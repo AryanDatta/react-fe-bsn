@@ -24,7 +24,7 @@ const pageHtml = `
   <div class="nav-links">
     <a href="#vision">Vision</a>
     <a href="#ai3d">AI + 3D</a>
-    <a href="#analyzer">AI Analyzer</a>
+    <a href="/dashboard" class="nav-aidash">AI Dashboard</a>
     <a href="#research">Research</a>
     <a href="#model">Model</a>
     <a href="#pricing">Pricing</a>
@@ -59,11 +59,8 @@ const pageHtml = `
             <div class="dd-email" id="ddEmail">user@bsn.ai</div>
             <div class="dd-badge"><span class="dd-badge-dot"></span>ACTIVE AGENT</div>
           </div>
-          <a href="#analyzer" class="dd-item" onclick="togProfile()">
-            <svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>AI Analyzer
-          </a>
-          <a href="#" class="dd-item">
-            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard
+          <a href="/dashboard" class="dd-item">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>AI Dashboard
           </a>
           <a href="#" class="dd-item">
             <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>My Profile
@@ -84,7 +81,7 @@ const pageHtml = `
 <div class="mob-menu" id="mobMenu">
   <a href="#vision" onclick="togMob()">Vision</a>
   <a href="#ai3d" onclick="togMob()">AI + 3D</a>
-  <a href="#analyzer" onclick="togMob()">AI Analyzer</a>
+  <a href="/dashboard">AI Dashboard</a>
   <a href="#research" onclick="togMob()">Research</a>
   <a href="#model" onclick="togMob()">Model</a>
   <a href="#pricing" onclick="togMob()">Pricing</a>
@@ -135,28 +132,6 @@ const pageHtml = `
       <div class="fg"><label class="fl">PASSWORD</label><input type="password" class="fi2" id="rPass" placeholder="Create a password"></div>
       <button class="fsub" onclick="doRegister()">Create Account — Get 3 Free Analyses</button>
       <p class="ffoot">Have an account? <a href="#" onclick="switchTab('login')">Sign in</a></p>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ PAYWALL MODAL ═══ -->
-<div class="modal-ov" id="paywallModal" onclick="outClosePaywall(event)">
-  <div class="modal-box" style="max-width:440px">
-    <button class="modal-x" onclick="closePaywall()">✕</button>
-    <div style="text-align:center;padding:8px 0">
-      <div style="font-size:52px;margin-bottom:16px">🚀</div>
-      <h2 style="font-size:22px;font-weight:700;margin-bottom:8px">You've used all 3 free analyses</h2>
-      <p style="color:rgba(255,255,255,.4);font-size:13px;line-height:1.65;margin-bottom:24px">Upgrade to continue getting AI-powered investment insights. Unlimited analyses + priority model access.</p>
-      <div class="paywall-price">₹499<span class="pe">/month</span></div>
-      <p style="font-size:11px;color:rgba(255,255,255,.3);margin-bottom:20px">30 analyses · Cancel anytime</p>
-      <ul style="list-style:none;text-align:left;margin-bottom:28px;display:flex;flex-direction:column;gap:10px">
-        <li style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.7)"><span style="color:var(--e)">→</span>30 investment analyses per month</li>
-        <li style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.7)"><span style="color:var(--e)">→</span>Priority AI model access</li>
-        <li style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.7)"><span style="color:var(--e)">→</span>Full JSON + structured report</li>
-        <li style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.7)"><span style="color:var(--e)">→</span>10% of fees fund our research mission</li>
-      </ul>
-      <button class="fsub" id="rzpBtn" onclick="startPayment()">Upgrade Now — ₹499/mo</button>
-      <p style="font-size:11px;color:rgba(255,255,255,.18);margin-top:12px">Powered by Razorpay · Secure payment</p>
     </div>
   </div>
 </div>
@@ -343,47 +318,39 @@ const pageHtml = `
   </div>
 </section>
 
-<!-- ═══ AI ANALYZER ═══ -->
-<section id="analyzer" class="s-dk" style="padding-top:0">
+<!-- ═══ AI DASHBOARD ═══ -->
+<section id="aidash" class="s-dk" style="padding-top:0">
   <div class="si" style="padding-top:0">
-    <div style="text-align:center;margin-bottom:48px" class="rv">
-      <span class="slbl">POWERED BY AI · FREE TO START</span>
-      <h2 class="stit">Investment Memo <em>Analyzer</em></h2>
-      <p style="font-size:14px;color:rgba(255,255,255,.4);margin-top:12px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7">
-        Get a structured AI analysis of any pitch deck, memo, or company summary.<br>
-        Every new account gets <strong style="color:var(--m)">3 free analyses</strong>.
+    <div style="text-align:center;margin-bottom:40px" class="rv">
+      <span class="slbl">YOUR MISSION CONTROL</span>
+      <h2 class="stit">The BSN <em>AI Dashboard</em></h2>
+      <p style="font-size:14px;color:rgba(255,255,255,.4);margin-top:12px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.7">
+        One slate to browse, buy and deploy every BSN agent — investment analysis, autonomous ops,
+        digital twins and more. Buy what you need, deploy in one click.
       </p>
     </div>
 
-    <!-- Logged-in: analyzer card -->
-    <div class="analyzer-card rv d1" id="analyzerCard" style="display:none">
-      <div class="usage-bar-wrap">
-        <div class="usage-bar" id="usageBar" style="width:0%"></div>
+    <div class="aidash-card rv d1" onclick="goDashboard()">
+      <div class="aidash-glow"></div>
+      <div class="aidash-grid-bg"></div>
+      <div class="aidash-top">
+        <div class="aidash-badge"><span class="aidash-dot"></span>LIVE · 6 AGENTS</div>
+        <svg class="aidash-launch" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
       </div>
-      <div class="usage-info">
-        <span id="usageText">Loading usage...</span>
-        <span class="usage-pill" id="usagePill">FREE TIER</span>
+      <div class="aidash-ico-row">
+        <span class="aidash-ico">📊</span>
+        <span class="aidash-ico">🤖</span>
+        <span class="aidash-ico">🌐</span>
+        <span class="aidash-ico">♾️</span>
+        <span class="aidash-ico">🌊</span>
+        <span class="aidash-ico">🌌</span>
       </div>
-
-      <div id="analyzerForm">
-        <div class="af-row">
-          <div class="fg"><label class="fl">COMPANY NAME</label><input type="text" class="fi2" id="acName" placeholder="e.g. BlueWave Logistics"></div>
-          <div class="fg"><label class="fl">SECTOR</label><input type="text" class="fi2" id="acSector" placeholder="e.g. Maritime Tech"></div>
-        </div>
-        <div class="fg"><label class="fl">FINANCIAL METRICS (optional)</label><textarea class="fi2" id="acMetrics" rows="3" placeholder="ARR: $1.2M, Growth: 40% YoY, Gross Margin: 58%..."></textarea></div>
-        <div class="fg"><label class="fl">MEMO / PITCH DECK TEXT</label><textarea class="fi2" id="acMemo" rows="7" placeholder="Paste your investment memo, pitch deck notes, or company summary here..."></textarea></div>
-        <button class="fsub" id="analyzeBtn" onclick="runAnalysis()" style="margin-top:4px">Analyze Investment Memo →</button>
+      <h3 class="aidash-title">Enter the AI Agents Dashboard</h3>
+      <p class="aidash-sub">Marketplace · Deploy · Book a demo · Know more — all in one slate.</p>
+      <div class="aidash-acts">
+        <button class="aidash-btn" onclick="event.stopPropagation();goDashboard()">Open AI Dashboard →</button>
+        <button class="aidash-btn2" onclick="event.stopPropagation();bookDemo(event)">Book a Demo</button>
       </div>
-
-      <div id="analyzerResult" style="display:none;margin-top:28px"></div>
-    </div>
-
-    <!-- Logged-out: prompt to sign up -->
-    <div class="analyzer-login rv d2" id="analyzerLogin">
-      <div class="al-icon">🧬</div>
-      <h3>Sign in to start analyzing</h3>
-      <p>Register free and get 3 AI-powered investment analyses instantly. No credit card required.</p>
-      <button class="fsub" style="max-width:260px;margin:0 auto;display:block" onclick="showModal('register')">Get 3 Free Analyses →</button>
     </div>
   </div>
 </section>
@@ -552,32 +519,64 @@ export default function App() {
       window.open(`https://calendar.google.com/calendar/render?${params.toString()}`,'_blank');
     }
 
-    /* LOGIN / REGISTER */
-    window.doLogin=async function(){
-      const email=document.getElementById('lEmail').value.trim(),pass=document.getElementById('lPass').value;
-      if(!email||!pass){alert('Please fill in email and password.');return}
-      try{
-        const res=await fetch('https://bsnjavabackend.onrender.com/api/users/login',{method:'POST',headers:{'accept':'*/*','Content-Type':'application/json'},body:JSON.stringify({email,password:pass})});
-        if(!res.ok) throw new Error('login failed');
-        const data=await res.json();
-        const name=data.fullName||email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
-        const user={name,email:data.email||email,...data};
-        localStorage.setItem('bsnUser',JSON.stringify(user));
-        window.loginUser(user);window.closeModal();
-      }catch(err){alert('Login failed. Please check email/password.');}
+    /* ── BACKEND ── */
+    const API = 'https://bsnjavabackend.onrender.com/api/users';
+    const hdrs = {'accept':'*/*','Content-Type':'application/json'};
+
+    // Parses any backend response; returns {ok, data, message}
+    async function apiCall(url, body){
+      const res = await fetch(url, {method:'POST', headers:hdrs, body:JSON.stringify(body)});
+      let data = {};
+      try { data = await res.json(); } catch(_){}
+      return { ok: res.ok, status: res.status, data, message: data.message || '' };
     }
 
+    function buildUser(data, fallbacks={}){
+      const name = data.fullName || fallbacks.name || '';
+      return { name, email: data.email || fallbacks.email || '', ...data };
+    }
+
+    /* ── LOGIN ── */
+    window.doLogin=async function(){
+      const email=document.getElementById('lEmail').value.trim();
+      const pass=document.getElementById('lPass').value;
+      if(!email||!pass){alert('Please fill in email and password.');return}
+
+      const {ok, data, message} = await apiCall(`${API}/login`, {email, password:pass});
+      if(ok){
+        const user = buildUser(data, {email});
+        localStorage.setItem('bsnUser', JSON.stringify(user));
+        window.loginUser(user); window.closeModal();
+      } else {
+        alert(message || 'Invalid email or password. Please try again.');
+      }
+    }
+
+    /* ── REGISTER ── */
     window.doRegister=async function(){
-      const name=document.getElementById('rName').value.trim(),email=document.getElementById('rEmail').value.trim(),phone=document.getElementById('rPhone').value.trim(),role=document.getElementById('rRole').value.trim(),lookingFor=document.getElementById('rLookingFor').value.trim(),pass=document.getElementById('rPass').value;
+      const name       = document.getElementById('rName').value.trim();
+      const email      = document.getElementById('rEmail').value.trim();
+      const phone      = document.getElementById('rPhone').value.trim();
+      const role       = document.getElementById('rRole').value.trim();
+      const lookingFor = document.getElementById('rLookingFor').value.trim();
+      const pass       = document.getElementById('rPass').value;
       if(!name||!email||!phone||!role||!lookingFor||!pass){alert('Please fill in all fields.');return}
-      try{
-        const res=await fetch('https://bsnjavabackend.onrender.com/api/users',{method:'POST',headers:{'accept':'*/*','Content-Type':'application/json'},body:JSON.stringify({fullName:name,email,phone,role,lookingFor,password:pass})});
-        if(!res.ok) throw new Error('signup failed');
-        const data=await res.json();
-        const user={name:data.fullName||name,email:data.email||email,...data};
-        localStorage.setItem('bsnUser',JSON.stringify(user));
-        window.loginUser(user);window.closeModal();
-      }catch(err){alert('Signup failed. Please try again.');}
+
+      const {ok, data, message} = await apiCall(API, {fullName:name, email, phone, role, lookingFor, password:pass});
+      if(ok){
+        // 201 — new account created
+        const user = buildUser(data, {name, email});
+        localStorage.setItem('bsnUser', JSON.stringify(user));
+        window.loginUser(user); window.closeModal();
+      } else if(message && message.toLowerCase().includes('user already exists')){
+        // Email taken — offer to switch to login
+        alert('This email is already registered. Switching to Sign In.');
+        document.getElementById('rEmail').value = email; // pre-fill not available on login form
+        window.switchTab('login');
+        document.getElementById('lEmail').value = email;
+      } else {
+        alert(message || 'Registration failed. Please try again.');
+      }
     }
 
     window.loginUser=function(u){
@@ -593,10 +592,13 @@ export default function App() {
       document.getElementById('ddName').textContent=displayName;
       document.getElementById('ddEmail').textContent=u.email||'';
       document.getElementById('onlineDot').style.display='block';
-      // Show analyzer for logged-in users
-      document.getElementById('analyzerCard').style.display='block';
-      document.getElementById('analyzerLogin').style.display='none';
-      window.refreshUsage(u.email);
+    }
+
+    /* ── AI DASHBOARD ── */
+    window.goDashboard=function(){
+      const user=JSON.parse(localStorage.getItem('bsnUser')||'null');
+      if(user&&user.email){ window.location.href='/dashboard'; }
+      else { window.showModal('register'); }
     }
 
     window.doLogout=function(){
@@ -605,190 +607,8 @@ export default function App() {
       document.getElementById('ddIn').style.display='none';
       document.getElementById('onlineDot').style.display='none';
       document.getElementById('ddAvatar').innerHTML='A';
-      document.getElementById('analyzerCard').style.display='none';
-      document.getElementById('analyzerLogin').style.display='block';
-      document.getElementById('analyzerResult').style.display='none';
       pOpen=false;document.getElementById('authDD').classList.remove('open');
       if(window.google?.accounts?.oauth2) google.accounts.oauth2.revoke('', ()=>{});
-    }
-
-    /* ── ANALYZER ──────────────────────────────────────────────────── */
-
-    window.refreshUsage=async function(email){
-      try{
-        const r=await fetch(`${FLASK}/usage/${encodeURIComponent(email)}`);
-        const u=await r.json();
-        const used=u.free_used||0, limit=u.free_limit||3, paid=u.paid_credits||0;
-        const total=limit+paid;
-        const pct=Math.min(100,Math.round((used/limit)*100));
-        document.getElementById('usageBar').style.width=pct+'%';
-
-        if(paid>0){
-          document.getElementById('usageText').textContent=`${paid} paid analyses remaining`;
-          document.getElementById('usagePill').textContent='PAID PLAN';
-          document.getElementById('usagePill').className='usage-pill paid';
-        } else {
-          document.getElementById('usageText').textContent=`${used} of ${limit} free analyses used`;
-          document.getElementById('usagePill').textContent='FREE TIER';
-          document.getElementById('usagePill').className='usage-pill';
-        }
-
-        const btn=document.getElementById('analyzeBtn');
-        if(!u.can_analyze){
-          btn.textContent='Upgrade to Analyze →';
-          btn.onclick=()=>window.showPaywall();
-        } else {
-          btn.textContent='Analyze Investment Memo →';
-          btn.onclick=()=>window.runAnalysis();
-        }
-      }catch(e){
-        document.getElementById('usageText').textContent='Could not load usage (Flask not running?)';
-      }
-    }
-
-    window.runAnalysis=async function(){
-      const user=JSON.parse(localStorage.getItem('bsnUser')||'null');
-      if(!user){window.showModal('register');return;}
-
-      const memo=document.getElementById('acMemo').value.trim();
-      if(!memo){alert('Please paste your memo text first.');return;}
-
-      const btn=document.getElementById('analyzeBtn');
-      btn.disabled=true;btn.textContent='Analyzing...';
-      document.getElementById('analyzerResult').style.display='none';
-
-      try{
-        const res=await fetch(`${FLASK}/analyze`,{
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({
-            email:user.email,
-            memo_text:memo,
-            company_name:document.getElementById('acName').value.trim(),
-            sector:document.getElementById('acSector').value.trim(),
-            financial_metrics:document.getElementById('acMetrics').value.trim(),
-          })
-        });
-        const data=await res.json();
-
-        if(res.status===402||data.error==='limit_reached'){
-          window.showPaywall();return;
-        }
-        if(data.error){
-          alert('Analysis error: '+data.error);return;
-        }
-
-        // Render result
-        window.renderResult(data);
-        await window.refreshUsage(user.email);
-
-      }catch(e){
-        alert('Could not reach Flask API. Make sure it is running on localhost:5000.');
-      } finally {
-        btn.disabled=false;btn.textContent='Analyze Investment Memo →';
-      }
-    }
-
-    window.renderResult=function(d){
-      const rec=d.investment_recommendation||'watchlist';
-      const meta=d._meta||{};
-      const el=document.getElementById('analyzerResult');
-      el.style.display='block';
-      const list=arr=>(arr||[]).map(s=>`<li>${s}</li>`).join('');
-      el.innerHTML=`
-        <div class="ar-rec ${rec}">
-          <div class="ar-rec-label">RECOMMENDATION</div>
-          <div class="ar-rec-val">${rec}</div>
-          <div class="ar-score">Confidence: ${d.confidence_score||0}/100</div>
-          ${d.recommendation_reason?`<div class="ar-reason">${d.recommendation_reason}</div>`:''}
-        </div>
-        <div style="margin-top:14px;padding:16px;background:rgba(14,165,233,.05);border:1px solid rgba(14,165,233,.1);border-radius:14px">
-          <div style="font-size:10px;letter-spacing:2px;color:var(--m);margin-bottom:8px;font-weight:600">COMPANY SUMMARY</div>
-          <p style="font-size:13px;color:rgba(255,255,255,.65);line-height:1.65">${d.company_summary||''}</p>
-        </div>
-        <div class="ar-grid">
-          <div class="ar-card"><h4>STRENGTHS</h4><ul>${list(d.strengths)}</ul></div>
-          <div class="ar-card"><h4>RISKS</h4><ul>${list(d.risks)}</ul></div>
-          <div class="ar-card"><h4>RED FLAGS</h4><ul>${list(d.red_flags)}</ul></div>
-          <div class="ar-card"><h4>FOLLOW-UP QUESTIONS</h4><ul>${list(d.follow_up_questions)}</ul></div>
-        </div>
-        ${meta.free_remaining!==undefined?`<div class="ar-meta">${meta.paid_credits>0?meta.paid_credits+' paid credits remaining':meta.free_remaining+' free analyses remaining'}</div>`:''}
-      `;
-    }
-
-    /* ── PAYWALL ──────────────────────────────────────────────────── */
-
-    window.showPaywall=function(){
-      document.getElementById('paywallModal').classList.add('open');
-      document.body.style.overflow='hidden';
-    }
-    window.closePaywall=function(){
-      document.getElementById('paywallModal').classList.remove('open');
-      document.body.style.overflow='';
-    }
-    window.outClosePaywall=function(e){
-      if(e.target===document.getElementById('paywallModal'))window.closePaywall();
-    }
-
-    window.startPayment=async function(){
-      const user=JSON.parse(localStorage.getItem('bsnUser')||'null');
-      if(!user){window.closePaywall();window.showModal('register');return;}
-
-      const btn=document.getElementById('rzpBtn');
-      btn.disabled=true;btn.textContent='Creating order...';
-
-      try{
-        const res=await fetch(`${FLASK}/payment/create-order`,{
-          method:'POST',headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({email:user.email})
-        });
-        const order=await res.json();
-        if(order.error){alert('Payment error: '+order.error);return;}
-
-        // Load Razorpay script if not loaded
-        if(!window.Razorpay){
-          await new Promise((ok,fail)=>{
-            const s=document.createElement('script');
-            s.src='https://checkout.razorpay.com/v1/checkout.js';
-            s.onload=ok;s.onerror=fail;
-            document.head.appendChild(s);
-          });
-        }
-
-        const rzp=new window.Razorpay({
-          key:order.key,
-          amount:order.amount,
-          currency:order.currency||'INR',
-          order_id:order.order_id,
-          name:'BSN Investment Analyzer',
-          description:'30 analyses — ₹499/month',
-          prefill:{email:user.email,name:user.name||''},
-          theme:{color:'#0ea5e9'},
-          handler:async function(response){
-            const vRes=await fetch(`${FLASK}/payment/verify`,{
-              method:'POST',headers:{'Content-Type':'application/json'},
-              body:JSON.stringify({
-                email:user.email,
-                razorpay_order_id:response.razorpay_order_id,
-                razorpay_payment_id:response.razorpay_payment_id,
-                razorpay_signature:response.razorpay_signature,
-              })
-            });
-            const vData=await vRes.json();
-            if(vData.success){
-              window.closePaywall();
-              await window.refreshUsage(user.email);
-              alert('Payment successful! You have 30 new analyses.');
-            }
-          }
-        });
-        rzp.open();
-
-      }catch(e){
-        alert('Payment setup failed. Please try again.');
-      }finally{
-        btn.disabled=false;btn.textContent='Upgrade Now — ₹499/mo';
-      }
     }
 
     /* REVEAL */
@@ -841,32 +661,70 @@ export default function App() {
     async function handleGoogleToken(tokenResponse) {
       if (tokenResponse.error) { alert('Google sign-in cancelled.'); return; }
       try {
-        const r = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        // 1. Fetch Google profile
+        const profileRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
           headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
         });
-        const profile = await r.json();
-        const user = {
-          name:         profile.name,
-          email:        profile.email,
-          picture:      profile.picture,
-          googleId:     profile.sub,
-          authProvider: 'google',
-        };
-        // Optional: sync with Java backend (silently ignore if endpoint doesn't exist)
-        try {
-          const res = await fetch('https://bsnjavabackend.onrender.com/api/users/google', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: user.email, fullName: user.name, googleId: user.googleId }),
-          });
-          if (res.ok) { const data = await res.json(); Object.assign(user, data); }
-        } catch(_) {}
+        const profile = await profileRes.json();
+        if (!profile.email) { alert('Could not get email from Google. Please try again.'); return; }
 
-        localStorage.setItem('bsnUser', JSON.stringify(user));
-        window.loginUser(user);
-        window.closeModal();
+        // Deterministic derived password — same every time for this Google account
+        const derivedPass = 'BSN_G_' + profile.sub.slice(-12);
+
+        // 2. Try to REGISTER first (handles brand-new Google users)
+        const reg = await apiCall(API, {
+          fullName:   profile.name,
+          email:      profile.email,
+          phone:      'N/A',
+          role:       'Google User',
+          lookingFor: 'BSN Platform Access',
+          password:   derivedPass,
+        });
+
+        if (reg.ok) {
+          // New user — registered and saved
+          const user = buildUser(reg.data, {name: profile.name, email: profile.email});
+          user.picture = profile.picture;
+          user.googleId = profile.sub;
+          user.authProvider = 'google';
+          localStorage.setItem('bsnUser', JSON.stringify(user));
+          window.loginUser(user); window.closeModal();
+          return;
+        }
+
+        if (reg.message && reg.message.toLowerCase().includes('user already exists')) {
+          // 3. User already in DB — try logging in with derived password (returning Google user)
+          const login = await apiCall(`${API}/login`, {email: profile.email, password: derivedPass});
+
+          if (login.ok) {
+            const user = buildUser(login.data, {name: profile.name, email: profile.email});
+            user.picture = profile.picture;
+            user.googleId = profile.sub;
+            user.authProvider = 'google';
+            localStorage.setItem('bsnUser', JSON.stringify(user));
+            window.loginUser(user); window.closeModal();
+            return;
+          }
+
+          // 4. Email exists but was registered with a different (email/password) account
+          alert('This email is already registered with a password account.\nPlease sign in using your email and password.');
+          window.switchTab('login');
+          document.getElementById('lEmail').value = profile.email;
+          return;
+        }
+
+        // 5. Unexpected backend error — still allow local-only session
+        console.error('Google register unexpected error:', reg.message);
+        const fallbackUser = {
+          name: profile.name, email: profile.email,
+          picture: profile.picture, googleId: profile.sub, authProvider: 'google',
+        };
+        localStorage.setItem('bsnUser', JSON.stringify(fallbackUser));
+        window.loginUser(fallbackUser); window.closeModal();
+
       } catch(e) {
-        alert('Could not fetch Google profile. Please try again.');
+        console.error('Google sign-in error:', e);
+        alert('Could not complete Google sign-in. Please try again.');
       }
     }
 
