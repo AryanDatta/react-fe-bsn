@@ -14,6 +14,15 @@ const pageHtml = `
 <div id="pb"></div>
 <canvas id="bg"></canvas>
 
+<!-- ═══ AUTH LOADING OVERLAY ═══ -->
+<div class="auth-loading" id="authLoading">
+  <div class="auth-loading-box">
+    <img src="/logo.png" alt="BSN" class="auth-loading-logo">
+    <div class="auth-spinner"></div>
+    <div class="auth-loading-text" id="authLoadingText">Signing you in…</div>
+  </div>
+</div>
+
 <!-- ═══ NAVBAR ═══ -->
 <nav id="nav">
   <a href="#" class="nav-logo">
@@ -536,19 +545,35 @@ export default function App() {
       return { name, email: data.email || fallbacks.email || '', ...data };
     }
 
+    /* ── AUTH LOADING OVERLAY ── */
+    window.showLoading=function(msg){
+      document.getElementById('authLoadingText').textContent=msg||'Signing you in…';
+      document.getElementById('authLoading').classList.add('open');
+    }
+    window.hideLoading=function(){
+      document.getElementById('authLoading').classList.remove('open');
+    }
+
     /* ── LOGIN ── */
     window.doLogin=async function(){
       const email=document.getElementById('lEmail').value.trim();
       const pass=document.getElementById('lPass').value;
       if(!email||!pass){alert('Please fill in email and password.');return}
 
-      const {ok, data, message} = await apiCall(`${API}/login`, {email, password:pass});
-      if(ok){
-        const user = buildUser(data, {email});
-        localStorage.setItem('bsnUser', JSON.stringify(user));
-        window.loginUser(user); window.closeModal();
-      } else {
-        alert(message || 'Invalid email or password. Please try again.');
+      window.showLoading('Signing you in…');
+      try {
+        const {ok, data, message} = await apiCall(`${API}/login`, {email, password:pass});
+        if(ok){
+          const user = buildUser(data, {email});
+          localStorage.setItem('bsnUser', JSON.stringify(user));
+          window.loginUser(user); window.closeModal();
+        } else {
+          alert(message || 'Invalid email or password. Please try again.');
+        }
+      } catch(e) {
+        alert('Could not reach the server. Please try again.');
+      } finally {
+        window.hideLoading();
       }
     }
 
@@ -562,20 +587,27 @@ export default function App() {
       const pass       = document.getElementById('rPass').value;
       if(!name||!email||!phone||!role||!lookingFor||!pass){alert('Please fill in all fields.');return}
 
-      const {ok, data, message} = await apiCall(API, {fullName:name, email, phone, role, lookingFor, password:pass});
-      if(ok){
-        // 201 — new account created
-        const user = buildUser(data, {name, email});
-        localStorage.setItem('bsnUser', JSON.stringify(user));
-        window.loginUser(user); window.closeModal();
-      } else if(message && message.toLowerCase().includes('user already exists')){
-        // Email taken — offer to switch to login
-        alert('This email is already registered. Switching to Sign In.');
-        document.getElementById('rEmail').value = email; // pre-fill not available on login form
-        window.switchTab('login');
-        document.getElementById('lEmail').value = email;
-      } else {
-        alert(message || 'Registration failed. Please try again.');
+      window.showLoading('Creating your account…');
+      try {
+        const {ok, data, message} = await apiCall(API, {fullName:name, email, phone, role, lookingFor, password:pass});
+        if(ok){
+          // 201 — new account created
+          const user = buildUser(data, {name, email});
+          localStorage.setItem('bsnUser', JSON.stringify(user));
+          window.loginUser(user); window.closeModal();
+        } else if(message && message.toLowerCase().includes('user already exists')){
+          // Email taken — offer to switch to login
+          alert('This email is already registered. Switching to Sign In.');
+          document.getElementById('rEmail').value = email; // pre-fill not available on login form
+          window.switchTab('login');
+          document.getElementById('lEmail').value = email;
+        } else {
+          alert(message || 'Registration failed. Please try again.');
+        }
+      } catch(e) {
+        alert('Could not reach the server. Please try again.');
+      } finally {
+        window.hideLoading();
       }
     }
 
@@ -659,7 +691,8 @@ export default function App() {
     let _googleTokenClient = null;
 
     async function handleGoogleToken(tokenResponse) {
-      if (tokenResponse.error) { alert('Google sign-in cancelled.'); return; }
+      if (tokenResponse.error) { window.hideLoading(); alert('Google sign-in cancelled.'); return; }
+      window.showLoading('Setting up your profile…');
       try {
         // 1. Fetch Google profile
         const profileRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
@@ -725,6 +758,8 @@ export default function App() {
       } catch(e) {
         console.error('Google sign-in error:', e);
         alert('Could not complete Google sign-in. Please try again.');
+      } finally {
+        window.hideLoading();
       }
     }
 
@@ -734,6 +769,7 @@ export default function App() {
         client_id: GOOGLE_CLIENT_ID,
         scope: 'openid profile email',
         callback: handleGoogleToken,
+        error_callback: function(){ window.hideLoading(); }, // popup closed / blocked
       });
     }
 
@@ -743,6 +779,7 @@ export default function App() {
         initGoogleAuth();
         if (!_googleTokenClient) { alert('Google Sign-In is loading. Please try again in a moment.'); return; }
       }
+      window.showLoading('Connecting to Google…');
       _googleTokenClient.requestAccessToken({ prompt: 'select_account' });
     };
 
