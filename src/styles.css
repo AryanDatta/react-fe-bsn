@@ -39,14 +39,14 @@ body.hov #cd{transform:translate(-50%,-50%) scale(2);background:var(--m)}
 /* ═══════════════════════════════════════
    NAVBAR
 ═══════════════════════════════════════ */
-nav{
+#nav{
   position:fixed;top:0;left:0;right:0;z-index:200;
   height:62px;display:flex;align-items:center;
   padding:0 40px;
   transition:background .35s,border-color .35s;
   border-bottom:1px solid transparent;
 }
-nav.scrolled{
+#nav.scrolled{
   background:rgba(3,13,10,.92);
   backdrop-filter:blur(24px) saturate(1.5);
   border-color:rgba(16,185,129,.15);
@@ -128,7 +128,7 @@ nav.scrolled{
 .nav-ham.open span:nth-child(1){transform:rotate(45deg) translate(4.5px,4.5px)}
 .nav-ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
 .nav-ham.open span:nth-child(3){transform:rotate(-45deg) translate(4.5px,-4.5px)}
-@media(max-width:900px){nav{padding:0 18px;height:56px}.nav-links,.btn-gi{display:none}.btn-demo{font-size:11px;padding:7px 12px}.nav-ham{display:flex}.nav-logo{margin-right:auto}}
+@media(max-width:900px){#nav{padding:0 18px;height:56px}.nav-links,.btn-gi{display:none}.btn-demo{font-size:11px;padding:7px 12px}.nav-ham{display:flex}.nav-logo{margin-right:auto}}
 @media(max-width:480px){.btn-demo{display:none}}
 
 .mob-menu{display:none;position:fixed;inset:0;background:rgba(2,10,6,.97);backdrop-filter:blur(20px);z-index:190;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:72px 28px 36px}
@@ -565,6 +565,13 @@ footer{
 ═══════════════════════════════════════ */
 .paywall-price{font-size:42px;font-weight:700;letter-spacing:-1px;background:linear-gradient(90deg,var(--m),var(--bm));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
 .paywall-price .pe{font-size:16px;color:rgba(255,255,255,.35);font-weight:400;-webkit-text-fill-color:rgba(255,255,255,.35)}
+
+/* ═══ FORGOT PASSWORD ═══ */
+.fp-link{text-align:right;margin:-6px 0 14px}
+.fp-link a{font-size:11px;color:var(--bm);text-decoration:none;letter-spacing:.3px}
+.fp-link a:hover{text-decoration:underline}
+.fp-info{font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.65;margin-bottom:16px}
+.fp-info strong{color:#fff}
 
 /* ═══ AUTH LOADING OVERLAY ═══ */
 .auth-loading{display:none;position:fixed;inset:0;background:rgba(2,11,18,.82);backdrop-filter:blur(10px);z-index:600;align-items:center;justify-content:center;opacity:0;transition:opacity .25s ease}
