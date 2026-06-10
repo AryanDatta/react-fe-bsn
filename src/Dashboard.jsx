@@ -423,7 +423,7 @@ export default function Dashboard() {
 
   /* ── SIDEBAR ── */
   const Sidebar = () => (
-    <aside style={{width:220,flexShrink:0,borderRight:"1px solid rgba(14,165,233,.1)",background:"rgba(2,11,18,.75)",backdropFilter:"blur(24px)",display:"flex",flexDirection:"column",padding:"24px 0",position:"sticky",top:0,height:"100vh",overflowY:"auto"}}>
+    <aside style={{width:220,boxSizing:"border-box",borderRight:"1px solid rgba(14,165,233,.1)",background:"rgba(2,11,18,.92)",backdropFilter:"blur(24px)",display:"flex",flexDirection:"column",padding:"24px 0",position:"fixed",top:0,left:0,bottom:0,zIndex:120,overflowY:"auto"}}>
       <a href={HOME} style={{display:"flex",alignItems:"center",gap:10,textDecoration:"none",padding:"0 18px",marginBottom:28}}>
         <img src="/logo.png" alt="BSN" style={{height:28,filter:"drop-shadow(0 0 10px rgba(16,185,129,.6))"}}/>
         <div>
@@ -636,7 +636,7 @@ export default function Dashboard() {
     <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#030d0a 0%,#020b10 50%,#030d0a 100%)",fontFamily:"'Inter',system-ui,sans-serif",color:"#fff",cursor:"auto",display:"flex",flexDirection:mobile?"column":"row"}}>
       {!mobile && <Sidebar/>}
       {mobile  && <MobileHeader/>}
-      <main style={{flex:1,overflowY:"auto",padding:mobile?"20px 16px 80px":tablet?"28px 28px":"36px 40px",position:"relative",zIndex:1}}>
+      <main style={{flex:1,minWidth:0,marginLeft:mobile?0:220,overflowY:"auto",padding:mobile?"20px 16px 80px":tablet?"28px 28px":"36px 40px",position:"relative",zIndex:1}}>
         {tabs[tab]}
       </main>
       {mobile && <BottomNav/>}

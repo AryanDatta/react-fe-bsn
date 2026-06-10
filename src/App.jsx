@@ -124,8 +124,24 @@ const pageHtml = `
       <div class="auth-divider"><span>OR</span></div>
       <div class="fg"><label class="fl">EMAIL</label><input type="email" class="fi2" id="lEmail" placeholder="you@example.com"></div>
       <div class="fg"><label class="fl">PASSWORD</label><input type="password" class="fi2" id="lPass" placeholder="••••••••"></div>
+      <p class="fp-link"><a href="#" onclick="showForgot(event)">Forgot password?</a></p>
       <button class="fsub" onclick="doLogin()">Sign In to BSN</button>
       <p class="ffoot">No account? <a href="#" onclick="switchTab('register')">Register free</a></p>
+    </div>
+    <div id="fForgot" style="display:none">
+      <div id="fpStep1">
+        <p class="fp-info">Enter your account email and we'll send you a 6-digit reset code.</p>
+        <div class="fg"><label class="fl">EMAIL</label><input type="email" class="fi2" id="fpEmail" placeholder="you@example.com"></div>
+        <button class="fsub" onclick="doForgotSend()">Send Reset Code</button>
+      </div>
+      <div id="fpStep2" style="display:none">
+        <p class="fp-info">We emailed a 6-digit code to <strong id="fpEmailShow"></strong>. Enter it below with your new password.</p>
+        <div class="fg"><label class="fl">6-DIGIT CODE</label><input type="text" class="fi2" id="fpOtp" placeholder="123456" maxlength="6" inputmode="numeric" autocomplete="one-time-code"></div>
+        <div class="fg"><label class="fl">NEW PASSWORD</label><input type="password" class="fi2" id="fpPass" placeholder="New password (min 6 chars)"></div>
+        <button class="fsub" onclick="doForgotReset()">Reset Password</button>
+        <p class="ffoot">Didn't get it? <a href="#" onclick="doForgotSend(event)">Resend code</a></p>
+      </div>
+      <p class="ffoot"><a href="#" onclick="switchTab('login')">← Back to Sign In</a></p>
     </div>
     <div id="fReg" style="display:none">
       <button class="btn-google" onclick="signInWithGoogle()">
@@ -515,6 +531,21 @@ export default function App() {
       document.getElementById('tReg').classList.toggle('active',t==='register');
       document.getElementById('fLogin').style.display=t==='login'?'block':'none';
       document.getElementById('fReg').style.display=t==='register'?'block':'none';
+      document.getElementById('fForgot').style.display='none';
+    }
+
+    /* ── FORGOT PASSWORD ── */
+    window.showForgot=function(e){
+      if(e)e.preventDefault();
+      document.getElementById('tLogin').classList.remove('active');
+      document.getElementById('tReg').classList.remove('active');
+      document.getElementById('fLogin').style.display='none';
+      document.getElementById('fReg').style.display='none';
+      document.getElementById('fForgot').style.display='block';
+      document.getElementById('fpStep1').style.display='block';
+      document.getElementById('fpStep2').style.display='none';
+      const le=document.getElementById('lEmail').value.trim();
+      if(le) document.getElementById('fpEmail').value=le;
     }
 
     /* BOOK DEMO */
@@ -605,6 +636,55 @@ export default function App() {
           alert(message || 'Registration failed. Please try again.');
         }
       } catch(e) {
+        alert('Could not reach the server. Please try again.');
+      } finally {
+        window.hideLoading();
+      }
+    }
+
+    window.doForgotSend=async function(e){
+      if(e)e.preventDefault();
+      const email=document.getElementById('fpEmail').value.trim();
+      if(!email){alert('Please enter your email.');return}
+
+      window.showLoading('Sending reset code…');
+      try {
+        const {ok, message} = await apiCall(`${API}/forgot-password`, {email});
+        if(ok){
+          document.getElementById('fpEmailShow').textContent=email;
+          document.getElementById('fpStep1').style.display='none';
+          document.getElementById('fpStep2').style.display='block';
+        } else {
+          alert(message || 'Could not send reset code. Please try again.');
+        }
+      } catch(_) {
+        alert('Could not reach the server. Please try again.');
+      } finally {
+        window.hideLoading();
+      }
+    }
+
+    window.doForgotReset=async function(){
+      const email=document.getElementById('fpEmail').value.trim();
+      const otp=document.getElementById('fpOtp').value.trim();
+      const pass=document.getElementById('fpPass').value;
+      if(!otp||!pass){alert('Please enter the code and a new password.');return}
+      if(pass.length<6){alert('New password must be at least 6 characters.');return}
+
+      window.showLoading('Resetting your password…');
+      try {
+        const {ok, message} = await apiCall(`${API}/reset-password`, {email, otp, newPassword:pass});
+        if(ok){
+          alert('Password updated! Sign in with your new password.');
+          document.getElementById('fpOtp').value='';
+          document.getElementById('fpPass').value='';
+          window.switchTab('login');
+          document.getElementById('lEmail').value=email;
+          document.getElementById('lPass').value='';
+        } else {
+          alert(message || 'Could not reset password. Check the code and try again.');
+        }
+      } catch(_) {
         alert('Could not reach the server. Please try again.');
       } finally {
         window.hideLoading();
