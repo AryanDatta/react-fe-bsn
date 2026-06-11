@@ -23,6 +23,27 @@ const pageHtml = `
   </div>
 </div>
 
+<!-- ═══ STATIC CHATBOT (bottom-left) ═══ -->
+<div class="cb-wrap" id="cbWrap">
+  <div class="cb-panel" id="cbPanel">
+    <div class="cb-head">
+      <div class="cb-ava">🤖</div>
+      <div>
+        <div class="cb-title">BSN Assistant</div>
+        <div class="cb-online"><span class="cb-online-dot"></span>Online · Instant answers</div>
+      </div>
+      <button class="cb-x" onclick="togChat(false)">✕</button>
+    </div>
+    <div class="cb-msgs" id="cbMsgs"></div>
+    <div class="cb-chips-label">COMMON QUESTIONS</div>
+    <div class="cb-chips" id="cbChips"></div>
+  </div>
+  <button class="cb-fab" id="cbFab" onclick="togChat()" aria-label="Chat with BSN">
+    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+    <span class="cb-fab-dot"></span>
+  </button>
+</div>
+
 <!-- ═══ NAVBAR ═══ -->
 <nav id="nav">
   <a href="#" class="nav-logo">
@@ -33,18 +54,15 @@ const pageHtml = `
   <div class="nav-links">
     <a href="#vision">Vision</a>
     <a href="#ai3d">AI + 3D</a>
-    <a href="/dashboard" class="nav-aidash">AI Dashboard</a>
+    <a href="/dashboard" class="nav-aidash" onclick="event.preventDefault();goDashboard()"><span class="nav-aidash-dot"></span>AI Dashboard</a>
     <a href="#research">Research</a>
     <a href="#model">Model</a>
     <a href="#pricing">Pricing</a>
     <a href="#join">Join</a>
-    <a href="#" onclick="bookDemo(event)">Book a Demo</a>
+    <a href="#" class="nav-demo" onclick="bookDemo(event)"><span class="nav-demo-dot"></span>Book a Demo</a>
   </div>
 
   <div class="nav-right">
-    <a href="#" onclick="bookDemo(event)" class="btn-demo">
-      <span class="dd"></span>Book a Demo
-    </a>
     <a href="#join" class="btn-gi">Get Involved</a>
 
     <div class="profile-wrap" id="profileWrap">
@@ -90,7 +108,7 @@ const pageHtml = `
 <div class="mob-menu" id="mobMenu">
   <a href="#vision" onclick="togMob()">Vision</a>
   <a href="#ai3d" onclick="togMob()">AI + 3D</a>
-  <a href="/dashboard">AI Dashboard</a>
+  <a href="/dashboard" class="mob-aidash" onclick="event.preventDefault();togMob();goDashboard()">⊞ AI Dashboard</a>
   <a href="#research" onclick="togMob()">Research</a>
   <a href="#model" onclick="togMob()">Model</a>
   <a href="#pricing" onclick="togMob()">Pricing</a>
@@ -179,29 +197,29 @@ const pageHtml = `
       <div class="h-stats">
         <div class="hs"><div class="n">70%+</div><div class="l">COST REDUCTION</div></div>
         <div class="sdiv"></div>
-        <div class="hs"><div class="n">10%</div><div class="l">PROFITS → RESEARCH</div></div>
+        <div class="hs"><div class="n">50%</div><div class="l">PROFITS → RESEARCH</div></div>
         <div class="sdiv"></div>
         <div class="hs"><div class="n">4</div><div class="l">RESEARCH PILLARS</div></div>
       </div>
     </div>
     <div class="hero-vis">
-      <div class="c3w">
-        <div class="c3">
-          <div class="c3-live"><span class="c3-ldot"></span>LIVE</div>
+      <div class="orbit o1"><div class="planet" onclick="document.getElementById('ai3d')?.scrollIntoView({behavior:'smooth'})"><span class="planet-ball">🤖</span><span class="planet-label">AI Agents Live</span><div class="planet-tip">We build and deploy intelligent AI agents that automate operations across industries, slashing costs and creating new revenue streams.</div></div></div>
+      <div class="orbit o2"><div class="planet" onclick="document.getElementById('research')?.scrollIntoView({behavior:'smooth'})"><span class="planet-ball">🧬</span><span class="planet-label">Biotech R&D</span><div class="planet-tip">Innovative biotech solutions that recycle plastics, clean oceans, and restore marine ecosystems at global scale.</div></div></div>
+      <div class="orbit o3"><div class="planet" onclick="document.getElementById('research')?.scrollIntoView({behavior:'smooth'})"><span class="planet-ball">🌊</span><span class="planet-label">Ocean Revival</span><div class="planet-tip">AI-guided cleanup fleets and nature-based technologies to heal our blue planet for generations.</div></div></div>
+      <div class="orbit o4"><div class="planet" onclick="document.getElementById('research')?.scrollIntoView({behavior:'smooth'})"><span class="planet-ball">🌌</span><span class="planet-label">Multiverse</span><div class="planet-tip">Theoretical and experimental research into consciousness across dimensions and multiversal pathways.</div></div></div>
+      <div class="c3w sun">
+        <div class="c3" onclick="document.getElementById('vision')?.scrollIntoView({behavior:'smooth'})">
           <img src="/logo.png" alt="BSN" class="c3-logo">
           <div class="c3-name">BANDNA SHRI NIKA</div>
-          <div class="c3-tag">AI · 3D WORLD · CONSCIOUSNESS</div>
-          <div class="c3-stats">
-            <div class="c3s"><span class="c3s-l">Operations Reduction</span><span class="c3s-r">70%+</span></div>
-            <div class="c3s"><span class="c3s-l">Research Funding</span><span class="c3s-r">10% PROFITS</span></div>
-            <div class="c3s"><span class="c3s-l">Stage</span><span class="c3s-r">SEED · DELHI</span></div>
-          </div>
+        </div>
+        <div class="sun-tip">
+          <div class="sun-tip-tag">AI · 3D WORLD · CONSCIOUSNESS</div>
+          <div class="sun-tip-meaning"><b>Bandna</b> — "to bind" · <b>Shri Nika</b> — Sanskrit for "one who is auspicious and bright"</div>
+          <div class="sun-tip-row"><span>Operations Reduction</span><b>70%+</b></div>
+          <div class="sun-tip-row"><span>Research Funding</span><b>50% PROFITS</b></div>
+          <div class="sun-tip-row"><span>Stage</span><b>SEED · DELHI</b></div>
         </div>
       </div>
-      <div class="ob" style="top:6%;left:-4%;--od:8s;--odb:0s;"><span class="ob-dot"></span>AI Agents Live</div>
-      <div class="ob" style="bottom:18%;right:-6%;--od:10s;--odb:2s;"><span class="ob-dot"></span>🌊 Ocean Revival</div>
-      <div class="ob" style="top:42%;right:-9%;--od:9s;--odb:1s;"><span class="ob-dot"></span>🧬 Biotech R&D</div>
-      <div class="ob" style="bottom:7%;left:-2%;--od:11s;--odb:3s;"><span class="ob-dot"></span>🌌 Multiverse</div>
     </div>
   </div>
   <div class="sc-hint"><span>SCROLL</span><div class="sc-line"></div></div>
@@ -219,7 +237,7 @@ const pageHtml = `
           <li><span class="cli">🪷</span>Custom 3D AI deployment plan for your business</li>
           <li><span class="cli">🌐</span>Live demo of revenue-generating agents</li>
           <li><span class="cli">🧬</span>See how your success powers the research mission</li>
-          <li><span class="cli">🌌</span>30-minute call with Aryan (the founder)</li>
+          <li><span class="cli">🌌</span>30-minute call with Aryan Datta (the founder)</li>
         </ul>
         <a href="#" onclick="bookDemo(event)" class="bd2">Book Free Consultation →</a>
         <p class="cnote">Personally reviewed · Reply within 24 hours</p>
@@ -256,7 +274,7 @@ const pageHtml = `
           <div class="founder-avatar" style="background:linear-gradient(135deg,#082640,#0e3a5e)">
             <div class="av-pulse"></div>A
           </div>
-          <div class="founder-name">Aryan</div>
+          <div class="founder-name">Aryan Datta</div>
           <div class="founder-role">FOUNDER</div>
         </div>
         <div class="founders-divider"></div>
@@ -278,14 +296,14 @@ const pageHtml = `
     <div class="rv" style="text-align:center">
       <span class="slbl">THE MINDS BEHIND BSN</span>
       <h2 class="stit">Our <em>Founders</em></h2>
-      <p style="font-size:14px;color:rgba(255,255,255,.4);margin-top:12px;max-width:440px;margin-left:auto;margin-right:auto;line-height:1.7">Two people building the bridge between silicon intelligence and human transcendence.</p>
+      <p style="font-size:14px;color:rgba(245,236,218,.4);margin-top:12px;max-width:440px;margin-left:auto;margin-right:auto;line-height:1.7">Two people building the bridge between silicon intelligence and human transcendence.</p>
     </div>
     <div class="team-grid">
       <div class="team-card rv d1">
         <div class="team-av" style="background:linear-gradient(135deg,#082640,#1254a4)">
           <div class="ring"></div><div class="ring2"></div>A
         </div>
-        <div class="team-name">Aryan</div>
+        <div class="team-name">Aryan Datta</div>
         <div class="team-role">FOUNDER & CEO</div>
         <p class="team-bio">Visionary behind BSN's AI-powered 3D world. Steering autonomous agents, digital twins and agentic AI that cut operations costs and fund humanity's awakening.</p>
         <div class="team-tags">
@@ -343,43 +361,6 @@ const pageHtml = `
   </div>
 </section>
 
-<!-- ═══ AI DASHBOARD ═══ -->
-<section id="aidash" class="s-dk" style="padding-top:0">
-  <div class="si" style="padding-top:0">
-    <div style="text-align:center;margin-bottom:40px" class="rv">
-      <span class="slbl">YOUR MISSION CONTROL</span>
-      <h2 class="stit">The BSN <em>AI Dashboard</em></h2>
-      <p style="font-size:14px;color:rgba(255,255,255,.4);margin-top:12px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.7">
-        One slate to browse, buy and deploy every BSN agent — investment analysis, autonomous ops,
-        digital twins and more. Buy what you need, deploy in one click.
-      </p>
-    </div>
-
-    <div class="aidash-card rv d1" onclick="goDashboard()">
-      <div class="aidash-glow"></div>
-      <div class="aidash-grid-bg"></div>
-      <div class="aidash-top">
-        <div class="aidash-badge"><span class="aidash-dot"></span>LIVE · 6 AGENTS</div>
-        <svg class="aidash-launch" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
-      </div>
-      <div class="aidash-ico-row">
-        <span class="aidash-ico">📊</span>
-        <span class="aidash-ico">🤖</span>
-        <span class="aidash-ico">🌐</span>
-        <span class="aidash-ico">♾️</span>
-        <span class="aidash-ico">🌊</span>
-        <span class="aidash-ico">🌌</span>
-      </div>
-      <h3 class="aidash-title">Enter the AI Agents Dashboard</h3>
-      <p class="aidash-sub">Marketplace · Deploy · Book a demo · Know more — all in one slate.</p>
-      <div class="aidash-acts">
-        <button class="aidash-btn" onclick="event.stopPropagation();goDashboard()">Open AI Dashboard →</button>
-        <button class="aidash-btn2" onclick="event.stopPropagation();bookDemo(event)">Book a Demo</button>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ═══ RESEARCH ═══ -->
 <section id="research" class="s-lt">
   <div class="si">
@@ -408,7 +389,7 @@ const pageHtml = `
       <div class="cyca">→</div>
       <div class="cycs"><div class="cycn">02</div><h3>Generate Revenue</h3><p>Sustainable cash flow from AI services creates a self-reinforcing engine</p></div>
       <div class="cyca">→</div>
-      <div class="cycs"><div class="cycn">03</div><h3>Fund the Mission</h3><p>10% of profits fuel research, ocean cleanup, and consciousness studies</p></div>
+      <div class="cycs"><div class="cycn">03</div><h3>Fund the Mission</h3><p>50% of profits fuel research, ocean cleanup, and consciousness studies</p></div>
     </div>
   </div>
 </section>
@@ -438,7 +419,7 @@ const pageHtml = `
         <div class="pprice"><span class="am">₹2.99L</span><span class="pe">/mo</span></div>
         <p class="pnote">* Excl. one-time setup</p>
         <p class="pdesc">Scale fast with full 3D agents that generate revenue while funding the mission.</p>
-        <ul class="pfs"><li><span class="pfi">→</span>3 advanced AI agents</li><li><span class="pfi">→</span>Real-time digital twins & simulations</li><li><span class="pfi">→</span>60–70% efficiency + new revenue streams</li><li><span class="pfi">→</span>Priority support & custom training</li><li><span class="pfi">→</span>10% of fees directly fund research</li></ul>
+        <ul class="pfs"><li><span class="pfi">→</span>3 advanced AI agents</li><li><span class="pfi">→</span>Real-time digital twins & simulations</li><li><span class="pfi">→</span>60–70% efficiency + new revenue streams</li><li><span class="pfi">→</span>Priority support & custom training</li><li><span class="pfi">→</span>50% of profits directly fund research</li></ul>
         <a href="#" onclick="showModal('register')" class="bps">DEPLOY LOTUS AGENT</a>
       </div>
       <div class="pc pc-e rv d3">
@@ -473,7 +454,7 @@ const pageHtml = `
   <div class="fi">
     <div class="flogo"><img src="/logo.png" alt="BSN"><span class="fb">BSN</span></div>
     <div class="flinks"><a href="#">Privacy</a><a href="#">Research Papers</a><a href="#">3D Demo Portal</a><a href="#">© 2026 Bandna Shri Nika</a></div>
-    <div class="fcopy">Built with love in Delhi, India<br>For the 3D world and beyond<br><span style="font-size:9px;color:rgba(255,255,255,.18);letter-spacing:1.5px">FOUNDED BY </span><span style="color:rgba(56,189,248,.6);font-weight:500">Aryan</span><span style="color:rgba(255,255,255,.18);margin:0 4px">&amp;</span><span style="color:rgba(56,189,248,.7);font-weight:600">Vansh Dhiman</span></div>
+    <div class="fcopy">Built with love in Delhi, India<br>For the 3D world and beyond<br><span style="font-size:9px;color:rgba(245,236,218,.18);letter-spacing:1.5px">FOUNDED BY </span><span style="color:rgba(56,189,248,.6);font-weight:500">Aryan Datta</span><span style="color:rgba(245,236,218,.18);margin:0 4px">&amp;</span><span style="color:rgba(56,189,248,.7);font-weight:600">Vansh Dhiman</span></div>
   </div>
 </footer>
 `;
@@ -555,7 +536,7 @@ export default function App() {
       start.setMinutes(0,0,0);
       const end=new Date(start.getTime()+30*60*1000);
       const fmt=d=>d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
-      const params=new URLSearchParams({action:'TEMPLATE',text:'BSN 3D AI Strategy Session',dates:`${fmt(start)}/${fmt(end)}`,details:'30-minute call with Aryan for BSN AI agents, 3D AI strategy, and business automation roadmap.',add:'aryan.datta.940@gmail.com'});
+      const params=new URLSearchParams({action:'TEMPLATE',text:'BSN 3D AI Strategy Session',dates:`${fmt(start)}/${fmt(end)}`,details:'30-minute call with Aryan Datta for BSN AI agents, 3D AI strategy, and business automation roadmap.',add:'aryan.datta.940@gmail.com'});
       window.open(`https://calendar.google.com/calendar/render?${params.toString()}`,'_blank');
     }
 
@@ -868,6 +849,80 @@ export default function App() {
     if (!_googleTokenClient) {
       const gsiScript = document.querySelector('script[src*="accounts.google.com/gsi"]');
       if (gsiScript) gsiScript.addEventListener('load', initGoogleAuth);
+    }
+
+    /* ── STATIC CHATBOT ────────────────────────────────────────────── */
+    const CB_FAQ = [
+      { q:'What does BSN actually do?',
+        a:'We deploy autonomous AI agents and digital twins that run your business operations — procurement, scheduling, reporting, analysis — 24/7. Clients typically cut operations costs by 70%+.' },
+      { q:'How much does it cost?',
+        a:'Marketplace agents start at a one-time ₹4,999. Managed plans: Seed Agent ₹99K/mo (1 agent), Lotus Agent ₹2.99L/mo (3 advanced agents — most popular), and custom Multiverse plans for enterprises.',
+        cta:{ label:'See Pricing →', act:'pricing' } },
+      { q:'How do AI agents cut 70% of my costs?',
+        a:'Agents automate repetitive operations around the clock — no salaries, no breaks, no errors from fatigue. Most clients see 30%+ savings in the first month, scaling to 70%+ as more workflows are automated.' },
+      { q:'How fast can I deploy?',
+        a:'Marketplace agents deploy in one click right after purchase. Custom enterprise agents typically go live in 2–4 weeks, including onboarding and training on your workflows.' },
+      { q:'Is my business data secure?',
+        a:'Yes. Data is encrypted in transit, kept isolated per client, and agents only operate inside the scope you give them. We never sell or share your data.' },
+      { q:'Which industries do you serve?',
+        a:'BSN agents are industry-agnostic — manufacturing, healthcare, logistics, retail, finance, real estate and more. If your business has repetitive operations, an agent can run them.' },
+      { q:'Can I see a demo first?',
+        a:"Of course — book a free 30-minute strategy session directly with the founder. You'll get a live demo plus a custom AI roadmap for your business.",
+        cta:{ label:'Book a Free Demo →', act:'demo' } },
+      { q:'How do I get started?',
+        a:'Create a free BSN account — you get 3 free analyses, instant access to the AI Dashboard, and you can deploy your first agent in minutes.',
+        cta:{ label:'Create Free Account →', act:'register' } },
+    ];
+
+    const cbMsgs  = document.getElementById('cbMsgs');
+    const cbChips = document.getElementById('cbChips');
+    let cbOpen = false, cbGreeted = false;
+
+    function cbScroll(){ cbMsgs.scrollTop = cbMsgs.scrollHeight; }
+
+    function cbAddMsg(text, who, cta){
+      const m = document.createElement('div');
+      m.className = 'cb-m ' + who;
+      m.textContent = text;
+      cbMsgs.appendChild(m);
+      if(cta){
+        const b = document.createElement('button');
+        b.className = 'cb-cta';
+        b.textContent = cta.label;
+        b.onclick = () => {
+          if(cta.act === 'pricing'){ window.togChat(false); document.getElementById('pricing')?.scrollIntoView({behavior:'smooth'}); }
+          else if(cta.act === 'demo'){ window.bookDemo(); }
+          else if(cta.act === 'register'){ window.togChat(false); window.showModal('register'); }
+        };
+        cbMsgs.appendChild(b);
+      }
+      cbScroll();
+    }
+
+    function cbAnswer(item){
+      const t = document.createElement('div');
+      t.className = 'cb-m bot cb-typing';
+      t.innerHTML = '<span></span><span></span><span></span>';
+      cbMsgs.appendChild(t); cbScroll();
+      setTimeout(() => { t.remove(); cbAddMsg(item.a, 'bot', item.cta); }, 700);
+    }
+
+    CB_FAQ.forEach((item, i) => {
+      const c = document.createElement('button');
+      c.className = 'cb-chip';
+      c.textContent = item.q;
+      c.onclick = () => { cbAddMsg(item.q, 'user'); cbAnswer(item); };
+      cbChips.appendChild(c);
+    });
+
+    window.togChat = function(force){
+      cbOpen = typeof force === 'boolean' ? force : !cbOpen;
+      document.getElementById('cbPanel').classList.toggle('open', cbOpen);
+      document.getElementById('cbFab').classList.toggle('open', cbOpen);
+      if(cbOpen && !cbGreeted){
+        cbGreeted = true;
+        cbAddMsg("Hi! 👋 I'm the BSN assistant. Pick a question below — I'll answer instantly.", 'bot');
+      }
     }
 
     /* RESTORE SESSION */
