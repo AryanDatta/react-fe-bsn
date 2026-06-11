@@ -50,7 +50,7 @@ const NAV = [
 
 const STATS = [
   { value:"70%+", label:"Cost Reduction",   icon:"📉", color:"#10b981" },
-  { value:"10%",  label:"Profits→Research", icon:"🧬", color:"#38bdf8" },
+  { value:"50%",  label:"Profits→Research", icon:"🧬", color:"#38bdf8" },
   { value:"4",    label:"Research Pillars", icon:"🌊", color:"#a78bfa" },
   { value:"∞",    label:"Multiverse Reach", icon:"🌌", color:"#f59e0b" },
 ];
@@ -132,13 +132,13 @@ function AgentCard({ agent, busy, onBuy, onDeploy, onKnow }) {
       </div>
 
       <div>
-        <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:5}}>{agent.name}</div>
-        <div style={{fontSize:12,color:"rgba(255,255,255,.4)",lineHeight:1.65}}>{agent.description}</div>
+        <div style={{fontSize:15,fontWeight:700,color:"#f5ecda",marginBottom:5}}>{agent.name}</div>
+        <div style={{fontSize:12,color:"rgba(245,236,218,.4)",lineHeight:1.65}}>{agent.description}</div>
       </div>
 
       <div style={{display:"flex",flexDirection:"column",gap:5}}>
         {(agent.features || []).map(f => (
-          <div key={f} style={{display:"flex",alignItems:"center",gap:7,fontSize:11,color:"rgba(255,255,255,.32)"}}>
+          <div key={f} style={{display:"flex",alignItems:"center",gap:7,fontSize:11,color:"rgba(245,236,218,.32)"}}>
             <span style={{color:m.accent}}>→</span>{f}
           </div>
         ))}
@@ -148,8 +148,8 @@ function AgentCard({ agent, busy, onBuy, onDeploy, onKnow }) {
       <div style={{display:"flex",alignItems:"baseline",gap:6,marginTop:2}}>
         {agent.purchasable ? (
           <>
-            <span style={{fontSize:18,fontWeight:800,color:"#fff",letterSpacing:"-.5px"}}>{fmtINR(agent.priceInr)}</span>
-            <span style={{fontSize:11,color:"rgba(255,255,255,.32)"}}>one-time</span>
+            <span style={{fontSize:18,fontWeight:800,color:"#f5ecda",letterSpacing:"-.5px"}}>{fmtINR(agent.priceInr)}</span>
+            <span style={{fontSize:11,color:"rgba(245,236,218,.32)"}}>one-time</span>
           </>
         ) : (
           <span style={{fontSize:12,fontWeight:600,color:tag.c}}>{soon ? "Coming soon" : "Research access"}</span>
@@ -190,15 +190,15 @@ function AgentCard({ agent, busy, onBuy, onDeploy, onKnow }) {
 
         <div style={{display:"flex",gap:8}}>
           <button onClick={() => onKnow(agent)}
-            style={{flex:1,padding:"8px 10px",borderRadius:9,background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.1)",color:"rgba(255,255,255,.62)",fontSize:11,fontWeight:600,cursor:"pointer",transition:"all .18s"}}
-            onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,.08)"}
-            onMouseLeave={e=>e.currentTarget.style.background="rgba(255,255,255,.04)"}>
+            style={{flex:1,padding:"8px 10px",borderRadius:9,background:"rgba(245,236,218,.04)",border:"1px solid rgba(245,236,218,.1)",color:"rgba(245,236,218,.62)",fontSize:11,fontWeight:600,cursor:"pointer",transition:"all .18s"}}
+            onMouseEnter={e=>e.currentTarget.style.background="rgba(245,236,218,.08)"}
+            onMouseLeave={e=>e.currentTarget.style.background="rgba(245,236,218,.04)"}>
             Know More
           </button>
           <button onClick={() => bookDemo(agent.name)}
-            style={{flex:1,padding:"8px 10px",borderRadius:9,background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.1)",color:"rgba(255,255,255,.62)",fontSize:11,fontWeight:600,cursor:"pointer",transition:"all .18s"}}
-            onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,.08)"}
-            onMouseLeave={e=>e.currentTarget.style.background="rgba(255,255,255,.04)"}>
+            style={{flex:1,padding:"8px 10px",borderRadius:9,background:"rgba(245,236,218,.04)",border:"1px solid rgba(245,236,218,.1)",color:"rgba(245,236,218,.62)",fontSize:11,fontWeight:600,cursor:"pointer",transition:"all .18s"}}
+            onMouseEnter={e=>e.currentTarget.style.background="rgba(245,236,218,.08)"}
+            onMouseLeave={e=>e.currentTarget.style.background="rgba(245,236,218,.04)"}>
             Book Demo
           </button>
         </div>
@@ -216,19 +216,19 @@ function KnowMoreModal({ agent, onClose, onBuy, onDeploy, busy }) {
       style={{position:"fixed",inset:0,zIndex:300,background:"rgba(2,8,14,.78)",backdropFilter:"blur(8px)",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
       <div onClick={e=>e.stopPropagation()}
         style={{maxWidth:520,width:"100%",borderRadius:20,padding:"28px",background:"linear-gradient(155deg,#0b1622,#070d14)",border:`1px solid ${m.accent}33`,boxShadow:"0 30px 80px rgba(0,0,0,.55)",position:"relative",maxHeight:"88vh",overflowY:"auto"}}>
-        <button onClick={onClose} style={{position:"absolute",top:16,right:16,width:30,height:30,borderRadius:8,background:"rgba(255,255,255,.05)",border:"1px solid rgba(255,255,255,.1)",color:"rgba(255,255,255,.5)",cursor:"pointer",fontSize:14}}>✕</button>
+        <button onClick={onClose} style={{position:"absolute",top:16,right:16,width:30,height:30,borderRadius:8,background:"rgba(245,236,218,.05)",border:"1px solid rgba(245,236,218,.1)",color:"rgba(245,236,218,.5)",cursor:"pointer",fontSize:14}}>✕</button>
         <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:18}}>
           <div style={{width:54,height:54,borderRadius:14,background:m.accentBg,border:`1px solid ${m.accent}30`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:26}}>{agent.icon}</div>
           <div>
-            <div style={{fontSize:19,fontWeight:700,color:"#fff"}}>{agent.name}</div>
+            <div style={{fontSize:19,fontWeight:700,color:"#f5ecda"}}>{agent.name}</div>
             <div style={{fontSize:11,color:m.accent,letterSpacing:"1px",fontWeight:600,marginTop:2}}>{agent.tag}{agent.purchasable?` · ${fmtINR(agent.priceInr)}`:""}</div>
           </div>
         </div>
-        <p style={{fontSize:13,color:"rgba(255,255,255,.55)",lineHeight:1.7,marginBottom:20}}>{agent.description}</p>
-        <div style={{fontSize:10,letterSpacing:"1.5px",color:"rgba(255,255,255,.3)",fontWeight:600,marginBottom:10}}>WHAT'S INCLUDED</div>
+        <p style={{fontSize:13,color:"rgba(245,236,218,.55)",lineHeight:1.7,marginBottom:20}}>{agent.description}</p>
+        <div style={{fontSize:10,letterSpacing:"1.5px",color:"rgba(245,236,218,.3)",fontWeight:600,marginBottom:10}}>WHAT'S INCLUDED</div>
         <div style={{display:"flex",flexDirection:"column",gap:9,marginBottom:24}}>
           {(agent.features || []).map(f => (
-            <div key={f} style={{display:"flex",alignItems:"center",gap:9,fontSize:13,color:"rgba(255,255,255,.7)"}}>
+            <div key={f} style={{display:"flex",alignItems:"center",gap:9,fontSize:13,color:"rgba(245,236,218,.7)"}}>
               <span style={{color:m.accent,fontWeight:700}}>→</span>{f}
             </div>
           ))}
@@ -253,7 +253,7 @@ function KnowMoreModal({ agent, onClose, onBuy, onDeploy, busy }) {
             </a>
           )}
           <button onClick={() => bookDemo(agent.name)}
-            style={{flex:1,minWidth:160,padding:"12px",borderRadius:10,background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.12)",color:"rgba(255,255,255,.72)",fontSize:13,fontWeight:600,cursor:"pointer"}}>
+            style={{flex:1,minWidth:160,padding:"12px",borderRadius:10,background:"rgba(245,236,218,.04)",border:"1px solid rgba(245,236,218,.12)",color:"rgba(245,236,218,.72)",fontSize:13,fontWeight:600,cursor:"pointer"}}>
             Book a Demo
           </button>
         </div>
@@ -428,26 +428,26 @@ export default function Dashboard() {
         <img src="/logo.png" alt="BSN" style={{height:28,filter:"drop-shadow(0 0 10px rgba(16,185,129,.6))"}}/>
         <div>
           <div style={{fontSize:14,fontWeight:700,color:"#34d399"}}>BSN</div>
-          <div style={{fontSize:7,letterSpacing:"2.5px",color:"rgba(255,255,255,.22)"}}>AI DASHBOARD</div>
+          <div style={{fontSize:7,letterSpacing:"2.5px",color:"rgba(245,236,218,.22)"}}>AI DASHBOARD</div>
         </div>
       </a>
       <nav style={{flex:1,display:"flex",flexDirection:"column",gap:3,padding:"0 8px"}}>
         {NAV.map(item => {
           const active = tab === item.id;
           return (
-            <button key={item.id} onClick={()=>setTab(item.id)} style={{display:"flex",alignItems:"center",gap:10,padding:"10px 12px",borderRadius:10,background:active?"rgba(14,165,233,.12)":"transparent",border:active?"1px solid rgba(14,165,233,.22)":"1px solid transparent",color:active?"#38bdf8":"rgba(255,255,255,.42)",fontSize:13,fontWeight:active?600:400,cursor:"pointer",textAlign:"left",transition:"all .16s"}}
-              onMouseEnter={e=>{if(!active)e.currentTarget.style.background="rgba(255,255,255,.04)"}}
+            <button key={item.id} onClick={()=>setTab(item.id)} style={{display:"flex",alignItems:"center",gap:10,padding:"10px 12px",borderRadius:10,background:active?"rgba(14,165,233,.12)":"transparent",border:active?"1px solid rgba(14,165,233,.22)":"1px solid transparent",color:active?"#38bdf8":"rgba(245,236,218,.42)",fontSize:13,fontWeight:active?600:400,cursor:"pointer",textAlign:"left",transition:"all .16s"}}
+              onMouseEnter={e=>{if(!active)e.currentTarget.style.background="rgba(245,236,218,.04)"}}
               onMouseLeave={e=>{if(!active)e.currentTarget.style.background="transparent"}}
             ><span style={{fontSize:13}}>{item.icon}</span>{item.label}</button>
           );
         })}
       </nav>
-      <div style={{margin:"0 8px",padding:"12px",borderRadius:12,background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.06)"}}>
+      <div style={{margin:"0 8px",padding:"12px",borderRadius:12,background:"rgba(245,236,218,.03)",border:"1px solid rgba(245,236,218,.06)"}}>
         <div style={{display:"flex",alignItems:"center",gap:9,marginBottom:10}}>
           <AvatarImg size={32}/>
           <div style={{overflow:"hidden"}}>
-            <div style={{fontSize:12,fontWeight:600,color:"#fff",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{displayName}</div>
-            <div style={{fontSize:10,color:"rgba(255,255,255,.28)",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{user.email}</div>
+            <div style={{fontSize:12,fontWeight:600,color:"#f5ecda",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{displayName}</div>
+            <div style={{fontSize:10,color:"rgba(245,236,218,.28)",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{user.email}</div>
           </div>
         </div>
         <button onClick={logout} style={{width:"100%",padding:"7px 10px",borderRadius:8,background:"rgba(239,68,68,.07)",border:"1px solid rgba(239,68,68,.2)",color:"rgba(239,68,68,.7)",fontSize:11,fontWeight:600,cursor:"pointer",transition:"all .18s"}}
@@ -466,7 +466,7 @@ export default function Dashboard() {
         <span style={{fontSize:14,fontWeight:700,color:"#34d399"}}>BSN</span>
       </a>
       <div style={{display:"flex",alignItems:"center",gap:10}}>
-        <span style={{fontSize:12,color:"rgba(255,255,255,.4)"}}>{firstName}</span>
+        <span style={{fontSize:12,color:"rgba(245,236,218,.4)"}}>{firstName}</span>
         <AvatarImg size={30}/>
       </div>
     </header>
@@ -478,7 +478,7 @@ export default function Dashboard() {
       {NAV.map(item => {
         const active = tab === item.id;
         return (
-          <button key={item.id} onClick={()=>setTab(item.id)} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:3,background:"none",border:"none",cursor:"pointer",color:active?"#38bdf8":"rgba(255,255,255,.32)",borderTop:active?"2px solid #38bdf8":"2px solid transparent",transition:"all .16s"}}>
+          <button key={item.id} onClick={()=>setTab(item.id)} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:3,background:"none",border:"none",cursor:"pointer",color:active?"#38bdf8":"rgba(245,236,218,.32)",borderTop:active?"2px solid #38bdf8":"2px solid transparent",transition:"all .16s"}}>
             <span style={{fontSize:16}}>{item.icon}</span>
             <span style={{fontSize:9,fontWeight:active?600:400,letterSpacing:".5px"}}>{item.label.split(" ")[0]}</span>
           </button>
@@ -498,7 +498,7 @@ export default function Dashboard() {
         <h1 style={{fontSize:mobile?22:26,fontWeight:700,letterSpacing:"-.5px"}}>
           Hello, <span style={{background:"linear-gradient(90deg,#34d399,#38bdf8)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{firstName}</span> 👋
         </h1>
-        <p style={{fontSize:13,color:"rgba(255,255,255,.35)",marginTop:5}}>
+        <p style={{fontSize:13,color:"rgba(245,236,218,.35)",marginTop:5}}>
           {ownedCount > 0 ? `You own ${ownedCount} agent${ownedCount>1?"s":""} · ${deployedCount} deployed.` : "Browse the marketplace and deploy your first AI agent."}
         </p>
       </div>
@@ -508,7 +508,7 @@ export default function Dashboard() {
             <div style={{position:"absolute",top:0,left:"20%",right:"20%",height:1,background:`linear-gradient(90deg,transparent,${s.color}44,transparent)`}}/>
             <div style={{fontSize:22}}>{s.icon}</div>
             <div style={{fontSize:mobile?22:26,fontWeight:800,color:s.color,letterSpacing:"-1px",marginTop:8}}>{s.value}</div>
-            <div style={{fontSize:10,color:"rgba(255,255,255,.3)",letterSpacing:"1px",marginTop:1}}>{s.label}</div>
+            <div style={{fontSize:10,color:"rgba(245,236,218,.3)",letterSpacing:"1px",marginTop:1}}>{s.label}</div>
           </div>
         ))}
       </div>
@@ -528,7 +528,7 @@ export default function Dashboard() {
       <div style={{marginBottom:28}}>
         <span style={{fontSize:10,letterSpacing:"2px",color:"rgba(56,189,248,.65)",fontWeight:600}}>BUY · DEPLOY · BOOK</span>
         <h1 style={{fontSize:mobile?22:24,fontWeight:700,marginTop:6}}>AI Agent Marketplace</h1>
-        <p style={{fontSize:13,color:"rgba(255,255,255,.35)",marginTop:5,maxWidth:500,lineHeight:1.7}}>Buy an agent with secure Razorpay checkout, deploy it in one click, or book a demo first. 10% of every purchase funds our research mission.</p>
+        <p style={{fontSize:13,color:"rgba(245,236,218,.35)",marginTop:5,maxWidth:500,lineHeight:1.7}}>Buy an agent with secure Razorpay checkout, deploy it in one click, or book a demo first. 50% of profits from every purchase fund our research mission.</p>
       </div>
       <div style={{display:"grid",gridTemplateColumns:agentCols,gap:16}}>
         {agents.map(a=><AgentCard key={a.id} agent={a} {...gridProps}/>)}
@@ -548,7 +548,10 @@ export default function Dashboard() {
       <div style={{marginBottom:28}}>
         <span style={{fontSize:10,letterSpacing:"2px",color:"rgba(16,185,129,.65)",fontWeight:600}}>THE BIGGER PICTURE</span>
         <h1 style={{fontSize:mobile?22:24,fontWeight:700,marginTop:6}}>Mission Impact</h1>
-        <p style={{fontSize:13,color:"rgba(255,255,255,.35)",marginTop:5,lineHeight:1.7,maxWidth:480}}>Every rupee generated funds four pioneering research pillars.</p>
+        <p style={{fontSize:13,color:"rgba(245,236,218,.35)",marginTop:5,lineHeight:1.7,maxWidth:480}}>How we'll split research funding across four pioneering pillars.</p>
+        <span style={{display:"inline-flex",alignItems:"center",gap:7,marginTop:12,padding:"5px 12px",borderRadius:100,background:"rgba(245,158,11,.08)",border:"1px solid rgba(245,158,11,.3)",fontSize:10,fontWeight:700,letterSpacing:"1.5px",color:"#fbbf24"}}>
+          <span style={{width:6,height:6,borderRadius:"50%",background:"#f59e0b",boxShadow:"0 0 6px #f59e0b"}}/>PRE-REVENUE · FUNDING BEGINS WITH FIRST SALE
+        </span>
       </div>
       <div style={{display:"grid",gridTemplateColumns:mobile?"1fr":"repeat(2,1fr)",gap:16,marginBottom:20}}>
         {PILLARS.map(p=>(
@@ -558,12 +561,12 @@ export default function Dashboard() {
               <span style={{fontSize:28}}>{p.icon}</span>
               <div><div style={{fontSize:14,fontWeight:700}}>{p.title}</div><div style={{fontSize:9,color:p.color,letterSpacing:"1px",fontWeight:600}}>RESEARCH PILLAR</div></div>
             </div>
-            <p style={{fontSize:12,color:"rgba(255,255,255,.38)",lineHeight:1.65,marginBottom:14}}>{p.desc}</p>
+            <p style={{fontSize:12,color:"rgba(245,236,218,.38)",lineHeight:1.65,marginBottom:14}}>{p.desc}</p>
             <div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}>
-              <span style={{fontSize:9,color:"rgba(255,255,255,.28)",letterSpacing:"1px"}}>FUNDING</span>
+              <span style={{fontSize:9,color:"rgba(245,236,218,.28)",letterSpacing:"1px"}}>TARGET ALLOCATION</span>
               <span style={{fontSize:12,fontWeight:700,color:p.color}}>{p.pct}%</span>
             </div>
-            <div style={{height:4,borderRadius:4,background:"rgba(255,255,255,.06)"}}>
+            <div style={{height:4,borderRadius:4,background:"rgba(245,236,218,.06)"}}>
               <div style={{height:"100%",width:`${p.pct}%`,background:`linear-gradient(90deg,${p.color}88,${p.color})`,borderRadius:4}}/>
             </div>
           </div>
@@ -572,8 +575,8 @@ export default function Dashboard() {
       <div style={{padding:"20px 22px",borderRadius:14,background:"rgba(16,185,129,.06)",border:"1px solid rgba(16,185,129,.15)",display:"flex",alignItems:"center",gap:16}}>
         <span style={{fontSize:32,flexShrink:0}}>🌱</span>
         <div>
-          <div style={{fontSize:13,fontWeight:700,marginBottom:4}}>10% of all revenue goes directly to research</div>
-          <div style={{fontSize:12,color:"rgba(255,255,255,.38)",lineHeight:1.6}}>When you buy or use any agent, you automatically fund ocean cleanup, biotech breakthroughs, and multiverse research.</div>
+          <div style={{fontSize:13,fontWeight:700,marginBottom:4}}>50% of all future profits are pledged to research</div>
+          <div style={{fontSize:12,color:"rgba(245,236,218,.38)",lineHeight:1.6}}>BSN is pre-revenue today. From the very first sale, every agent purchase will automatically fund ocean cleanup, biotech breakthroughs, and multiverse research — at the target allocations above.</div>
         </div>
       </div>
     </div>
@@ -592,7 +595,7 @@ export default function Dashboard() {
             {user.picture ? <img src={user.picture} alt={displayName} style={{width:"100%",height:"100%",objectFit:"cover"}}/> : initials}
           </div>
           <div style={{fontSize:16,fontWeight:700}}>{displayName}</div>
-          <div style={{fontSize:11,color:"rgba(255,255,255,.32)",marginTop:3,wordBreak:"break-all"}}>{user.email}</div>
+          <div style={{fontSize:11,color:"rgba(245,236,218,.32)",marginTop:3,wordBreak:"break-all"}}>{user.email}</div>
           <div style={{display:"flex",flexWrap:"wrap",justifyContent:"center",gap:6,marginTop:12}}>
             <span style={{padding:"3px 10px",borderRadius:100,background:"rgba(16,185,129,.1)",border:"1px solid rgba(16,185,129,.25)",fontSize:9,fontWeight:700,letterSpacing:"1.5px",color:"#34d399",display:"inline-flex",alignItems:"center",gap:5}}>
               <span style={{width:5,height:5,borderRadius:"50%",background:"#10b981",boxShadow:"0 0 5px #10b981"}}/>ACTIVE
@@ -601,13 +604,13 @@ export default function Dashboard() {
               <span style={{padding:"3px 10px",borderRadius:100,background:"rgba(66,133,244,.1)",border:"1px solid rgba(66,133,244,.25)",fontSize:9,fontWeight:700,letterSpacing:"1.5px",color:"#4285F4"}}>Google</span>
             )}
           </div>
-          <div style={{marginTop:16,paddingTop:14,borderTop:"1px solid rgba(255,255,255,.06)",display:"flex",justifyContent:"space-around"}}>
-            <div><div style={{fontSize:20,fontWeight:800,color:"#34d399"}}>{ownedCount}</div><div style={{fontSize:9,color:"rgba(255,255,255,.3)",letterSpacing:"1px"}}>OWNED</div></div>
-            <div><div style={{fontSize:20,fontWeight:800,color:"#38bdf8"}}>{deployedCount}</div><div style={{fontSize:9,color:"rgba(255,255,255,.3)",letterSpacing:"1px"}}>DEPLOYED</div></div>
+          <div style={{marginTop:16,paddingTop:14,borderTop:"1px solid rgba(245,236,218,.06)",display:"flex",justifyContent:"space-around"}}>
+            <div><div style={{fontSize:20,fontWeight:800,color:"#34d399"}}>{ownedCount}</div><div style={{fontSize:9,color:"rgba(245,236,218,.3)",letterSpacing:"1px"}}>OWNED</div></div>
+            <div><div style={{fontSize:20,fontWeight:800,color:"#38bdf8"}}>{deployedCount}</div><div style={{fontSize:9,color:"rgba(245,236,218,.3)",letterSpacing:"1px"}}>DEPLOYED</div></div>
           </div>
         </div>
         <div style={{padding:mobile?"20px":"24px",borderRadius:16,background:"rgba(2,11,18,.8)",border:"1px solid rgba(14,165,233,.12)"}}>
-          <div style={{fontSize:11,fontWeight:600,letterSpacing:"1px",color:"rgba(255,255,255,.28)",marginBottom:16}}>ACCOUNT DETAILS</div>
+          <div style={{fontSize:11,fontWeight:600,letterSpacing:"1px",color:"rgba(245,236,218,.28)",marginBottom:16}}>ACCOUNT DETAILS</div>
           {[
             {label:"Full Name",  value:displayName},
             {label:"Email",      value:user.email},
@@ -616,9 +619,9 @@ export default function Dashboard() {
             {label:"Phone",      value:user.phone||"—"},
             {label:"Auth Method",value:user.authProvider==="google"?"Google OAuth":"Email & Password"},
           ].map(row=>(
-            <div key={row.label} style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12,padding:"11px 0",borderBottom:"1px solid rgba(255,255,255,.05)"}}>
-              <span style={{fontSize:11,color:"rgba(255,255,255,.3)",flexShrink:0}}>{row.label}</span>
-              <span style={{fontSize:12,color:"rgba(255,255,255,.78)",fontWeight:500,textAlign:"right",wordBreak:"break-word",maxWidth:"60%"}}>{row.value}</span>
+            <div key={row.label} style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12,padding:"11px 0",borderBottom:"1px solid rgba(245,236,218,.05)"}}>
+              <span style={{fontSize:11,color:"rgba(245,236,218,.3)",flexShrink:0}}>{row.label}</span>
+              <span style={{fontSize:12,color:"rgba(245,236,218,.78)",fontWeight:500,textAlign:"right",wordBreak:"break-word",maxWidth:"60%"}}>{row.value}</span>
             </div>
           ))}
           <button onClick={logout} style={{marginTop:20,width:"100%",padding:"10px",borderRadius:10,background:"rgba(239,68,68,.08)",border:"1px solid rgba(239,68,68,.22)",color:"rgba(239,68,68,.8)",fontSize:12,fontWeight:600,cursor:"pointer",transition:"all .2s"}}
@@ -633,7 +636,7 @@ export default function Dashboard() {
   const tabs = { overview:<Overview/>, agents:<Agents/>, impact:<Impact/>, profile:<Profile/> };
 
   return (
-    <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#030d0a 0%,#020b10 50%,#030d0a 100%)",fontFamily:"'Inter',system-ui,sans-serif",color:"#fff",cursor:"auto",display:"flex",flexDirection:mobile?"column":"row"}}>
+    <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#030d0a 0%,#020b10 50%,#030d0a 100%)",fontFamily:"'Inter',system-ui,sans-serif",color:"#f5ecda",cursor:"auto",display:"flex",flexDirection:mobile?"column":"row"}}>
       {!mobile && <Sidebar/>}
       {mobile  && <MobileHeader/>}
       <main style={{flex:1,minWidth:0,marginLeft:mobile?0:220,overflowY:"auto",padding:mobile?"20px 16px 80px":tablet?"28px 28px":"36px 40px",position:"relative",zIndex:1}}>
@@ -649,10 +652,10 @@ export default function Dashboard() {
           style={{position:"fixed",inset:0,zIndex:320,background:"rgba(2,8,14,.78)",backdropFilter:"blur(8px)",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
           <div onClick={e=>e.stopPropagation()}
             style={{maxWidth:400,width:"100%",borderRadius:20,padding:"26px",background:"linear-gradient(155deg,#0b1622,#070d14)",border:"1px solid rgba(56,189,248,.22)",boxShadow:"0 30px 80px rgba(0,0,0,.55)",position:"relative"}}>
-            <button onClick={()=>setChooser(null)} style={{position:"absolute",top:14,right:14,width:30,height:30,borderRadius:8,background:"rgba(255,255,255,.05)",border:"1px solid rgba(255,255,255,.1)",color:"rgba(255,255,255,.5)",cursor:"pointer",fontSize:14}}>✕</button>
+            <button onClick={()=>setChooser(null)} style={{position:"absolute",top:14,right:14,width:30,height:30,borderRadius:8,background:"rgba(245,236,218,.05)",border:"1px solid rgba(245,236,218,.1)",color:"rgba(245,236,218,.5)",cursor:"pointer",fontSize:14}}>✕</button>
             <div style={{fontSize:11,letterSpacing:"1.5px",color:"rgba(56,189,248,.7)",fontWeight:600,marginBottom:4}}>CHECKOUT</div>
-            <div style={{fontSize:18,fontWeight:700,color:"#fff",marginBottom:2}}>{chooser.name}</div>
-            <div style={{fontSize:13,color:"rgba(255,255,255,.45)",marginBottom:22}}>Choose a payment method · {fmtINR(chooser.priceInr)}</div>
+            <div style={{fontSize:18,fontWeight:700,color:"#f5ecda",marginBottom:2}}>{chooser.name}</div>
+            <div style={{fontSize:13,color:"rgba(245,236,218,.45)",marginBottom:22}}>Choose a payment method · {fmtINR(chooser.priceInr)}</div>
 
             <button onClick={()=>{ const a=chooser; setChooser(null); buyAgent(a); }}
               style={{width:"100%",padding:"13px",borderRadius:12,marginBottom:10,background:"linear-gradient(90deg,#34d399,#38bdf8)",border:"none",color:"#04140e",fontSize:13,fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
@@ -664,7 +667,7 @@ export default function Dashboard() {
               Pay<span style={{color:"#0070ba"}}>Pal</span>
             </button>
 
-            <p style={{fontSize:10.5,color:"rgba(255,255,255,.3)",lineHeight:1.55,marginTop:16,textAlign:"center"}}>
+            <p style={{fontSize:10.5,color:"rgba(245,236,218,.3)",lineHeight:1.55,marginTop:16,textAlign:"center"}}>
               Razorpay confirms instantly. PayPal opens a payment link — you'll confirm here once it's sent.
             </p>
           </div>
@@ -677,11 +680,11 @@ export default function Dashboard() {
           style={{position:"fixed",inset:0,zIndex:330,background:"rgba(2,8,14,.8)",backdropFilter:"blur(8px)",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
           <div onClick={e=>e.stopPropagation()}
             style={{maxWidth:420,width:"100%",borderRadius:20,padding:"28px",background:"linear-gradient(155deg,#0b1622,#070d14)",border:"1px solid rgba(255,196,57,.3)",boxShadow:"0 30px 80px rgba(0,0,0,.55)",position:"relative",textAlign:"center"}}>
-            <button onClick={()=>setPaypal(null)} style={{position:"absolute",top:14,right:14,width:30,height:30,borderRadius:8,background:"rgba(255,255,255,.05)",border:"1px solid rgba(255,255,255,.1)",color:"rgba(255,255,255,.5)",cursor:"pointer",fontSize:14}}>✕</button>
+            <button onClick={()=>setPaypal(null)} style={{position:"absolute",top:14,right:14,width:30,height:30,borderRadius:8,background:"rgba(245,236,218,.05)",border:"1px solid rgba(245,236,218,.1)",color:"rgba(245,236,218,.5)",cursor:"pointer",fontSize:14}}>✕</button>
             <div style={{fontSize:40,marginBottom:10}}>💸</div>
-            <div style={{fontSize:18,fontWeight:700,color:"#fff",marginBottom:8}}>Complete your PayPal payment</div>
-            <p style={{fontSize:13,color:"rgba(255,255,255,.5)",lineHeight:1.65,marginBottom:18}}>
-              A PayPal tab opened for <strong style={{color:"#fff"}}>{paypal.name}</strong> ({fmtINR(paypal.priceInr)}).
+            <div style={{fontSize:18,fontWeight:700,color:"#f5ecda",marginBottom:8}}>Complete your PayPal payment</div>
+            <p style={{fontSize:13,color:"rgba(245,236,218,.5)",lineHeight:1.65,marginBottom:18}}>
+              A PayPal tab opened for <strong style={{color:"#f5ecda"}}>{paypal.name}</strong> ({fmtINR(paypal.priceInr)}).
               Send the payment there, then confirm below to unlock the agent.
             </p>
             <a href={paypal.payUrl} target="_blank" rel="noreferrer"
@@ -692,7 +695,7 @@ export default function Dashboard() {
               style={{width:"100%",padding:"13px",borderRadius:12,background:"linear-gradient(90deg,#34d399,#38bdf8)",border:"none",color:"#04140e",fontSize:13,fontWeight:700,cursor:busy===paypal.id?"wait":"pointer"}}>
               {busy===paypal.id ? "Confirming…" : "I've Paid — Unlock Agent"}
             </button>
-            <p style={{fontSize:10,color:"rgba(255,255,255,.28)",marginTop:12,lineHeight:1.5}}>
+            <p style={{fontSize:10,color:"rgba(245,236,218,.28)",marginTop:12,lineHeight:1.5}}>
               PayPal.me payments are verified manually by our team. Misuse may revoke access.
             </p>
           </div>
@@ -700,7 +703,7 @@ export default function Dashboard() {
       )}
 
       {toast && (
-        <div style={{position:"fixed",bottom:mobile?72:24,left:"50%",transform:"translateX(-50%)",zIndex:400,padding:"12px 20px",borderRadius:12,background:"rgba(8,22,34,.96)",border:"1px solid rgba(56,189,248,.3)",color:"#fff",fontSize:13,fontWeight:500,boxShadow:"0 12px 40px rgba(0,0,0,.5)",maxWidth:"90vw",textAlign:"center"}}>
+        <div style={{position:"fixed",bottom:mobile?72:24,left:"50%",transform:"translateX(-50%)",zIndex:400,padding:"12px 20px",borderRadius:12,background:"rgba(8,22,34,.96)",border:"1px solid rgba(56,189,248,.3)",color:"#f5ecda",fontSize:13,fontWeight:500,boxShadow:"0 12px 40px rgba(0,0,0,.5)",maxWidth:"90vw",textAlign:"center"}}>
           {toast}
         </div>
       )}
