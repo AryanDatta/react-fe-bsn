@@ -52,12 +52,11 @@ const pageHtml = `
   </a>
 
   <div class="nav-links">
-    <a href="#vision">Vision</a>
-    <a href="#ai3d">AI + 3D</a>
+    <a href="#services">Services</a>
+    <a href="#proof">Proof</a>
     <a href="/dashboard" class="nav-aidash" onclick="event.preventDefault();goDashboard()"><span class="nav-aidash-dot"></span>AI Dashboard</a>
-    <a href="#research">Research</a>
-    <a href="#model">Model</a>
     <a href="#pricing">Pricing</a>
+    <a href="#vision">Mission</a>
     <a href="#join">Join</a>
     <a href="#" class="nav-demo" onclick="bookDemo(event)"><span class="nav-demo-dot"></span>Book a Demo</a>
   </div>
@@ -106,12 +105,11 @@ const pageHtml = `
 
 <!-- Mobile menu -->
 <div class="mob-menu" id="mobMenu">
-  <a href="#vision" onclick="togMob()">Vision</a>
-  <a href="#ai3d" onclick="togMob()">AI + 3D</a>
+  <a href="#services" onclick="togMob()">Services</a>
+  <a href="#proof" onclick="togMob()">Proof of Work</a>
   <a href="/dashboard" class="mob-aidash" onclick="event.preventDefault();togMob();goDashboard()">⊞ AI Dashboard</a>
-  <a href="#research" onclick="togMob()">Research</a>
-  <a href="#model" onclick="togMob()">Model</a>
   <a href="#pricing" onclick="togMob()">Pricing</a>
+  <a href="#vision" onclick="togMob()">Mission</a>
   <a href="#join" onclick="togMob()">Join</a>
   <div class="mob-bottom">
     <a href="#" class="mob-demo" onclick="togMob();bookDemo(event)">
@@ -183,27 +181,27 @@ const pageHtml = `
 <section class="hero">
   <div class="hero-inner">
     <div>
-      <div class="h-eye"><span class="e-dot"></span>SEED STAGE · DELHI, INDIA</div>
+      <div class="h-eye"><span class="e-dot"></span>AI AUTOMATION FOR BUSINESSES · DELHI, INDIA</div>
       <h1 class="ht">
-        Autonomous AI<br>Agents for the<br>
-        <span class="hem">3D World</span> &amp;<br>
-        <span class="hgrad">the Multiverse</span>
+        We Build <span class="hem">AI Automation</span><br>
+        Systems for Businesses<br>
+        to <span class="hgrad">Save Time</span>
       </h1>
-      <p class="h-body">Deploy <strong>enterprise AI agents</strong>, <strong>AI digital twins</strong> and <strong>agentic AI</strong> that slash operations costs by 70%+ — so we can fund pioneering biotechnology, ocean revival, and steps toward the <strong>multiverse</strong>.</p>
+      <p class="h-body">We build <strong>AI automation systems</strong> that <strong>increase efficiency</strong>, <strong>generate leads</strong>, and <strong>reduce the time it takes to make decisions</strong> — so your team focuses on growth, not repetitive work.</p>
       <div class="h-acts">
-        <a href="#join" class="bp2">Start the Journey →</a>
-        <a href="#" onclick="bookDemo(event)" class="bo2">Book a Demo</a>
+        <a href="#" onclick="bookDemo(event)" class="bp2">Book Free AI Consultation →</a>
+        <a href="#proof" class="bo2">See AI Demo</a>
       </div>
       <div class="h-stats">
-        <div class="hs"><div class="n">70%+</div><div class="l">COST REDUCTION</div></div>
+        <div class="hs"><div class="n">70%+</div><div class="l">LESS MANUAL WORK</div></div>
         <div class="sdiv"></div>
-        <div class="hs"><div class="n">50%</div><div class="l">PROFITS → RESEARCH</div></div>
+        <div class="hs"><div class="n">24/7</div><div class="l">LEAD RESPONSE</div></div>
         <div class="sdiv"></div>
-        <div class="hs"><div class="n">4</div><div class="l">RESEARCH PILLARS</div></div>
+        <div class="hs"><div class="n">Live</div><div class="l">SYSTEMS SHIPPED</div></div>
       </div>
     </div>
     <div class="hero-vis">
-      <div class="orbit o1"><div class="planet" onclick="document.getElementById('ai3d')?.scrollIntoView({behavior:'smooth'})"><span class="planet-ball">🤖</span><span class="planet-label">AI Agents Live</span><div class="planet-tip">We build and deploy intelligent AI agents that automate operations across industries, slashing costs and creating new revenue streams.</div></div></div>
+      <div class="orbit o1"><div class="planet" onclick="document.getElementById('ai3d')?.scrollIntoView({behavior:'smooth'})"><span class="planet-ball">🤖</span><span class="planet-label">AI Agents Live</span><div class="planet-tip">We build and deploy intelligent AI agents that automate operations across industries, increasing efficiency and speeding up decision-making.</div></div></div>
       <div class="orbit o2"><div class="planet" onclick="document.getElementById('research')?.scrollIntoView({behavior:'smooth'})"><span class="planet-ball">🧬</span><span class="planet-label">Biotech R&D</span><div class="planet-tip">Innovative biotech solutions that recycle plastics, clean oceans, and restore marine ecosystems at global scale.</div></div></div>
       <div class="orbit o3"><div class="planet" onclick="document.getElementById('research')?.scrollIntoView({behavior:'smooth'})"><span class="planet-ball">🌊</span><span class="planet-label">Ocean Revival</span><div class="planet-tip">AI-guided cleanup fleets and nature-based technologies to heal our blue planet for generations.</div></div></div>
       <div class="orbit o4"><div class="planet" onclick="document.getElementById('research')?.scrollIntoView({behavior:'smooth'})"><span class="planet-ball">🌌</span><span class="planet-label">Multiverse</span><div class="planet-tip">Theoretical and experimental research into consciousness across dimensions and multiversal pathways.</div></div></div>
@@ -225,6 +223,24 @@ const pageHtml = `
   <div class="sc-hint"><span>SCROLL</span><div class="sc-line"></div></div>
 </section>
 
+<!-- ═══ SERVICES / WHAT WE BUILD ═══ -->
+<section id="services" class="s-wh">
+  <div class="si">
+    <div class="rv" style="text-align:center">
+      <span class="slbl" style="color:#1254a4">WHAT WE BUILD</span>
+      <h2 class="stit" style="color:#030f1e">AI Systems That Do<br><em style="color:#1254a4;font-style:italic;font-weight:300">Real Business Work</em></h2>
+      <p style="font-size:14px;color:rgba(3,15,30,.55);margin-top:12px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.7">Practical AI you can deploy now — built to capture leads, answer customers, and cut repetitive work.</p>
+    </div>
+    <div class="res-grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+      <div class="rc rv d1"><span class="rcico">💬</span><h3>AI Lead Response Assistant</h3><p><strong>Problem:</strong> leads go cold when no one replies fast. <strong>For:</strong> sales teams &amp; agents. <strong>Benefit:</strong> instant 24/7 replies over email &amp; SMS/WhatsApp — never miss an enquiry.</p><span class="rcn">01</span></div>
+      <div class="rc rv d2"><span class="rcico">🎯</span><h3>AI Lead Qualification &amp; Scoring</h3><p><strong>Problem:</strong> reps waste hours on unqualified leads. <strong>For:</strong> busy sales teams. <strong>Benefit:</strong> AI reads buyer intent and scores leads HOT / WARM / COLD so you chase only real buyers.</p><span class="rcn">02</span></div>
+      <div class="rc rv d3"><span class="rcico">🤖</span><h3>AI Customer Support Bot</h3><p><strong>Problem:</strong> repetitive questions eat your team's day. <strong>For:</strong> support &amp; ops. <strong>Benefit:</strong> instant, accurate answers around the clock — more efficiency, faster replies.</p><span class="rcn">03</span></div>
+      <div class="rc rv d4"><span class="rcico">⚙️</span><h3>Custom AI Business Automation</h3><p><strong>Problem:</strong> manual workflows slow everything down. <strong>For:</strong> ops-heavy businesses. <strong>Benefit:</strong> we automate any repetitive process — higher efficiency, fewer errors, faster decisions.</p><span class="rcn">04</span></div>
+      <div class="rc rv d1" style="background:linear-gradient(135deg,#e0f2fe,#e1f7eb)"><span class="rcico">💻</span><h3>Custom Websites &amp; IT Solutions</h3><p><strong>Problem:</strong> off-the-shelf tools don't fit how you work. <strong>For:</strong> founders &amp; growing businesses. <strong>Benefit:</strong> we design and build custom websites, SaaS platforms and full IT solutions tailored to your workflow.</p><span class="rcn">05</span></div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══ CONSULTING ═══ -->
 <section id="consulting" class="s-lt">
   <div class="si">
@@ -232,7 +248,7 @@ const pageHtml = `
       <div class="rv">
         <div class="cbg"><span style="width:6px;height:6px;border-radius:50%;background:#1254a4;display:inline-block"></span>LIMITED SLOTS · FREE FOR FOUNDERS</div>
         <h2 class="stit" style="color:#030f1e">Book Your Free<br><span style="color:#1254a4;font-weight:300;font-style:italic">3D AI Strategy</span><br>Session</h2>
-        <p class="cbody">Speak directly with the founder. Get a personalized roadmap for deploying 3D AI agents that slash costs and fund our research in emotion-driven energy awakening, biotechnology, ocean revival, and the multiverse.</p>
+        <p class="cbody">Speak directly with the founder. Get a personalized roadmap for deploying 3D AI agents that increase efficiency, speed up decisions, and fund our research in emotion-driven energy awakening, biotechnology, ocean revival, and the multiverse.</p>
         <ul class="clist">
           <li><span class="cli">🪷</span>Custom 3D AI deployment plan for your business</li>
           <li><span class="cli">🌐</span>Live demo of revenue-generating agents</li>
@@ -263,7 +279,7 @@ const pageHtml = `
       <h2 class="stit" style="color:#030f1e">From AI Agents to<br><em style="color:#1254a4;font-style:italic;font-weight:300">Awakened Humanity</em></h2>
     </div>
     <div class="vis-grid">
-      <div class="vc rv d1"><span class="vcn">01</span><span class="vcico">🤖</span><h3>Deploy AI Agents First</h3><p>We build and deploy intelligent AI agents that automate operations across industries, slashing costs and creating new revenue streams.</p></div>
+      <div class="vc rv d1"><span class="vcn">01</span><span class="vcico">🤖</span><h3>Deploy AI Agents First</h3><p>We build and deploy intelligent AI agents that automate operations across industries, increasing efficiency and speeding up decision-making.</p></div>
       <div class="vc rv d2"><span class="vcn">02</span><span class="vcico">🌊</span><h3>Fund the Future</h3><p>Every rupee earned powers biotechnology research, ocean recycling & cleanup, and groundbreaking work in awareness and emotional mastery.</p></div>
       <div class="vc rv d3"><span class="vcn">03</span><span class="vcico">🧘‍♂️</span><h3>Higher Consciousness</h3><p>We research emotion-driven energies, the universe's deepest secrets, and practical steps toward the multiverse — creating Higher Emotional Intelligence.</p></div>
     </div>
@@ -305,7 +321,7 @@ const pageHtml = `
         </div>
         <div class="team-name">Aryan Datta</div>
         <div class="team-role">FOUNDER & CEO</div>
-        <p class="team-bio">Visionary behind BSN's AI-powered 3D world. Steering autonomous agents, digital twins and agentic AI that cut operations costs and fund humanity's awakening.</p>
+        <p class="team-bio">Visionary behind BSN's AI-powered 3D world. Steering autonomous agents, digital twins and agentic AI that increase efficiency and fund humanity's awakening.</p>
         <div class="team-tags">
           <span class="team-tag">AI Agents</span>
           <span class="team-tag">3D World</span>
@@ -339,7 +355,7 @@ const pageHtml = `
         <h2 class="stit">Running the 3D World<br>with <em>Autonomous AI</em></h2>
         <p class="a3b">As founder I personally steer <strong>autonomous AI agents</strong>, <strong>AI digital twins</strong> and <strong>agentic AI</strong> operating in immersive 3D environments — virtual factories, smart cities, and metaverse-scale operations.</p>
         <div class="a3fs">
-          <div class="a3f"><span class="a3fa">→</span><p><strong>Enterprise AI agents</strong> & 3D agents that reduce human operations by 70%+</p></div>
+          <div class="a3f"><span class="a3fa">→</span><p><strong>Enterprise AI agents</strong> & 3D agents that increase operational efficiency by 70%+</p></div>
           <div class="a3f"><span class="a3fa">→</span><p>Real-time <strong>AI digital twins</strong> for any industry — manufacturing to healthcare</p></div>
           <div class="a3f"><span class="a3fa">→</span><p><strong>AI automation</strong> & workflow intelligence that drives revenue and funds our mission</p></div>
         </div>
@@ -354,7 +370,7 @@ const pageHtml = `
           <canvas id="globeC" width="250" height="250"></canvas>
           <div class="g-badge" style="top:4%;left:0%;--gd:7s;--gdd:0s;"><span class="gbd"></span>3D Agents Active</div>
           <div class="g-badge" style="bottom:8%;right:-8%;--gd:9s;--gdd:2s;"><span class="gbd"></span>Digital Twin Live</div>
-          <div class="g-badge" style="top:44%;right:-12%;--gd:8s;--gdd:1s;"><span class="gbd"></span>70% Cost Saved</div>
+          <div class="g-badge" style="top:44%;right:-12%;--gd:8s;--gdd:1s;"><span class="gbd"></span>70% Less Manual Work</div>
         </div>
       </div>
     </div>
@@ -385,11 +401,67 @@ const pageHtml = `
       <h2 class="stit">The Virtuous <em>Cycle</em></h2>
     </div>
     <div class="cyc rv">
-      <div class="cycs"><div class="cycn">01</div><h3>Deploy AI Agents</h3><p>Cut operational costs for businesses worldwide with intelligent autonomous agents</p></div>
+      <div class="cycs"><div class="cycn">01</div><h3>Deploy AI Agents</h3><p>Increase efficiency and speed up decisions for businesses worldwide with intelligent autonomous agents</p></div>
       <div class="cyca">→</div>
       <div class="cycs"><div class="cycn">02</div><h3>Generate Revenue</h3><p>Sustainable cash flow from AI services creates a self-reinforcing engine</p></div>
       <div class="cyca">→</div>
       <div class="cycs"><div class="cycn">03</div><h3>Fund the Mission</h3><p>50% of profits fuel research, ocean cleanup, and consciousness studies</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROOF OF WORK ═══ -->
+<section id="proof" class="s-lt">
+  <div class="si">
+    <div class="rv" style="text-align:center">
+      <span class="slbl" style="color:#1254a4">PROOF OF WORK</span>
+      <h2 class="stit" style="color:#030f1e">AI Systems<br><em style="color:#1254a4;font-style:italic;font-weight:300">We Have Built</em></h2>
+      <p style="font-size:14px;color:rgba(3,15,30,.55);margin:12px auto 0;max-width:540px;line-height:1.7">Real, working software — not slides. Here's a system we built and shipped.</p>
+    </div>
+
+    <!-- Flagship product -->
+    <div class="rv" style="margin-top:44px;background:linear-gradient(160deg,#071426,#0a1f3a);border:1px solid rgba(56,189,248,.18);border-radius:22px;padding:34px 30px;box-shadow:0 24px 60px rgba(3,20,40,.18)">
+      <div style="display:inline-flex;align-items:center;gap:7px;font-size:11px;letter-spacing:1.5px;color:#38bdf8;border:1px solid rgba(56,189,248,.3);padding:5px 12px;border-radius:30px;margin-bottom:16px"><span style="width:6px;height:6px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981"></span>LIVE · 24/7 · ALWAYS WORKING</div>
+      <h3 style="font-size:26px;font-weight:700;color:#f5ecda;letter-spacing:-.5px;margin-bottom:8px">AI Real Estate Sales Assistant</h3>
+      <p style="font-size:14px;color:rgba(245,236,218,.6);line-height:1.7;max-width:640px">Qualifies leads, responds instantly, automates follow-ups, and helps agents close more deals. <strong style="color:#fbbf24">Respond faster. Qualify smarter. Close more deals.</strong></p>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:26px">
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(56,189,248,.12);border-radius:14px;padding:18px 16px"><div style="font-size:22px;margin-bottom:8px">⚡</div><div style="font-size:13px;font-weight:600;color:#f5ecda;margin-bottom:5px">Instant Response</div><div style="font-size:11.5px;color:rgba(245,236,218,.5);line-height:1.6">Replies to new inquiries instantly, 24/7, via email or SMS/WhatsApp.</div></div>
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(56,189,248,.12);border-radius:14px;padding:18px 16px"><div style="font-size:22px;margin-bottom:8px">🧠</div><div style="font-size:13px;font-weight:600;color:#f5ecda;margin-bottom:5px">Smart Lead Qualification</div><div style="font-size:11.5px;color:rgba(245,236,218,.5);line-height:1.6">Extracts key details and reads buyer intent using AI.</div></div>
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(56,189,248,.12);border-radius:14px;padding:18px 16px"><div style="font-size:22px;margin-bottom:8px">⭐</div><div style="font-size:13px;font-weight:600;color:#f5ecda;margin-bottom:5px">Lead Scoring</div><div style="font-size:11.5px;color:rgba(245,236,218,.5);line-height:1.6">Scores leads HOT, WARM, or COLD so agents focus on the right ones.</div></div>
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(56,189,248,.12);border-radius:14px;padding:18px 16px"><div style="font-size:22px;margin-bottom:8px">🔁</div><div style="font-size:13px;font-weight:600;color:#f5ecda;margin-bottom:5px">Automated Follow-ups</div><div style="font-size:11.5px;color:rgba(245,236,218,.5);line-height:1.6">Sends timely follow-ups automatically and nurtures leads until they're ready.</div></div>
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(56,189,248,.12);border-radius:14px;padding:18px 16px"><div style="font-size:22px;margin-bottom:8px">📊</div><div style="font-size:13px;font-weight:600;color:#f5ecda;margin-bottom:5px">Agent Dashboard</div><div style="font-size:11.5px;color:rgba(245,236,218,.5);line-height:1.6">Tracks leads, conversations, scores and activity in one simple view.</div></div>
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(56,189,248,.12);border-radius:14px;padding:18px 16px"><div style="font-size:22px;margin-bottom:8px">✉️</div><div style="font-size:13px;font-weight:600;color:#f5ecda;margin-bottom:5px">Daily Lead Digest</div><div style="font-size:11.5px;color:rgba(245,236,218,.5);line-height:1.6">A daily email summary of new leads and key insights.</div></div>
+      </div>
+    </div>
+
+    <!-- How it works -->
+    <div class="rv" style="margin-top:34px;text-align:center">
+      <span class="slbl" style="color:#1254a4">HOW IT WORKS</span>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:20px">
+        <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:30px;padding:8px 14px;box-shadow:0 6px 16px rgba(3,20,40,.06)"><span style="width:20px;height:20px;border-radius:50%;background:#1254a4;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto">1</span><span style="font-size:12px;color:#031508;font-weight:500">Visitor submits inquiry</span></div>
+        <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:30px;padding:8px 14px;box-shadow:0 6px 16px rgba(3,20,40,.06)"><span style="width:20px;height:20px;border-radius:50%;background:#1254a4;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto">2</span><span style="font-size:12px;color:#031508;font-weight:500">AI analyzes &amp; qualifies</span></div>
+        <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:30px;padding:8px 14px;box-shadow:0 6px 16px rgba(3,20,40,.06)"><span style="width:20px;height:20px;border-radius:50%;background:#1254a4;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto">3</span><span style="font-size:12px;color:#031508;font-weight:500">Lead scored HOT/WARM/COLD</span></div>
+        <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:30px;padding:8px 14px;box-shadow:0 6px 16px rgba(3,20,40,.06)"><span style="width:20px;height:20px;border-radius:50%;background:#1254a4;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto">4</span><span style="font-size:12px;color:#031508;font-weight:500">Instant response sent</span></div>
+        <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:30px;padding:8px 14px;box-shadow:0 6px 16px rgba(3,20,40,.06)"><span style="width:20px;height:20px;border-radius:50%;background:#1254a4;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto">5</span><span style="font-size:12px;color:#031508;font-weight:500">Auto follow-ups nurture</span></div>
+        <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:30px;padding:8px 14px;box-shadow:0 6px 16px rgba(3,20,40,.06)"><span style="width:20px;height:20px;border-radius:50%;background:#10b981;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto">6</span><span style="font-size:12px;color:#031508;font-weight:500">Agent closes the deal</span></div>
+      </div>
+    </div>
+
+    <!-- Tech stack -->
+    <div class="rv" style="margin-top:34px;text-align:center">
+      <div style="font-size:11px;letter-spacing:1.5px;color:rgba(3,15,30,.45);margin-bottom:12px">BUILT WITH</div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px">
+        <span style="font-size:12px;color:#031508;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:8px;padding:7px 12px;font-weight:500">Node.js</span>
+        <span style="font-size:12px;color:#031508;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:8px;padding:7px 12px;font-weight:500">Express.js</span>
+        <span style="font-size:12px;color:#031508;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:8px;padding:7px 12px;font-weight:500">Groq AI</span>
+        <span style="font-size:12px;color:#031508;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:8px;padding:7px 12px;font-weight:500">JavaScript</span>
+        <span style="font-size:12px;color:#031508;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:8px;padding:7px 12px;font-weight:500">HTML5</span>
+        <span style="font-size:12px;color:#031508;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:8px;padding:7px 12px;font-weight:500">CSS3</span>
+        <span style="font-size:12px;color:#031508;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:8px;padding:7px 12px;font-weight:500">Gmail SMTP</span>
+        <span style="font-size:12px;color:#031508;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:8px;padding:7px 12px;font-weight:500">REST API</span>
+      </div>
+      <div style="margin-top:22px"><a href="#" onclick="bookDemo(event)" class="bd2">See a Live Demo →</a></div>
     </div>
   </div>
 </section>
@@ -408,8 +480,8 @@ const pageHtml = `
         <div class="pname">Seed Agent</div>
         <div class="pprice"><span class="am">₹99K</span><span class="pe">/mo</span></div>
         <p class="pnote">* Excl. one-time setup</p>
-        <p class="pdesc">Perfect for small teams ready to cut operations costs with 3D AI.</p>
-        <ul class="pfs"><li><span class="pfi">→</span>1 AI agent</li><li><span class="pfi">→</span>Basic digital twin & automation</li><li><span class="pfi">→</span>30%+ operations cost reduction</li><li><span class="pfi">→</span>Monthly mission impact report</li></ul>
+        <p class="pdesc">Perfect for small teams ready to boost efficiency with 3D AI.</p>
+        <ul class="pfs"><li><span class="pfi">→</span>1 AI agent</li><li><span class="pfi">→</span>Basic digital twin & automation</li><li><span class="pfi">→</span>30%+ efficiency gain</li><li><span class="pfi">→</span>Monthly mission impact report</li></ul>
         <a href="#" onclick="showModal('register')" class="bpg">START WITH SEED AGENT</a>
       </div>
       <div class="pc pc-f rv d2">
@@ -854,12 +926,12 @@ export default function App() {
     /* ── STATIC CHATBOT ────────────────────────────────────────────── */
     const CB_FAQ = [
       { q:'What does BSN actually do?',
-        a:'We deploy autonomous AI agents and digital twins that run your business operations — procurement, scheduling, reporting, analysis — 24/7. Clients typically cut operations costs by 70%+.' },
+        a:'We deploy autonomous AI agents and digital twins that run your business operations — procurement, scheduling, reporting, analysis — 24/7. Clients typically boost efficiency by 70%+ and make faster decisions.' },
       { q:'How much does it cost?',
         a:'Marketplace agents start at a one-time ₹4,999. Managed plans: Seed Agent ₹99K/mo (1 agent), Lotus Agent ₹2.99L/mo (3 advanced agents — most popular), and custom Multiverse plans for enterprises.',
         cta:{ label:'See Pricing →', act:'pricing' } },
-      { q:'How do AI agents cut 70% of my costs?',
-        a:'Agents automate repetitive operations around the clock — no salaries, no breaks, no errors from fatigue. Most clients see 30%+ savings in the first month, scaling to 70%+ as more workflows are automated.' },
+      { q:'How do AI agents make me 70% more efficient?',
+        a:'Agents automate repetitive operations around the clock — no salaries, no breaks, no errors from fatigue. Most clients see 30%+ efficiency gains in the first month, scaling to 70%+ as more workflows are automated.' },
       { q:'How fast can I deploy?',
         a:'Marketplace agents deploy in one click right after purchase. Custom enterprise agents typically go live in 2–4 weeks, including onboarding and training on your workflows.' },
       { q:'Is my business data secure?',
