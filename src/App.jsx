@@ -1,48 +1,11 @@
 import { useEffect } from "react";
 
-// ── Change this to your deployed Flask URL when you go live ──
-const FLASK_API = "http://localhost:5000";
-
-// ── Google OAuth Client ID (set in .env as VITE_GOOGLE_CLIENT_ID) ──
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
-
 const pageHtml = `
 
-<div id="gsi-fallback" style="display:none"></div>
 <div id="cd"></div>
 <div id="cr"></div>
 <div id="pb"></div>
 <canvas id="bg"></canvas>
-
-<!-- ═══ AUTH LOADING OVERLAY ═══ -->
-<div class="auth-loading" id="authLoading">
-  <div class="auth-loading-box">
-    <img src="/logo.png" alt="BSN" class="auth-loading-logo">
-    <div class="auth-spinner"></div>
-    <div class="auth-loading-text" id="authLoadingText">Signing you in…</div>
-  </div>
-</div>
-
-<!-- ═══ STATIC CHATBOT (bottom-left) ═══ -->
-<div class="cb-wrap" id="cbWrap">
-  <div class="cb-panel" id="cbPanel">
-    <div class="cb-head">
-      <div class="cb-ava">🤖</div>
-      <div>
-        <div class="cb-title">BSN Assistant</div>
-        <div class="cb-online"><span class="cb-online-dot"></span>Online · Instant answers</div>
-      </div>
-      <button class="cb-x" onclick="togChat(false)">✕</button>
-    </div>
-    <div class="cb-msgs" id="cbMsgs"></div>
-    <div class="cb-chips-label">COMMON QUESTIONS</div>
-    <div class="cb-chips" id="cbChips"></div>
-  </div>
-  <button class="cb-fab" id="cbFab" onclick="togChat()" aria-label="Chat with BSN">
-    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
-    <span class="cb-fab-dot"></span>
-  </button>
-</div>
 
 <!-- ═══ NAVBAR ═══ -->
 <nav id="nav">
@@ -52,18 +15,21 @@ const pageHtml = `
   </a>
 
   <div class="nav-links">
-    <a href="#services">Services</a>
-    <a href="#proof">Proof</a>
-    <a href="/dashboard" class="nav-aidash" onclick="event.preventDefault();goDashboard()"><span class="nav-aidash-dot"></span>AI Dashboard</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#vision">Mission</a>
+    <a href="#mehnat">Mehnat</a>
+    <a href="#products">Products</a>
+    <a href="#experiments">Experiments</a>
+    <a href="#vision">Vision</a>
+    <a href="#research">Research</a>
     <a href="#join">Join</a>
-    <a href="#" class="nav-demo" onclick="bookDemo(event)"><span class="nav-demo-dot"></span>Book a Demo</a>
   </div>
 
   <div class="nav-right">
+    <a href="https://mehnat-eight.vercel.app/" target="_blank" rel="noopener" class="btn-demo">
+      <span class="dd"></span>Try Mehnat
+    </a>
     <a href="#join" class="btn-gi">Get Involved</a>
 
+    <!-- Profile -->
     <div class="profile-wrap" id="profileWrap">
       <div class="profile-btn" id="profileBtn" onclick="togProfile()">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
@@ -71,25 +37,27 @@ const pageHtml = `
       </div>
 
       <div class="auth-dd" id="authDD">
+        <!-- Logged out -->
         <div id="ddOut" class="dd-out">
-          <p>Sign in to track mission impact and manage your AI agents.</p>
+          <p>Sign in to follow the research journey behind every BSN product.</p>
           <div class="dd-btns">
             <button class="dd-login" onclick="showModal('login')">Log In</button>
             <button class="dd-reg" onclick="showModal('register')">Register</button>
           </div>
         </div>
+        <!-- Logged in -->
         <div id="ddIn" style="display:none">
           <div class="dd-user">
             <div class="dd-avatar" id="ddAvatar">A</div>
             <div class="dd-name" id="ddName">User</div>
             <div class="dd-email" id="ddEmail">user@bsn.ai</div>
-            <div class="dd-badge"><span class="dd-badge-dot"></span>ACTIVE AGENT</div>
+            <div class="dd-badge"><span class="dd-badge-dot"></span>BSN MEMBER</div>
           </div>
-          <a href="/dashboard" class="dd-item">
-            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>AI Dashboard
-          </a>
-          <a href="#" class="dd-item">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>My Profile
+          <button class="dd-item" onclick="openJourney()">
+            <svg viewBox="0 0 24 24"><path d="M12 2v20M2 8h6M2 16h6M16 8h6M16 16h6"/></svg>Research Journey
+          </button>
+          <a href="#products" class="dd-item" onclick="togProfile()">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Products
           </a>
           <div class="dd-sep"></div>
           <button class="dd-item red" onclick="doLogout()">
@@ -105,15 +73,15 @@ const pageHtml = `
 
 <!-- Mobile menu -->
 <div class="mob-menu" id="mobMenu">
-  <a href="#services" onclick="togMob()">Services</a>
-  <a href="#proof" onclick="togMob()">Proof of Work</a>
-  <a href="/dashboard" class="mob-aidash" onclick="event.preventDefault();togMob();goDashboard()">⊞ AI Dashboard</a>
-  <a href="#pricing" onclick="togMob()">Pricing</a>
-  <a href="#vision" onclick="togMob()">Mission</a>
+  <a href="#mehnat" onclick="togMob()">Mehnat</a>
+  <a href="#products" onclick="togMob()">Products</a>
+  <a href="#experiments" onclick="togMob()">Experiments</a>
+  <a href="#vision" onclick="togMob()">Vision</a>
+  <a href="#research" onclick="togMob()">Research</a>
   <a href="#join" onclick="togMob()">Join</a>
   <div class="mob-bottom">
-    <a href="#" class="mob-demo" onclick="togMob();bookDemo(event)">
-      <span style="width:6px;height:6px;border-radius:50%;background:var(--e);box-shadow:0 0 6px var(--e)"></span>Book a Demo
+    <a href="https://mehnat-eight.vercel.app/" target="_blank" rel="noopener" class="mob-demo">
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--e);box-shadow:0 0 6px var(--e)"></span>Try Mehnat
     </a>
     <a href="#join" class="mob-gi" onclick="togMob()">Get Involved →</a>
     <button class="mob-auth" onclick="togMob();showModal('login')">Sign In / Register</button>
@@ -132,47 +100,145 @@ const pageHtml = `
       <div class="modal-tab active" id="tLogin" onclick="switchTab('login')">Log In</div>
       <div class="modal-tab" id="tReg" onclick="switchTab('register')">Register</div>
     </div>
+
+    <p class="ferr" id="authErr"></p>
+
+    <!-- Login -->
     <div id="fLogin">
-      <button class="btn-google" onclick="signInWithGoogle()">
-        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-        Continue with Google
-      </button>
-      <div class="auth-divider"><span>OR</span></div>
       <div class="fg"><label class="fl">EMAIL</label><input type="email" class="fi2" id="lEmail" placeholder="you@example.com"></div>
       <div class="fg"><label class="fl">PASSWORD</label><input type="password" class="fi2" id="lPass" placeholder="••••••••"></div>
-      <p class="fp-link"><a href="#" onclick="showForgot(event)">Forgot password?</a></p>
-      <button class="fsub" onclick="doLogin()">Sign In to BSN</button>
+      <button class="fsub" onclick="doLogin()" id="lBtn">Sign In to BSN</button>
       <p class="ffoot">No account? <a href="#" onclick="switchTab('register')">Register free</a></p>
     </div>
-    <div id="fForgot" style="display:none">
-      <div id="fpStep1">
-        <p class="fp-info">Enter your account email and we'll send you a 6-digit reset code.</p>
-        <div class="fg"><label class="fl">EMAIL</label><input type="email" class="fi2" id="fpEmail" placeholder="you@example.com"></div>
-        <button class="fsub" onclick="doForgotSend()">Send Reset Code</button>
-      </div>
-      <div id="fpStep2" style="display:none">
-        <p class="fp-info">We emailed a 6-digit code to <strong id="fpEmailShow"></strong>. Enter it below with your new password.</p>
-        <div class="fg"><label class="fl">6-DIGIT CODE</label><input type="text" class="fi2" id="fpOtp" placeholder="123456" maxlength="6" inputmode="numeric" autocomplete="one-time-code"></div>
-        <div class="fg"><label class="fl">NEW PASSWORD</label><input type="password" class="fi2" id="fpPass" placeholder="New password (min 6 chars)"></div>
-        <button class="fsub" onclick="doForgotReset()">Reset Password</button>
-        <p class="ffoot">Didn't get it? <a href="#" onclick="doForgotSend(event)">Resend code</a></p>
-      </div>
-      <p class="ffoot"><a href="#" onclick="switchTab('login')">← Back to Sign In</a></p>
-    </div>
+
+    <!-- Register -->
     <div id="fReg" style="display:none">
-      <button class="btn-google" onclick="signInWithGoogle()">
-        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-        Sign up with Google
-      </button>
-      <div class="auth-divider"><span>OR</span></div>
       <div class="fg"><label class="fl">FULL NAME</label><input type="text" class="fi2" id="rName" placeholder="Your name"></div>
       <div class="fg"><label class="fl">EMAIL</label><input type="email" class="fi2" id="rEmail" placeholder="you@example.com"></div>
       <div class="fg"><label class="fl">PHONE</label><input type="tel" class="fi2" id="rPhone" placeholder="9999999999"></div>
       <div class="fg"><label class="fl">ROLE</label><input type="text" class="fi2" id="rRole" placeholder="Founder / Student / Developer"></div>
       <div class="fg"><label class="fl">LOOKING FOR</label><input type="text" class="fi2" id="rLookingFor" placeholder="What are you looking for?"></div>
       <div class="fg"><label class="fl">PASSWORD</label><input type="password" class="fi2" id="rPass" placeholder="Create a password"></div>
-      <button class="fsub" onclick="doRegister()">Create Account — Get 3 Free Analyses</button>
+      <button class="fsub" onclick="doRegister()" id="rBtn">Create Account</button>
       <p class="ffoot">Have an account? <a href="#" onclick="switchTab('login')">Sign in</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ RESEARCH JOURNEY (post-login view) ═══ -->
+<div class="jview" id="jview">
+  <div class="jv-head">
+    <div class="jv-brand"><img src="/logo.png" alt="BSN"><div><div class="nav-bsn">BSN</div><div class="nav-sub">RESEARCH JOURNEY</div></div></div>
+    <button class="jv-close" onclick="closeJourney()">✕ CLOSE</button>
+  </div>
+  <div class="jv-inner">
+    <div class="jv-hello">
+      <span class="slbl">WELCOME BACK</span>
+      <h2 class="stit">Hello, <em id="jvName">Explorer</em> 👋</h2>
+      <p class="jv-sub">This is the record of every product we have researched, experimented with, and shipped. Nothing here is a promise — it's a log of work done.</p>
+      <div class="jv-stats">
+        <div class="jvs"><div class="n">3</div><div class="l">SHIPPED &amp; LIVE</div></div>
+        <div class="sdiv"></div>
+        <div class="jvs"><div class="n">2</div><div class="l">IN BETA</div></div>
+        <div class="sdiv"></div>
+        <div class="jvs"><div class="n">4</div><div class="l">RESEARCH RECORDS</div></div>
+      </div>
+    </div>
+
+    <div class="jv-timeline">
+
+      <div class="jrec">
+        <div class="jrec-rail"><span class="jrec-dot live"></span><span class="jrec-line"></span></div>
+        <div class="jrec-card">
+          <div class="jrec-top"><span class="jtag live">SHIPPED · LIVE</span><span class="jrec-id">REC-009</span></div>
+          <h3>Mehnat <span class="jhero">HERO PRODUCT</span></h3>
+          <p class="jrec-what"><strong>Researched:</strong> proof-of-work behavior loops — points that move only when a verified video is recorded. Streak decay, freeze tokens, rank multipliers (Iron → up), squads where the streak survives only if everyone records.</p>
+          <p class="jrec-out"><strong>Outcome:</strong> shipped as a live social effort-tracker. 13-week verified-effort grid, ranked ladder, community grind.</p>
+          <a class="jrec-link" href="https://mehnat-eight.vercel.app/" target="_blank" rel="noopener">Open Mehnat →</a>
+        </div>
+      </div>
+
+      <div class="jrec">
+        <div class="jrec-rail"><span class="jrec-dot live"></span><span class="jrec-line"></span></div>
+        <div class="jrec-card">
+          <div class="jrec-top"><span class="jtag live">SHIPPED · LIVE</span><span class="jrec-id">REC-008</span></div>
+          <h3>Dewleaf — AI Skin &amp; Scalp Advisor</h3>
+          <p class="jrec-what"><strong>Researched:</strong> staged severity classification from a short questionnaire (e.g. "Breakouts — Stage 2 of 5") and automatic AM/PM routine generation, in under a minute.</p>
+          <p class="jrec-out"><strong>Outcome:</strong> shipped free to use. Cosmetic guidance only — clearly labelled not a medical diagnosis.</p>
+          <a class="jrec-link" href="https://skin-advisor.onrender.com" target="_blank" rel="noopener">Try Dewleaf →</a>
+        </div>
+      </div>
+
+      <div class="jrec">
+        <div class="jrec-rail"><span class="jrec-dot live"></span><span class="jrec-line"></span></div>
+        <div class="jrec-card">
+          <div class="jrec-top"><span class="jtag live">SHIPPED</span><span class="jrec-id">REC-007</span></div>
+          <h3>AI Real Estate Sales Assistant</h3>
+          <p class="jrec-what"><strong>Researched:</strong> a 6-step lead pipeline — inquiry → AI qualification → HOT/WARM/COLD scoring → instant response → automated follow-ups → agent hand-off. Built with Node.js, Express, Groq AI, Gmail SMTP.</p>
+          <p class="jrec-out"><strong>Outcome:</strong> working assistant with agent dashboard and daily lead digest email.</p>
+        </div>
+      </div>
+
+      <div class="jrec">
+        <div class="jrec-rail"><span class="jrec-dot beta"></span><span class="jrec-line"></span></div>
+        <div class="jrec-card">
+          <div class="jrec-top"><span class="jtag beta">IN BETA</span><span class="jrec-id">REC-006</span></div>
+          <h3>Digital Twin Engine</h3>
+          <p class="jrec-what"><strong>Researched:</strong> real-time sensor sync, predictive failure modeling, and reusable industry templates for manufacturing, healthcare and logistics twins.</p>
+          <p class="jrec-out"><strong>Outcome:</strong> working beta; predictive simulations run against live sensor feeds.</p>
+        </div>
+      </div>
+
+      <div class="jrec">
+        <div class="jrec-rail"><span class="jrec-dot beta"></span><span class="jrec-line"></span></div>
+        <div class="jrec-card">
+          <div class="jrec-top"><span class="jtag beta">IN BETA</span><span class="jrec-id">REC-005</span></div>
+          <h3>3D World Architect</h3>
+          <p class="jrec-what"><strong>Researched:</strong> virtual environment building with real-time physics simulation and export paths to Unity / Unreal.</p>
+          <p class="jrec-out"><strong>Outcome:</strong> beta builder for immersive 3D business environments and photorealistic digital twins.</p>
+        </div>
+      </div>
+
+      <div class="jrec">
+        <div class="jrec-rail"><span class="jrec-dot done"></span><span class="jrec-line"></span></div>
+        <div class="jrec-card">
+          <div class="jrec-top"><span class="jtag done">RESEARCH COMPLETE</span><span class="jrec-id">REC-004</span></div>
+          <h3>Investment Analyzer</h3>
+          <p class="jrec-what"><strong>Researched:</strong> AI analysis of investment memos, pitch decks and financials — confidence scoring, risk &amp; red-flag detection, auto-generated follow-up questions.</p>
+          <p class="jrec-out"><strong>Outcome:</strong> research validated; feeds our own internal deal-review process.</p>
+        </div>
+      </div>
+
+      <div class="jrec">
+        <div class="jrec-rail"><span class="jrec-dot done"></span><span class="jrec-line"></span></div>
+        <div class="jrec-card">
+          <div class="jrec-top"><span class="jtag done">RESEARCH COMPLETE</span><span class="jrec-id">REC-003</span></div>
+          <h3>Autonomous Ops Agent</h3>
+          <p class="jrec-what"><strong>Researched:</strong> end-to-end workflow automation — procurement, scheduling, reporting — with cost-reduction analytics and 24/7 agent monitoring.</p>
+          <p class="jrec-out"><strong>Outcome:</strong> automation patterns proven; techniques reused across every product we ship.</p>
+        </div>
+      </div>
+
+      <div class="jrec">
+        <div class="jrec-rail"><span class="jrec-dot res"></span><span class="jrec-line"></span></div>
+        <div class="jrec-card">
+          <div class="jrec-top"><span class="jtag res">ACTIVE RESEARCH</span><span class="jrec-id">REC-002</span></div>
+          <h3>Ocean Revival Agent</h3>
+          <p class="jrec-what"><strong>Researching:</strong> satellite data ingestion, AI-guided cleanup fleet coordination, and global ecosystem health reporting.</p>
+          <p class="jrec-out"><strong>Status:</strong> open research — findings published as they mature.</p>
+        </div>
+      </div>
+
+      <div class="jrec">
+        <div class="jrec-rail"><span class="jrec-dot concept"></span></div>
+        <div class="jrec-card">
+          <div class="jrec-top"><span class="jtag concept">FRONTIER · LONG-HORIZON</span><span class="jrec-id">REC-001</span></div>
+          <h3>Frontier Explorer</h3>
+          <p class="jrec-what"><strong>Exploring:</strong> long-horizon questions in consciousness, emotion-driven energy mapping and multiversal theory. Explicitly speculative — funded by product revenue, never sold as a product.</p>
+          <p class="jrec-out"><strong>Status:</strong> concept stage. We publish notes, not promises.</p>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -181,93 +247,177 @@ const pageHtml = `
 <section class="hero">
   <div class="hero-inner">
     <div>
-      <div class="h-eye"><span class="e-dot"></span>AI AUTOMATION FOR BUSINESSES · DELHI, INDIA</div>
+      <div class="h-eye"><span class="e-dot"></span>AI PRODUCT STUDIO · DELHI, INDIA</div>
       <h1 class="ht">
-        We Build <span class="hem">AI Automation</span><br>
-        Systems for Businesses<br>
-        to <span class="hgrad">Save Time</span>
+        We Research.<br>We Build.<br>
+        <span class="hem">We Ship</span><br>
+        <span class="hgrad">AI Products.</span>
       </h1>
-      <p class="h-body">We build <strong>AI automation systems</strong> that <strong>increase efficiency</strong>, <strong>generate leads</strong>, and <strong>reduce the time it takes to make decisions</strong> — so your team focuses on growth, not repetitive work.</p>
+      <p class="h-body">BSN is a product company. Every product starts as an <strong>AI research record</strong>, becomes an <strong>experiment</strong>, and ships as something you can use today — like <strong>Mehnat</strong>, our live effort-tracking app. Product revenue funds our long-horizon research.</p>
       <div class="h-acts">
-        <a href="#" onclick="bookDemo(event)" class="bp2">Book Free AI Consultation →</a>
-        <a href="#proof" class="bo2">See AI Demo</a>
+        <a href="https://mehnat-eight.vercel.app/" target="_blank" rel="noopener" class="bp2">Try Mehnat — Live Now →</a>
+        <a href="#experiments" class="bo2">See the Experiments</a>
       </div>
       <div class="h-stats">
-        <div class="hs"><div class="n">70%+</div><div class="l">LESS MANUAL WORK</div></div>
+        <div class="hs"><div class="n">3</div><div class="l">PRODUCTS SHIPPED</div></div>
         <div class="sdiv"></div>
-        <div class="hs"><div class="n">24/7</div><div class="l">LEAD RESPONSE</div></div>
+        <div class="hs"><div class="n">9</div><div class="l">RESEARCH RECORDS</div></div>
         <div class="sdiv"></div>
-        <div class="hs"><div class="n">Live</div><div class="l">SYSTEMS SHIPPED</div></div>
+        <div class="hs"><div class="n">100%</div><div class="l">BUILT IN-HOUSE</div></div>
       </div>
     </div>
+
     <div class="hero-vis">
-      <div class="orbit o1"><div class="planet" onclick="document.getElementById('ai3d')?.scrollIntoView({behavior:'smooth'})"><span class="planet-ball">🤖</span><span class="planet-label">AI Agents Live</span><div class="planet-tip">We build and deploy intelligent AI agents that automate operations across industries, increasing efficiency and speeding up decision-making.</div></div></div>
-      <div class="orbit o2"><div class="planet" onclick="document.getElementById('research')?.scrollIntoView({behavior:'smooth'})"><span class="planet-ball">🧬</span><span class="planet-label">Biotech R&D</span><div class="planet-tip">Innovative biotech solutions that recycle plastics, clean oceans, and restore marine ecosystems at global scale.</div></div></div>
-      <div class="orbit o3"><div class="planet" onclick="document.getElementById('research')?.scrollIntoView({behavior:'smooth'})"><span class="planet-ball">🌊</span><span class="planet-label">Ocean Revival</span><div class="planet-tip">AI-guided cleanup fleets and nature-based technologies to heal our blue planet for generations.</div></div></div>
-      <div class="orbit o4"><div class="planet" onclick="document.getElementById('research')?.scrollIntoView({behavior:'smooth'})"><span class="planet-ball">🌌</span><span class="planet-label">Multiverse</span><div class="planet-tip">Theoretical and experimental research into consciousness across dimensions and multiversal pathways.</div></div></div>
-      <div class="c3w sun">
-        <div class="c3" onclick="document.getElementById('vision')?.scrollIntoView({behavior:'smooth'})">
+      <div class="c3w">
+        <div class="c3">
+          <div class="c3-live"><span class="c3-ldot"></span>LIVE</div>
           <img src="/logo.png" alt="BSN" class="c3-logo">
           <div class="c3-name">BANDNA SHRI NIKA</div>
-        </div>
-        <div class="sun-tip">
-          <div class="sun-tip-tag">AI · 3D WORLD · CONSCIOUSNESS</div>
-          <div class="sun-tip-meaning"><b>Bandna</b> — "to bind" · <b>Shri Nika</b> — Sanskrit for "one who is auspicious and bright"</div>
-          <div class="sun-tip-row"><span>Operations Reduction</span><b>70%+</b></div>
-          <div class="sun-tip-row"><span>Research Funding</span><b>50% PROFITS</b></div>
-          <div class="sun-tip-row"><span>Stage</span><b>SEED · DELHI</b></div>
+          <div class="c3-tag">RESEARCH → EXPERIMENT → PRODUCT</div>
+          <div class="c3-stats">
+            <div class="c3s"><span class="c3s-l">Hero Product</span><span class="c3s-r">MEHNAT · LIVE</span></div>
+            <div class="c3s"><span class="c3s-l">Latest Ship</span><span class="c3s-r">DEWLEAF</span></div>
+            <div class="c3s"><span class="c3s-l">In Beta</span><span class="c3s-r">2 PRODUCTS</span></div>
+          </div>
         </div>
       </div>
+      <div class="ob" style="top:6%;left:-4%;--od:8s;--odb:0s;"><span class="ob-dot"></span>🔥 Mehnat Live</div>
+      <div class="ob" style="bottom:18%;right:-6%;--od:10s;--odb:2s;"><span class="ob-dot"></span>🍃 Dewleaf Shipped</div>
+      <div class="ob" style="top:42%;right:-9%;--od:9s;--odb:1s;"><span class="ob-dot"></span>🏠 RE Assistant</div>
+      <div class="ob" style="bottom:7%;left:-2%;--od:11s;--odb:3s;"><span class="ob-dot"></span>🧪 9 Research Records</div>
     </div>
   </div>
   <div class="sc-hint"><span>SCROLL</span><div class="sc-line"></div></div>
 </section>
 
-<!-- ═══ SERVICES / WHAT WE BUILD ═══ -->
-<section id="services" class="s-wh">
+<!-- ═══ MEHNAT — HERO PRODUCT ═══ -->
+<section id="mehnat" class="s-mh">
   <div class="si">
-    <div class="rv" style="text-align:center">
-      <span class="slbl" style="color:#1254a4">WHAT WE BUILD</span>
-      <h2 class="stit" style="color:#030f1e">AI Systems That Do<br><em style="color:#1254a4;font-style:italic;font-weight:300">Real Business Work</em></h2>
-      <p style="font-size:14px;color:rgba(3,15,30,.55);margin-top:12px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.7">Practical AI you can deploy now — built to capture leads, answer customers, and cut repetitive work.</p>
-    </div>
-    <div class="res-grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
-      <div class="rc rv d1"><span class="rcico">💬</span><h3>AI Lead Response Assistant</h3><p><strong>Problem:</strong> leads go cold when no one replies fast. <strong>For:</strong> sales teams &amp; agents. <strong>Benefit:</strong> instant 24/7 replies over email &amp; SMS/WhatsApp — never miss an enquiry.</p><span class="rcn">01</span></div>
-      <div class="rc rv d2"><span class="rcico">🎯</span><h3>AI Lead Qualification &amp; Scoring</h3><p><strong>Problem:</strong> reps waste hours on unqualified leads. <strong>For:</strong> busy sales teams. <strong>Benefit:</strong> AI reads buyer intent and scores leads HOT / WARM / COLD so you chase only real buyers.</p><span class="rcn">02</span></div>
-      <div class="rc rv d3"><span class="rcico">🤖</span><h3>AI Customer Support Bot</h3><p><strong>Problem:</strong> repetitive questions eat your team's day. <strong>For:</strong> support &amp; ops. <strong>Benefit:</strong> instant, accurate answers around the clock — more efficiency, faster replies.</p><span class="rcn">03</span></div>
-      <div class="rc rv d4"><span class="rcico">⚙️</span><h3>Custom AI Business Automation</h3><p><strong>Problem:</strong> manual workflows slow everything down. <strong>For:</strong> ops-heavy businesses. <strong>Benefit:</strong> we automate any repetitive process — higher efficiency, fewer errors, faster decisions.</p><span class="rcn">04</span></div>
-      <div class="rc rv d1" style="background:linear-gradient(135deg,#e0f2fe,#e1f7eb)"><span class="rcico">💻</span><h3>Custom Websites &amp; IT Solutions</h3><p><strong>Problem:</strong> off-the-shelf tools don't fit how you work. <strong>For:</strong> founders &amp; growing businesses. <strong>Benefit:</strong> we design and build custom websites, SaaS platforms and full IT solutions tailored to your workflow.</p><span class="rcn">05</span></div>
+    <div class="mh-grid">
+      <div class="rv">
+        <span class="slbl" style="color:#ff6a3d">HERO PRODUCT · LIVE NOW</span>
+        <h2 class="stit mh-title">MEHNAT<span class="mh-dot">.</span></h2>
+        <p class="mh-tag">"NOTHING COUNTS UNTIL IT'S ON CAMERA."</p>
+        <p class="mh-body">Mehnat is a social effort-tracker built on one rule: <strong>points move only when you record</strong>. No verified video, no progress. Streaks decay, ranks multiply your points, and in a squad the streak survives only if <em>everyone</em> records.</p>
+        <div class="mh-feats">
+          <div class="mh-f"><span class="mh-fi">🎥</span><div><strong>Verified video proof</strong><p>One verified video a day keeps everything alive — streak, rank, points.</p></div></div>
+          <div class="mh-f"><span class="mh-fi">🔥</span><div><strong>Streaks &amp; freezes</strong><p>Grind-day tracking with limited freeze tokens. Miss a day, feel it.</p></div></div>
+          <div class="mh-f"><span class="mh-fi">🏆</span><div><strong>Ranked ladder</strong><p>Climb from Iron up. Higher rank = higher point multiplier.</p></div></div>
+          <div class="mh-f"><span class="mh-fi">👥</span><div><strong>Squads</strong><p>Shared streaks. The squad survives only if every member records.</p></div></div>
+        </div>
+        <div class="h-acts" style="margin-top:26px">
+          <a href="https://mehnat-eight.vercel.app/" target="_blank" rel="noopener" class="bp-mh">Open Mehnat →</a>
+          <a href="#experiments" class="bo2">Read the experiment</a>
+        </div>
+      </div>
+      <div class="rv d2">
+        <div class="mh-shot">
+          <div class="mh-shot-bar"><span></span><span></span><span></span><em>mehnat-eight.vercel.app</em></div>
+          <img src="/products/mehnat-dashboard.png" alt="Mehnat dashboard — points move only when you record" onerror="this.parentElement.classList.add('noimg')">
+          <div class="mh-shot-fallback">
+            <div class="mh-fb-title">NOTHING COUNTS<br>UNTIL IT'S ON CAMERA.</div>
+            <div class="mh-fb-row"><span>WALLET</span><strong>0 PTS — moves only when you record</strong></div>
+            <div class="mh-fb-row"><span>RANK</span><strong>IRON · ×1 multiplier</strong></div>
+            <div class="mh-fb-row"><span>EFFORT</span><strong>13-week verified grid</strong></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ CONSULTING ═══ -->
-<section id="consulting" class="s-lt">
+<!-- ═══ PRODUCTS ═══ -->
+<section id="products" class="s-dk">
   <div class="si">
-    <div class="cg">
-      <div class="rv">
-        <div class="cbg"><span style="width:6px;height:6px;border-radius:50%;background:#1254a4;display:inline-block"></span>LIMITED SLOTS · FREE FOR FOUNDERS</div>
-        <h2 class="stit" style="color:#030f1e">Book Your Free<br><span style="color:#1254a4;font-weight:300;font-style:italic">3D AI Strategy</span><br>Session</h2>
-        <p class="cbody">Speak directly with the founder. Get a personalized roadmap for deploying 3D AI agents that increase efficiency, speed up decisions, and fund our research in emotion-driven energy awakening, biotechnology, ocean revival, and the multiverse.</p>
-        <ul class="clist">
-          <li><span class="cli">🪷</span>Custom 3D AI deployment plan for your business</li>
-          <li><span class="cli">🌐</span>Live demo of revenue-generating agents</li>
-          <li><span class="cli">🧬</span>See how your success powers the research mission</li>
-          <li><span class="cli">🌌</span>30-minute call with Aryan Datta (the founder)</li>
-        </ul>
-        <a href="#" onclick="bookDemo(event)" class="bd2">Book Free Consultation →</a>
-        <p class="cnote">Personally reviewed · Reply within 24 hours</p>
+    <div class="rv" style="text-align:center">
+      <span class="slbl">SHIPPED · YOU CAN USE THESE TODAY</span>
+      <h2 class="stit">Products, Not <em>Promises</em></h2>
+      <p class="sect-sub">Everything below is live or in users' hands — each one grew out of a research record you can trace in our journey.</p>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card rv d1">
+        <div class="prod-top"><span class="jtag live">LIVE</span><span class="prod-ico">🔥</span></div>
+        <h3>Mehnat</h3>
+        <p class="prod-line">Social effort-tracker. Points move only when you record a verified video. Streaks, ranks, squads.</p>
+        <a class="prod-link" href="https://mehnat-eight.vercel.app/" target="_blank" rel="noopener">mehnat-eight.vercel.app →</a>
       </div>
-      <div class="rv d2">
-        <div class="ccard">
-          <span class="cemoji">🪷🤖🌌</span>
-          <h3 class="ccard-title">Your Free Session Includes</h3>
-          <div class="crow"><span class="crl">Operations Audit + 3D AI Roadmap</span><span class="crv">FREE</span></div>
-          <div class="crow"><span class="crl">Revenue Projection for Your Industry</span><span class="crv">FREE</span></div>
-          <div class="crow"><span class="crl">Mission Impact Overview</span><span class="crv">FREE</span></div>
-        </div>
+      <div class="prod-card rv d2">
+        <div class="prod-top"><span class="jtag live">LIVE · FREE</span><span class="prod-ico">🍃</span></div>
+        <h3>Dewleaf</h3>
+        <p class="prod-line">AI skin &amp; scalp advisor. Answer a few questions, get a staged result and a full AM/PM routine in under a minute.</p>
+        <a class="prod-link" href="https://skin-advisor.onrender.com" target="_blank" rel="noopener">skin-advisor.onrender.com →</a>
+      </div>
+      <div class="prod-card rv d3">
+        <div class="prod-top"><span class="jtag live">SHIPPED</span><span class="prod-ico">🏠</span></div>
+        <h3>AI Real Estate Sales Assistant</h3>
+        <p class="prod-line">Qualifies leads, scores them HOT/WARM/COLD, responds instantly and nurtures with automated follow-ups. Agent dashboard + daily digest.</p>
+        <span class="prod-link muted">Available for deployment — book a walkthrough</span>
       </div>
     </div>
+    <p class="prod-note rv">Every product above links back to a research record. <a href="#" onclick="requireLoginForJourney(event)">Sign in to browse the full Research Journey →</a></p>
+  </div>
+</section>
+
+<!-- ═══ EXPERIMENTS & DOCUMENTS (replaces pricing) ═══ -->
+<section id="experiments" class="s-dk s-xp">
+  <div class="si">
+    <div class="ph rv">
+      <span class="slbl">LAB NOTES · REAL DOCUMENTS</span>
+      <h2 class="stit">Experiments That Became<br><em>Products</em></h2>
+      <p>We don't publish rate cards. We publish the experiments — hypothesis, method, and what shipped.</p>
+    </div>
+    <div class="xp-grid">
+
+      <div class="xp-card rv d1">
+        <div class="xp-img">
+          <img src="/experiments/automation-first.jpg" alt="BSN — The smartest businesses are automating first" onerror="this.parentElement.classList.add('noimg')">
+          <div class="xp-img-fb">📄 AUTOMATION-FIRST · DOC</div>
+        </div>
+        <div class="xp-body">
+          <div class="xp-meta"><span class="xp-id">EXP-001</span><span class="jtag done">VALIDATED</span></div>
+          <h3>Automate the Repetitive</h3>
+          <p><strong>Hypothesis:</strong> repetitive business tasks can be automated end-to-end with AI workflows.<br><strong>Method:</strong> automation pipelines across scheduling, reporting and follow-ups.<br><strong>Shipped into:</strong> Autonomous Ops Agent research + every product we build.</p>
+        </div>
+      </div>
+
+      <div class="xp-card rv d2">
+        <div class="xp-img">
+          <img src="/experiments/real-estate-assistant.jpg" alt="AI Real Estate Sales Assistant — full experiment document" onerror="this.parentElement.classList.add('noimg')">
+          <div class="xp-img-fb">📄 RE SALES ASSISTANT · DOC</div>
+        </div>
+        <div class="xp-body">
+          <div class="xp-meta"><span class="xp-id">EXP-002</span><span class="jtag live">SHIPPED</span></div>
+          <h3>AI Lead Qualification</h3>
+          <p><strong>Hypothesis:</strong> AI can score property leads HOT/WARM/COLD and respond faster than any human agent.<br><strong>Method:</strong> 6-step pipeline — inquiry → AI analysis → scoring → instant response → follow-ups → agent hand-off.<br><strong>Shipped into:</strong> AI Real Estate Sales Assistant (Node.js · Express · Groq AI).</p>
+        </div>
+      </div>
+
+      <div class="xp-card rv d3">
+        <div class="xp-img">
+          <img src="/experiments/dewleaf.jpg" alt="Dewleaf — Your skin, figured out" onerror="this.parentElement.classList.add('noimg')">
+          <div class="xp-img-fb">📄 DEWLEAF · DOC</div>
+        </div>
+        <div class="xp-body">
+          <div class="xp-meta"><span class="xp-id">EXP-003</span><span class="jtag live">SHIPPED</span></div>
+          <h3>Staged Skin Classification</h3>
+          <p><strong>Hypothesis:</strong> a short questionnaire can drive a useful, staged skin &amp; scalp assessment.<br><strong>Method:</strong> severity staging ("Stage 2 of 5") + generated AM/PM routines, under 60 seconds.<br><strong>Shipped into:</strong> Dewleaf — live and free. Cosmetic guidance, not medical diagnosis.</p>
+        </div>
+      </div>
+
+      <div class="xp-card rv d4">
+        <div class="xp-img">
+          <img src="/products/mehnat-dashboard.png" alt="Mehnat — verified effort dashboard" onerror="this.parentElement.classList.add('noimg')">
+          <div class="xp-img-fb">📄 MEHNAT · DASHBOARD</div>
+        </div>
+        <div class="xp-body">
+          <div class="xp-meta"><span class="xp-id">EXP-004</span><span class="jtag live">LIVE · HERO</span></div>
+          <h3>Proof-of-Work Motivation</h3>
+          <p><strong>Hypothesis:</strong> effort tracked with verified video changes behavior more than self-reported check-ins.<br><strong>Method:</strong> points that move only on recording, streak decay, rank multipliers, squad-shared streaks.<br><strong>Shipped into:</strong> Mehnat — our hero product, live now.</p>
+        </div>
+      </div>
+
+    </div>
+    <p class="pfooter">Want the full write-ups? Register — the Research Journey holds every record from concept to ship.</p>
   </div>
 </section>
 
@@ -275,28 +425,32 @@ const pageHtml = `
 <section id="vision" class="s-wh">
   <div class="si">
     <div class="rv" style="text-align:center">
-      <span class="slbl" style="color:#1254a4">OUR NORTH STAR</span>
-      <h2 class="stit" style="color:#030f1e">From AI Agents to<br><em style="color:#1254a4;font-style:italic;font-weight:300">Awakened Humanity</em></h2>
+      <span class="slbl" style="color:#064e23">OUR NORTH STAR</span>
+      <h2 class="stit" style="color:#031508">Products Fund<br><em style="color:#0a6636;font-style:italic;font-weight:300">the Research</em></h2>
     </div>
     <div class="vis-grid">
-      <div class="vc rv d1"><span class="vcn">01</span><span class="vcico">🤖</span><h3>Deploy AI Agents First</h3><p>We build and deploy intelligent AI agents that automate operations across industries, increasing efficiency and speeding up decision-making.</p></div>
-      <div class="vc rv d2"><span class="vcn">02</span><span class="vcico">🌊</span><h3>Fund the Future</h3><p>Every rupee earned powers biotechnology research, ocean recycling & cleanup, and groundbreaking work in awareness and emotional mastery.</p></div>
-      <div class="vc rv d3"><span class="vcn">03</span><span class="vcico">🧘‍♂️</span><h3>Higher Consciousness</h3><p>We research emotion-driven energies, the universe's deepest secrets, and practical steps toward the multiverse — creating Higher Emotional Intelligence.</p></div>
+      <div class="vc rv d1"><span class="vcn">01</span><span class="vcico">🧪</span><h3>Research First</h3><p>Every product starts as a research record — a hypothesis about what AI can do, tested honestly before a line of product code is written.</p></div>
+      <div class="vc rv d2"><span class="vcn">02</span><span class="vcico">🚀</span><h3>Ship Real Products</h3><p>Research that survives becomes an experiment; experiments that work become products people use — Mehnat, Dewleaf, the RE Assistant.</p></div>
+      <div class="vc rv d3"><span class="vcn">03</span><span class="vcico">🌊</span><h3>Fund the Frontier</h3><p>Product revenue funds our long-horizon research: biotechnology, ocean revival, and open questions about consciousness.</p></div>
     </div>
     <div class="vquote rv">
-      <p>"We are not just building AI. We are building the bridge between silicon intelligence and human transcendence."</p>
+      <p>"We don't sell the future. We ship the present — and let the products pay for the future."</p>
+
+      <!-- Dual founders -->
       <div class="founders-row">
         <div class="founder-sig">
-          <div class="founder-avatar" style="background:linear-gradient(135deg,#082640,#0e3a5e)">
-            <div class="av-pulse"></div>A
+          <div class="founder-avatar" style="background:linear-gradient(135deg,#052e16,#064e23)">
+            <div class="av-pulse"></div>
+            A
           </div>
-          <div class="founder-name">Aryan Datta</div>
+          <div class="founder-name">Aryan</div>
           <div class="founder-role">FOUNDER</div>
         </div>
         <div class="founders-divider"></div>
         <div class="founder-sig">
-          <div class="founder-avatar" style="background:linear-gradient(135deg,#0e3a5e,#1254a4)">
-            <div class="av-pulse" style="animation-delay:.8s"></div>VD
+          <div class="founder-avatar" style="background:linear-gradient(135deg,#064e23,#0a6636)">
+            <div class="av-pulse" style="animation-delay:.8s"></div>
+            VD
           </div>
           <div class="founder-name">Vansh Dhiman</div>
           <div class="founder-role">CO-FOUNDER</div>
@@ -306,39 +460,42 @@ const pageHtml = `
   </div>
 </section>
 
-<!-- ═══ TEAM ═══ -->
+<!-- ═══ TEAM SECTION ═══ -->
 <section id="team" class="team-section">
   <div class="si">
     <div class="rv" style="text-align:center">
       <span class="slbl">THE MINDS BEHIND BSN</span>
       <h2 class="stit">Our <em>Founders</em></h2>
-      <p style="font-size:14px;color:rgba(245,236,218,.4);margin-top:12px;max-width:440px;margin-left:auto;margin-right:auto;line-height:1.7">Two people building the bridge between silicon intelligence and human transcendence.</p>
+      <p style="font-size:14px;color:rgba(255,255,255,.4);margin-top:12px;max-width:440px;margin-left:auto;margin-right:auto;line-height:1.7">Two builders shipping AI products and logging every step of the research behind them.</p>
     </div>
     <div class="team-grid">
       <div class="team-card rv d1">
-        <div class="team-av" style="background:linear-gradient(135deg,#082640,#1254a4)">
-          <div class="ring"></div><div class="ring2"></div>A
+        <div class="team-av" style="background:linear-gradient(135deg,#052e16,#0a5c2c)">
+          <div class="ring"></div>
+          <div class="ring2"></div>
+          A
         </div>
-        <div class="team-name">Aryan Datta</div>
-        <div class="team-role">FOUNDER & CEO</div>
-        <p class="team-bio">Visionary behind BSN's AI-powered 3D world. Steering autonomous agents, digital twins and agentic AI that increase efficiency and fund humanity's awakening.</p>
+        <div class="team-name">Aryan</div>
+        <div class="team-role">FOUNDER &amp; CEO</div>
+        <p class="team-bio">Product lead behind Mehnat, Dewleaf and the BSN research pipeline — turning AI research records into shipped products.</p>
         <div class="team-tags">
-          <span class="team-tag">AI Agents</span>
-          <span class="team-tag">3D World</span>
+          <span class="team-tag">Product</span>
+          <span class="team-tag">AI Research</span>
           <span class="team-tag">Vision</span>
         </div>
       </div>
       <div class="team-card rv d2">
-        <div class="team-av" style="background:linear-gradient(135deg,#0e3a5e,#1355a4)">
+        <div class="team-av" style="background:linear-gradient(135deg,#064e23,#0d6b31)">
           <div class="ring" style="animation-delay:.5s"></div>
-          <div class="ring2" style="animation-delay:1.1s"></div>VD
+          <div class="ring2" style="animation-delay:1.1s"></div>
+          VD
         </div>
         <div class="team-name">Vansh Dhiman</div>
         <div class="team-role">CO-FOUNDER</div>
-        <p class="team-bio">Co-architect of BSN's mission. Building the foundations that connect emotion-driven energies, multiverse research, and the future of intelligent 3D systems.</p>
+        <p class="team-bio">Co-architect of BSN's product engine — building the systems that carry an idea from research record to live product.</p>
         <div class="team-tags">
           <span class="team-tag">Co-Founder</span>
-          <span class="team-tag">Multiverse</span>
+          <span class="team-tag">Engineering</span>
           <span class="team-tag">Strategy</span>
         </div>
       </div>
@@ -346,165 +503,37 @@ const pageHtml = `
   </div>
 </section>
 
-<!-- ═══ AI + 3D ═══ -->
-<section id="ai3d" class="s-dk">
-  <div class="si">
-    <div class="a3g">
-      <div class="rv">
-        <span class="slbl">CORE BUSINESS · CASH-COW ENGINE</span>
-        <h2 class="stit">Running the 3D World<br>with <em>Autonomous AI</em></h2>
-        <p class="a3b">As founder I personally steer <strong>autonomous AI agents</strong>, <strong>AI digital twins</strong> and <strong>agentic AI</strong> operating in immersive 3D environments — virtual factories, smart cities, and metaverse-scale operations.</p>
-        <div class="a3fs">
-          <div class="a3f"><span class="a3fa">→</span><p><strong>Enterprise AI agents</strong> & 3D agents that increase operational efficiency by 70%+</p></div>
-          <div class="a3f"><span class="a3fa">→</span><p>Real-time <strong>AI digital twins</strong> for any industry — manufacturing to healthcare</p></div>
-          <div class="a3f"><span class="a3fa">→</span><p><strong>AI automation</strong> & workflow intelligence that drives revenue and funds our mission</p></div>
-        </div>
-      </div>
-      <div class="rv d2">
-        <div class="globe-wrap">
-          <div class="g-rings">
-            <div class="g-ring gr1"></div>
-            <div class="g-ring gr2"></div>
-            <div class="g-ring gr3"></div>
-          </div>
-          <canvas id="globeC" width="250" height="250"></canvas>
-          <div class="g-badge" style="top:4%;left:0%;--gd:7s;--gdd:0s;"><span class="gbd"></span>3D Agents Active</div>
-          <div class="g-badge" style="bottom:8%;right:-8%;--gd:9s;--gdd:2s;"><span class="gbd"></span>Digital Twin Live</div>
-          <div class="g-badge" style="top:44%;right:-12%;--gd:8s;--gdd:1s;"><span class="gbd"></span>70% Less Manual Work</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ RESEARCH ═══ -->
+<!-- ═══ RESEARCH (long-horizon) ═══ -->
 <section id="research" class="s-lt">
   <div class="si">
     <div class="rv" style="text-align:center">
-      <span class="slbl" style="color:#1254a4">DEDICATED RESEARCH TEAM</span>
-      <h2 class="stit" style="color:#030f1e">Research That<br><em style="color:#1254a4;font-style:italic;font-weight:300">Changes Everything</em></h2>
+      <span class="slbl" style="color:#064e23">FUNDED BY PRODUCT REVENUE · LONG-HORIZON</span>
+      <h2 class="stit" style="color:#031508">The Research Our<br><em style="color:#0a6636;font-style:italic;font-weight:300">Products Pay For</em></h2>
+      <p class="sect-sub" style="color:rgba(3,26,13,.5)">Clearly labelled long-horizon work. We publish notes, not promises — and we never sell this as a product.</p>
     </div>
     <div class="res-grid">
-      <div class="rc rv d1"><span class="rcico">🧬</span><h3>Biotechnology</h3><p>Innovative biotech solutions that recycle plastics, clean oceans, and restore marine ecosystems at global scale.</p><span class="rcn">01</span></div>
-      <div class="rc rv d2"><span class="rcico">🌊</span><h3>Ocean Revival</h3><p>AI-guided cleanup fleets and nature-based technologies to heal our blue planet for generations.</p><span class="rcn">02</span></div>
-      <div class="rc rv d3"><span class="rcico">🧘</span><h3>Emotion-Driven Energies</h3><p>Scientific exploration of higher emotional states and emotion-driven energies made universally accessible.</p><span class="rcn">03</span></div>
-      <div class="rc rv d4"><span class="rcico">🌌</span><h3>Universe & Multiverse</h3><p>Theoretical and experimental research into consciousness across dimensions and multiversal pathways.</p><span class="rcn">04</span></div>
+      <div class="rc rv d1"><span class="rcico">🧬</span><h3>Biotechnology</h3><p>Biotech approaches to recycling plastics and restoring marine ecosystems.</p><span class="rcn">01</span></div>
+      <div class="rc rv d2"><span class="rcico">🌊</span><h3>Ocean Revival</h3><p>AI-guided cleanup coordination and ecosystem health monitoring — see REC-002 in the journey.</p><span class="rcn">02</span></div>
+      <div class="rc rv d3"><span class="rcico">🧘</span><h3>Emotional Intelligence</h3><p>Exploratory work on emotional states and motivation — already informing products like Mehnat.</p><span class="rcn">03</span></div>
+      <div class="rc rv d4"><span class="rcico">🌌</span><h3>Frontier Questions</h3><p>Speculative, curiosity-driven research into consciousness and the universe. Concept stage, honestly labelled.</p><span class="rcn">04</span></div>
     </div>
   </div>
 </section>
 
-<!-- ═══ CYCLE ═══ -->
+<!-- ═══ HOW WE WORK ═══ -->
 <section id="model" class="s-mid">
   <div class="si">
     <div style="text-align:center;margin-bottom:52px" class="rv">
       <span class="slbl">HOW IT WORKS</span>
-      <h2 class="stit">The Virtuous <em>Cycle</em></h2>
+      <h2 class="stit">The Product <em>Journey</em></h2>
     </div>
     <div class="cyc rv">
-      <div class="cycs"><div class="cycn">01</div><h3>Deploy AI Agents</h3><p>Increase efficiency and speed up decisions for businesses worldwide with intelligent autonomous agents</p></div>
+      <div class="cycs"><div class="cycn">01</div><h3>Research Record</h3><p>Every idea starts as a logged research record — hypothesis in, honest findings out</p></div>
       <div class="cyca">→</div>
-      <div class="cycs"><div class="cycn">02</div><h3>Generate Revenue</h3><p>Sustainable cash flow from AI services creates a self-reinforcing engine</p></div>
+      <div class="cycs"><div class="cycn">02</div><h3>Experiment</h3><p>Findings become working experiments — documented, tested, and published as lab notes</p></div>
       <div class="cyca">→</div>
-      <div class="cycs"><div class="cycn">03</div><h3>Fund the Mission</h3><p>50% of profits fuel research, ocean cleanup, and consciousness studies</p></div>
+      <div class="cycs"><div class="cycn">03</div><h3>Shipped Product</h3><p>Experiments that survive become live products — and their revenue funds the next record</p></div>
     </div>
-  </div>
-</section>
-
-<!-- ═══ PROOF OF WORK ═══ -->
-<section id="proof" class="s-lt">
-  <div class="si">
-    <div class="rv" style="text-align:center">
-      <span class="slbl" style="color:#1254a4">PROOF OF WORK</span>
-      <h2 class="stit" style="color:#030f1e">AI Systems<br><em style="color:#1254a4;font-style:italic;font-weight:300">We Have Built</em></h2>
-      <p style="font-size:14px;color:rgba(3,15,30,.55);margin:12px auto 0;max-width:540px;line-height:1.7">Real, working software — not slides. Here's a system we built and shipped.</p>
-    </div>
-
-    <!-- Flagship product -->
-    <div class="rv" style="margin-top:44px;background:linear-gradient(160deg,#071426,#0a1f3a);border:1px solid rgba(56,189,248,.18);border-radius:22px;padding:34px 30px;box-shadow:0 24px 60px rgba(3,20,40,.18)">
-      <div style="display:inline-flex;align-items:center;gap:7px;font-size:11px;letter-spacing:1.5px;color:#38bdf8;border:1px solid rgba(56,189,248,.3);padding:5px 12px;border-radius:30px;margin-bottom:16px"><span style="width:6px;height:6px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981"></span>LIVE · 24/7 · ALWAYS WORKING</div>
-      <h3 style="font-size:26px;font-weight:700;color:#f5ecda;letter-spacing:-.5px;margin-bottom:8px">AI Real Estate Sales Assistant</h3>
-      <p style="font-size:14px;color:rgba(245,236,218,.6);line-height:1.7;max-width:640px">Qualifies leads, responds instantly, automates follow-ups, and helps agents close more deals. <strong style="color:#fbbf24">Respond faster. Qualify smarter. Close more deals.</strong></p>
-
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:26px">
-        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(56,189,248,.12);border-radius:14px;padding:18px 16px"><div style="font-size:22px;margin-bottom:8px">⚡</div><div style="font-size:13px;font-weight:600;color:#f5ecda;margin-bottom:5px">Instant Response</div><div style="font-size:11.5px;color:rgba(245,236,218,.5);line-height:1.6">Replies to new inquiries instantly, 24/7, via email or SMS/WhatsApp.</div></div>
-        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(56,189,248,.12);border-radius:14px;padding:18px 16px"><div style="font-size:22px;margin-bottom:8px">🧠</div><div style="font-size:13px;font-weight:600;color:#f5ecda;margin-bottom:5px">Smart Lead Qualification</div><div style="font-size:11.5px;color:rgba(245,236,218,.5);line-height:1.6">Extracts key details and reads buyer intent using AI.</div></div>
-        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(56,189,248,.12);border-radius:14px;padding:18px 16px"><div style="font-size:22px;margin-bottom:8px">⭐</div><div style="font-size:13px;font-weight:600;color:#f5ecda;margin-bottom:5px">Lead Scoring</div><div style="font-size:11.5px;color:rgba(245,236,218,.5);line-height:1.6">Scores leads HOT, WARM, or COLD so agents focus on the right ones.</div></div>
-        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(56,189,248,.12);border-radius:14px;padding:18px 16px"><div style="font-size:22px;margin-bottom:8px">🔁</div><div style="font-size:13px;font-weight:600;color:#f5ecda;margin-bottom:5px">Automated Follow-ups</div><div style="font-size:11.5px;color:rgba(245,236,218,.5);line-height:1.6">Sends timely follow-ups automatically and nurtures leads until they're ready.</div></div>
-        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(56,189,248,.12);border-radius:14px;padding:18px 16px"><div style="font-size:22px;margin-bottom:8px">📊</div><div style="font-size:13px;font-weight:600;color:#f5ecda;margin-bottom:5px">Agent Dashboard</div><div style="font-size:11.5px;color:rgba(245,236,218,.5);line-height:1.6">Tracks leads, conversations, scores and activity in one simple view.</div></div>
-        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(56,189,248,.12);border-radius:14px;padding:18px 16px"><div style="font-size:22px;margin-bottom:8px">✉️</div><div style="font-size:13px;font-weight:600;color:#f5ecda;margin-bottom:5px">Daily Lead Digest</div><div style="font-size:11.5px;color:rgba(245,236,218,.5);line-height:1.6">A daily email summary of new leads and key insights.</div></div>
-      </div>
-    </div>
-
-    <!-- How it works -->
-    <div class="rv" style="margin-top:34px;text-align:center">
-      <span class="slbl" style="color:#1254a4">HOW IT WORKS</span>
-      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:20px">
-        <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:30px;padding:8px 14px;box-shadow:0 6px 16px rgba(3,20,40,.06)"><span style="width:20px;height:20px;border-radius:50%;background:#1254a4;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto">1</span><span style="font-size:12px;color:#031508;font-weight:500">Visitor submits inquiry</span></div>
-        <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:30px;padding:8px 14px;box-shadow:0 6px 16px rgba(3,20,40,.06)"><span style="width:20px;height:20px;border-radius:50%;background:#1254a4;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto">2</span><span style="font-size:12px;color:#031508;font-weight:500">AI analyzes &amp; qualifies</span></div>
-        <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:30px;padding:8px 14px;box-shadow:0 6px 16px rgba(3,20,40,.06)"><span style="width:20px;height:20px;border-radius:50%;background:#1254a4;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto">3</span><span style="font-size:12px;color:#031508;font-weight:500">Lead scored HOT/WARM/COLD</span></div>
-        <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:30px;padding:8px 14px;box-shadow:0 6px 16px rgba(3,20,40,.06)"><span style="width:20px;height:20px;border-radius:50%;background:#1254a4;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto">4</span><span style="font-size:12px;color:#031508;font-weight:500">Instant response sent</span></div>
-        <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:30px;padding:8px 14px;box-shadow:0 6px 16px rgba(3,20,40,.06)"><span style="width:20px;height:20px;border-radius:50%;background:#1254a4;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto">5</span><span style="font-size:12px;color:#031508;font-weight:500">Auto follow-ups nurture</span></div>
-        <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:30px;padding:8px 14px;box-shadow:0 6px 16px rgba(3,20,40,.06)"><span style="width:20px;height:20px;border-radius:50%;background:#10b981;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto">6</span><span style="font-size:12px;color:#031508;font-weight:500">Agent closes the deal</span></div>
-      </div>
-    </div>
-
-    <!-- Tech stack -->
-    <div class="rv" style="margin-top:34px;text-align:center">
-      <div style="font-size:11px;letter-spacing:1.5px;color:rgba(3,15,30,.45);margin-bottom:12px">BUILT WITH</div>
-      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px">
-        <span style="font-size:12px;color:#031508;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:8px;padding:7px 12px;font-weight:500">Node.js</span>
-        <span style="font-size:12px;color:#031508;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:8px;padding:7px 12px;font-weight:500">Express.js</span>
-        <span style="font-size:12px;color:#031508;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:8px;padding:7px 12px;font-weight:500">Groq AI</span>
-        <span style="font-size:12px;color:#031508;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:8px;padding:7px 12px;font-weight:500">JavaScript</span>
-        <span style="font-size:12px;color:#031508;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:8px;padding:7px 12px;font-weight:500">HTML5</span>
-        <span style="font-size:12px;color:#031508;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:8px;padding:7px 12px;font-weight:500">CSS3</span>
-        <span style="font-size:12px;color:#031508;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:8px;padding:7px 12px;font-weight:500">Gmail SMTP</span>
-        <span style="font-size:12px;color:#031508;background:#fff;border:1px solid rgba(18,84,164,.15);border-radius:8px;padding:7px 12px;font-weight:500">REST API</span>
-      </div>
-      <div style="margin-top:22px"><a href="#" onclick="bookDemo(event)" class="bd2">See a Live Demo →</a></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ PRICING ═══ -->
-<section id="pricing" class="s-dk">
-  <div class="si">
-    <div class="ph rv">
-      <span class="slbl">INVEST IN INTELLIGENCE</span>
-      <h2 class="stit">Pricing That Powers<br><em>the Mission</em></h2>
-      <p>Every rupee you invest automatically funds biotechnology, ocean revival, emotion-driven energies research, and steps toward the multiverse.</p>
-    </div>
-    <div class="pg">
-      <div class="pc pc-s rv d1">
-        <div class="ptier">STARTER</div>
-        <div class="pname">Seed Agent</div>
-        <div class="pprice"><span class="am">₹99K</span><span class="pe">/mo</span></div>
-        <p class="pnote">* Excl. one-time setup</p>
-        <p class="pdesc">Perfect for small teams ready to boost efficiency with 3D AI.</p>
-        <ul class="pfs"><li><span class="pfi">→</span>1 AI agent</li><li><span class="pfi">→</span>Basic digital twin & automation</li><li><span class="pfi">→</span>30%+ efficiency gain</li><li><span class="pfi">→</span>Monthly mission impact report</li></ul>
-        <a href="#" onclick="showModal('register')" class="bpg">START WITH SEED AGENT</a>
-      </div>
-      <div class="pc pc-f rv d2">
-        <div class="pbadge">MOST POPULAR</div>
-        <div class="ptier">RECOMMENDED</div>
-        <div class="pname">Lotus Agent</div>
-        <div class="pprice"><span class="am">₹2.99L</span><span class="pe">/mo</span></div>
-        <p class="pnote">* Excl. one-time setup</p>
-        <p class="pdesc">Scale fast with full 3D agents that generate revenue while funding the mission.</p>
-        <ul class="pfs"><li><span class="pfi">→</span>3 advanced AI agents</li><li><span class="pfi">→</span>Real-time digital twins & simulations</li><li><span class="pfi">→</span>60–70% efficiency + new revenue streams</li><li><span class="pfi">→</span>Priority support & custom training</li><li><span class="pfi">→</span>50% of profits directly fund research</li></ul>
-        <a href="#" onclick="showModal('register')" class="bps">DEPLOY LOTUS AGENT</a>
-      </div>
-      <div class="pc pc-e rv d3">
-        <div class="ptier">VISIONARY</div>
-        <div class="pname">Multiverse</div>
-        <div class="pprice"><span class="am" style="font-size:28px">Custom</span></div>
-        <p class="pnote">&nbsp;</p>
-        <p class="pdesc">Unlimited agents + direct partnership with our emotion-driven energies & multiverse research team.</p>
-        <ul class="pfs"><li><span class="pfi">→</span>Unlimited custom 3D AI agents</li><li><span class="pfi">→</span>Metaverse-scale operations & digital twins</li><li><span class="pfi">→</span>Dedicated research liaison & co-creation</li><li><span class="pfi">→</span>Named contributor to breakthroughs</li><li><span class="pfi">→</span>White-glove onboarding & 24/7 support</li></ul>
-        <a href="#" onclick="showModal('register')" class="bpg">BUILD YOUR MULTIVERSE</a>
-      </div>
-    </div>
-    <p class="pfooter">Every plan includes a monthly impact report showing how your investment advances ocean cleanup, biotechnology, emotion-driven energies, and multiverse research.</p>
   </div>
 </section>
 
@@ -512,11 +541,12 @@ const pageHtml = `
 <section id="join" class="s-lt">
   <div class="si">
     <div class="join-in rv">
-      <div class="jbg"><span style="width:6px;height:6px;border-radius:50%;background:#1254a4;display:inline-block"></span>APPLICATION OPEN</div>
-      <h2 class="stit" style="color:#030f1e;margin-bottom:14px">Ready to Build<br><em style="color:#1254a4;font-style:italic;font-weight:300">the Future?</em><br>Join the Mission</h2>
-      <p class="jbody">Whether you're an investor, researcher, developer, ocean-tech partner, or consciousness seeker — I personally review every submission.</p>
+      <div class="jbg"><span style="width:6px;height:6px;border-radius:50%;background:#064e23;display:inline-block"></span>APPLICATION OPEN</div>
+      <h2 class="stit" style="color:#031508;margin-bottom:14px">Follow the<br><em style="color:#0a6636;font-style:italic;font-weight:300">Journey</em></h2>
+      <p class="jbody">Whether you're an investor, researcher, developer or early user — register to unlock the full Research Journey and see every record from concept to shipped product. We personally review every submission.</p>
       <button type="button" class="bjoin" onclick="showModal('register')">Create Your BSN Profile →</button>
       <p class="jnote">TAKES UNDER 3 MINUTES · REVIEWED WITHIN 48 HOURS</p>
+      <p style="margin-top:22px"><a href="#" onclick="bookDemo(event)" style="font-size:12px;color:#0a6636;font-weight:600;text-decoration:none">Prefer to talk? Book a 30-minute call with the founders →</a></p>
     </div>
   </div>
 </section>
@@ -525,17 +555,16 @@ const pageHtml = `
 <footer>
   <div class="fi">
     <div class="flogo"><img src="/logo.png" alt="BSN"><span class="fb">BSN</span></div>
-    <div class="flinks"><a href="#">Privacy</a><a href="#">Research Papers</a><a href="#">3D Demo Portal</a><a href="#">© 2026 Bandna Shri Nika</a></div>
-    <div class="fcopy">Built with love in Delhi, India<br>For the 3D world and beyond<br><span style="font-size:9px;color:rgba(245,236,218,.18);letter-spacing:1.5px">FOUNDED BY </span><span style="color:rgba(56,189,248,.6);font-weight:500">Aryan Datta</span><span style="color:rgba(245,236,218,.18);margin:0 4px">&amp;</span><span style="color:rgba(56,189,248,.7);font-weight:600">Vansh Dhiman</span></div>
+    <div class="flinks"><a href="https://mehnat-eight.vercel.app/" target="_blank" rel="noopener">Mehnat</a><a href="https://skin-advisor.onrender.com" target="_blank" rel="noopener">Dewleaf</a><a href="#experiments">Experiments</a><a href="#">Privacy</a><a href="#">© 2026 Bandna Shri Nika</a></div>
+    <div class="fcopy">Built with love in Delhi, India<br>Research → Experiment → Product<br><span style="font-size:9px;color:rgba(255,255,255,.18);letter-spacing:1.5px">FOUNDED BY </span><span style="color:rgba(16,185,129,.6);font-weight:500">Aryan</span><span style="color:rgba(255,255,255,.18);margin:0 4px">&amp;</span><span style="color:rgba(52,211,153,.7);font-weight:600">Vansh Dhiman</span></div>
   </div>
 </footer>
+
+
 `;
 
 export default function App() {
   useEffect(() => {
-
-    // ── Flask API base (change for production) ──────────────────────────
-    const FLASK = typeof FLASK_API !== 'undefined' ? FLASK_API : 'http://localhost:5000';
 
     /* CURSOR */
     const cd=document.getElementById('cd'),cr=document.getElementById('cr');
@@ -571,223 +600,131 @@ export default function App() {
     });
 
     /* AUTH MODAL */
+    const setErr=msg=>{const el=document.getElementById('authErr');el.textContent=msg||'';el.style.display=msg?'block':'none'};
     window.showModal=function(tab){
       document.getElementById('authModal').classList.add('open');
       document.body.style.overflow='hidden';
+      setErr('');
       window.switchTab(tab||'login');
       pOpen=false;document.getElementById('authDD').classList.remove('open');
     }
-    window.closeModal=function(){document.getElementById('authModal').classList.remove('open');document.body.style.overflow=''}
+    window.closeModal=function(){document.getElementById('authModal').classList.remove('open');document.body.style.overflow='';setErr('')}
     window.outClose=function(e){if(e.target===document.getElementById('authModal'))closeModal()}
     window.switchTab=function(t){
+      setErr('');
       document.getElementById('tLogin').classList.toggle('active',t==='login');
       document.getElementById('tReg').classList.toggle('active',t==='register');
       document.getElementById('fLogin').style.display=t==='login'?'block':'none';
       document.getElementById('fReg').style.display=t==='register'?'block':'none';
-      document.getElementById('fForgot').style.display='none';
     }
-
-    /* ── FORGOT PASSWORD ── */
-    window.showForgot=function(e){
-      if(e)e.preventDefault();
-      document.getElementById('tLogin').classList.remove('active');
-      document.getElementById('tReg').classList.remove('active');
-      document.getElementById('fLogin').style.display='none';
-      document.getElementById('fReg').style.display='none';
-      document.getElementById('fForgot').style.display='block';
-      document.getElementById('fpStep1').style.display='block';
-      document.getElementById('fpStep2').style.display='none';
-      const le=document.getElementById('lEmail').value.trim();
-      if(le) document.getElementById('fpEmail').value=le;
-    }
-
-    /* BOOK DEMO */
     window.bookDemo=function(e){
       if(e){e.preventDefault();}
       const start=new Date(Date.now()+24*60*60*1000);
       start.setMinutes(0,0,0);
       const end=new Date(start.getTime()+30*60*1000);
       const fmt=d=>d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
-      const params=new URLSearchParams({action:'TEMPLATE',text:'BSN 3D AI Strategy Session',dates:`${fmt(start)}/${fmt(end)}`,details:'30-minute call with Aryan Datta for BSN AI agents, 3D AI strategy, and business automation roadmap.',add:'aryan.datta.940@gmail.com'});
-      window.open(`https://calendar.google.com/calendar/render?${params.toString()}`,'_blank');
+      const params=new URLSearchParams({
+        action:'TEMPLATE',
+        text:'BSN Product Walkthrough & Research Journey',
+        dates:fmt(start)+'/'+fmt(end),
+        details:'30-minute call with Aryan — BSN products (Mehnat, Dewleaf, AI Real Estate Assistant) and the research journey behind them.',
+        add:'aryan.datta.940@gmail.com'
+      });
+      window.open('https://calendar.google.com/calendar/render?'+params.toString(),'_blank');
     }
 
-    /* ── BACKEND ── */
-    const API = 'https://bsnjavabackend.onrender.com/api/users';
-    const hdrs = {'accept':'*/*','Content-Type':'application/json'};
-
-    // Parses any backend response; returns {ok, data, message}
-    async function apiCall(url, body){
-      const res = await fetch(url, {method:'POST', headers:hdrs, body:JSON.stringify(body)});
-      let data = {};
-      try { data = await res.json(); } catch(_){}
-      return { ok: res.ok, status: res.status, data, message: data.message || '' };
+    /* RESEARCH JOURNEY VIEW */
+    window.openJourney=function(){
+      const u=JSON.parse(localStorage.getItem('bsnUser')||'null');
+      if(!u){window.showModal('login');return}
+      document.getElementById('jvName').textContent=(u.name||'Explorer').split(' ')[0];
+      document.getElementById('jview').classList.add('open');
+      document.body.style.overflow='hidden';
+      pOpen=false;document.getElementById('authDD').classList.remove('open');
     }
-
-    function buildUser(data, fallbacks={}){
-      const name = data.fullName || fallbacks.name || '';
-      return { name, email: data.email || fallbacks.email || '', ...data };
+    window.closeJourney=function(){
+      document.getElementById('jview').classList.remove('open');
+      document.body.style.overflow='';
     }
-
-    /* ── AUTH LOADING OVERLAY ── */
-    window.showLoading=function(msg){
-      document.getElementById('authLoadingText').textContent=msg||'Signing you in…';
-      document.getElementById('authLoading').classList.add('open');
-    }
-    window.hideLoading=function(){
-      document.getElementById('authLoading').classList.remove('open');
-    }
-
-    /* ── LOGIN ── */
-    window.doLogin=async function(){
-      const email=document.getElementById('lEmail').value.trim();
-      const pass=document.getElementById('lPass').value;
-      if(!email||!pass){alert('Please fill in email and password.');return}
-
-      window.showLoading('Signing you in…');
-      try {
-        const {ok, data, message} = await apiCall(`${API}/login`, {email, password:pass});
-        if(ok){
-          const user = buildUser(data, {email});
-          localStorage.setItem('bsnUser', JSON.stringify(user));
-          window.loginUser(user); window.closeModal();
-        } else {
-          alert(message || 'Invalid email or password. Please try again.');
-        }
-      } catch(e) {
-        alert('Could not reach the server. Please try again.');
-      } finally {
-        window.hideLoading();
-      }
-    }
-
-    /* ── REGISTER ── */
-    window.doRegister=async function(){
-      const name       = document.getElementById('rName').value.trim();
-      const email      = document.getElementById('rEmail').value.trim();
-      const phone      = document.getElementById('rPhone').value.trim();
-      const role       = document.getElementById('rRole').value.trim();
-      const lookingFor = document.getElementById('rLookingFor').value.trim();
-      const pass       = document.getElementById('rPass').value;
-      if(!name||!email||!phone||!role||!lookingFor||!pass){alert('Please fill in all fields.');return}
-
-      window.showLoading('Creating your account…');
-      try {
-        const {ok, data, message} = await apiCall(API, {fullName:name, email, phone, role, lookingFor, password:pass});
-        if(ok){
-          // 201 — new account created
-          const user = buildUser(data, {name, email});
-          localStorage.setItem('bsnUser', JSON.stringify(user));
-          window.loginUser(user); window.closeModal();
-        } else if(message && message.toLowerCase().includes('user already exists')){
-          // Email taken — offer to switch to login
-          alert('This email is already registered. Switching to Sign In.');
-          document.getElementById('rEmail').value = email; // pre-fill not available on login form
-          window.switchTab('login');
-          document.getElementById('lEmail').value = email;
-        } else {
-          alert(message || 'Registration failed. Please try again.');
-        }
-      } catch(e) {
-        alert('Could not reach the server. Please try again.');
-      } finally {
-        window.hideLoading();
-      }
-    }
-
-    window.doForgotSend=async function(e){
+    window.requireLoginForJourney=function(e){
       if(e)e.preventDefault();
-      const email=document.getElementById('fpEmail').value.trim();
-      if(!email){alert('Please enter your email.');return}
-
-      window.showLoading('Sending reset code…');
-      try {
-        const {ok, message} = await apiCall(`${API}/forgot-password`, {email});
-        if(ok){
-          document.getElementById('fpEmailShow').textContent=email;
-          document.getElementById('fpStep1').style.display='none';
-          document.getElementById('fpStep2').style.display='block';
-        } else {
-          alert(message || 'Could not send reset code. Please try again.');
-        }
-      } catch(_) {
-        alert('Could not reach the server. Please try again.');
-      } finally {
-        window.hideLoading();
-      }
+      window.openJourney();
     }
 
-    window.doForgotReset=async function(){
-      const email=document.getElementById('fpEmail').value.trim();
-      const otp=document.getElementById('fpOtp').value.trim();
-      const pass=document.getElementById('fpPass').value;
-      if(!otp||!pass){alert('Please enter the code and a new password.');return}
-      if(pass.length<6){alert('New password must be at least 6 characters.');return}
-
-      window.showLoading('Resetting your password…');
-      try {
-        const {ok, message} = await apiCall(`${API}/reset-password`, {email, otp, newPassword:pass});
-        if(ok){
-          alert('Password updated! Sign in with your new password.');
-          document.getElementById('fpOtp').value='';
-          document.getElementById('fpPass').value='';
-          window.switchTab('login');
-          document.getElementById('lEmail').value=email;
-          document.getElementById('lPass').value='';
-        } else {
-          alert(message || 'Could not reset password. Check the code and try again.');
-        }
-      } catch(_) {
-        alert('Could not reach the server. Please try again.');
-      } finally {
-        window.hideLoading();
-      }
+    /* AUTH */
+    window.doLogin=async function(){
+      const email=document.getElementById('lEmail').value.trim(),pass=document.getElementById('lPass').value;
+      if(!email||!pass){setErr('Please fill in email and password.');return}
+      const btn=document.getElementById('lBtn');btn.disabled=true;btn.textContent='Signing in…';
+      try{
+        const res=await fetch('https://bsnjavabackend.onrender.com/api/users/login',{
+          method:'POST',
+          headers:{'accept':'*/*','Content-Type':'application/json'},
+          body:JSON.stringify({email,password:pass})
+        });
+        if(!res.ok) throw new Error('login failed');
+        const data=await res.json();
+        const name=data.fullName || email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+        const user={name,email:data.email || email};
+        localStorage.setItem('bsnUser',JSON.stringify(user));
+        window.loginUser(user);window.closeModal();
+        window.openJourney();
+      }catch(err){
+        console.error(err);
+        setErr('Login failed — check your email and password, then try again.');
+      }finally{btn.disabled=false;btn.textContent='Sign In to BSN'}
     }
-
+    window.doRegister=async function(){
+      const name=document.getElementById('rName').value.trim(),email=document.getElementById('rEmail').value.trim(),phone=document.getElementById('rPhone').value.trim(),role=document.getElementById('rRole').value.trim(),lookingFor=document.getElementById('rLookingFor').value.trim(),pass=document.getElementById('rPass').value;
+      if(!name||!email||!phone||!role||!lookingFor||!pass){setErr('Please fill in all fields.');return}
+      const btn=document.getElementById('rBtn');btn.disabled=true;btn.textContent='Creating account…';
+      try{
+        const res=await fetch('https://bsnjavabackend.onrender.com/api/users',{
+          method:'POST',
+          headers:{'accept':'*/*','Content-Type':'application/json'},
+          body:JSON.stringify({fullName:name,email,phone,role,lookingFor,password:pass})
+        });
+        if(!res.ok) throw new Error('signup failed');
+        const data=await res.json();
+        const user={name:data.fullName || name,email:data.email || email};
+        localStorage.setItem('bsnUser',JSON.stringify(user));
+        window.loginUser(user);window.closeModal();
+        window.openJourney();
+      }catch(err){
+        console.error(err);
+        setErr('Signup failed — please try again in a moment.');
+      }finally{btn.disabled=false;btn.textContent='Create Account'}
+    }
     window.loginUser=function(u){
       document.getElementById('ddOut').style.display='none';
       document.getElementById('ddIn').style.display='block';
-      const displayName=u.name||u.fullName||'User';
-      const avatarEl=document.getElementById('ddAvatar');
-      if(u.picture){
-        avatarEl.innerHTML=`<img src="${u.picture}" alt="${displayName}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block">`;
-      } else {
-        avatarEl.textContent=displayName.charAt(0).toUpperCase();
-      }
+      const displayName=u.name || u.fullName || 'User';
+      document.getElementById('ddAvatar').textContent=displayName.charAt(0).toUpperCase();
       document.getElementById('ddName').textContent=displayName;
-      document.getElementById('ddEmail').textContent=u.email||'';
+      document.getElementById('ddEmail').textContent=u.email || '';
       document.getElementById('onlineDot').style.display='block';
     }
-
-    /* ── AI DASHBOARD ── */
-    window.goDashboard=function(){
-      const user=JSON.parse(localStorage.getItem('bsnUser')||'null');
-      if(user&&user.email){ window.location.href='/dashboard'; }
-      else { window.showModal('register'); }
-    }
-
     window.doLogout=function(){
       localStorage.removeItem('bsnUser');
       document.getElementById('ddOut').style.display='block';
       document.getElementById('ddIn').style.display='none';
       document.getElementById('onlineDot').style.display='none';
-      document.getElementById('ddAvatar').innerHTML='A';
+      window.closeJourney();
       pOpen=false;document.getElementById('authDD').classList.remove('open');
-      if(window.google?.accounts?.oauth2) google.accounts.oauth2.revoke('', ()=>{});
     }
 
     /* REVEAL */
     const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vi');io.unobserve(e.target)}}),{threshold:.08,rootMargin:'0px 0px -24px 0px'});
     document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 
-    /* WEBGL PARTICLES — blue */
+    /* WEBGL PARTICLES */
     (function(){
       const c=document.getElementById('bg'),gl=c.getContext('webgl');
       if(!gl)return;
       function resize(){c.width=innerWidth;c.height=innerHeight;gl.viewport(0,0,c.width,c.height)}
       resize();window.addEventListener('resize',resize,{passive:true});
-      const VS=`attribute vec3 p;attribute float s;attribute float a;uniform float t;varying float va;void main(){vec3 q=p;q.y=mod(q.y+t*.03,2.)-1.;gl_Position=vec4(q.x*.6,q.y,0,1);gl_PointSize=s;va=a;}`;
-      const FS=`precision mediump float;varying float va;void main(){float d=length(gl_PointCoord-.5);if(d>.5)discard;gl_FragColor=vec4(.05,.65,.91,va*(1.-d*1.8));}`;
+      const VS='attribute vec3 p;attribute float s;attribute float a;uniform float t;varying float va;void main(){vec3 q=p;q.y=mod(q.y+t*.03,2.)-1.;gl_Position=vec4(q.x*.6,q.y,0,1);gl_PointSize=s;va=a;}';
+      const FS='precision mediump float;varying float va;void main(){float d=length(gl_PointCoord-.5);if(d>.5)discard;gl_FragColor=vec4(.06,.73,.51,va*(1.-d*1.8));}';
       function sh(type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s}
       const prog=gl.createProgram();gl.attachShader(prog,sh(gl.VERTEX_SHADER,VS));gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(prog);gl.useProgram(prog);
       const N=900,pos=new Float32Array(N*3),sz=new Float32Array(N),al=new Float32Array(N);
@@ -799,208 +736,9 @@ export default function App() {
       (function draw(t){gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform1f(tl,t*.001);gl.drawArrays(gl.POINTS,0,N);requestAnimationFrame(draw)})(0);
     })();
 
-    /* 3D GLOBE — blue */
-    (function(){
-      const c=document.getElementById('globeC'),ctx=c.getContext('2d');
-      let t=0,W=250;
-      const pts=Array.from({length:72},()=>({lat:(Math.random()-.5)*Math.PI,lon:Math.random()*Math.PI*2,city:Math.random()<.14}));
-      const lns=Array.from({length:9},()=>({la1:(Math.random()-.5)*Math.PI,lo1:Math.random()*Math.PI*2,la2:(Math.random()-.5)*Math.PI,lo2:Math.random()*Math.PI*2}));
-      function proj(lat,lon){const x=Math.cos(lat)*Math.cos(lon+t),y=Math.sin(lat),z=Math.cos(lat)*Math.sin(lon+t);return{sx:W/2+x*W*.44,sy:W/2-y*W*.44,z,vis:z>-.15}}
-      (function frame(){
-        requestAnimationFrame(frame);t+=.0035;
-        ctx.clearRect(0,0,W,W);
-        const g=ctx.createRadialGradient(W*.44,W*.43,8,W/2,W/2,W*.46);
-        g.addColorStop(0,'rgba(8,38,64,.2)');g.addColorStop(1,'rgba(2,11,18,.07)');
-        ctx.beginPath();ctx.arc(W/2,W/2,W*.46,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
-        ctx.strokeStyle='rgba(14,165,233,.1)';ctx.lineWidth=.7;ctx.stroke();
-        for(let lt=-60;lt<=60;lt+=30){const lr=lt*Math.PI/180,r=Math.cos(lr)*W*.46,y=W/2-Math.sin(lr)*W*.46;ctx.beginPath();ctx.arc(W/2,y,r,0,Math.PI*2);ctx.strokeStyle='rgba(14,165,233,.04)';ctx.lineWidth=.5;ctx.stroke()}
-        for(let i=0;i<6;i++){const ang=i*Math.PI/3;ctx.beginPath();for(let a=0;a<=360;a+=6){const la=(a/180*Math.PI)-Math.PI/2,p=proj(la,ang);if(p.vis){a<6?ctx.moveTo(p.sx,p.sy):ctx.lineTo(p.sx,p.sy)}}ctx.strokeStyle='rgba(14,165,233,.05)';ctx.lineWidth=.5;ctx.stroke()}
-        lns.forEach((l,i)=>{const p1=proj(l.la1,l.lo1),p2=proj(l.la2,l.lo2);if(p1.vis&&p2.vis){ctx.beginPath();ctx.moveTo(p1.sx,p1.sy);ctx.lineTo(p2.sx,p2.sy);ctx.strokeStyle=`rgba(14,165,233,${.07+.09*Math.sin(t*1.4+i)})`;ctx.lineWidth=.7;ctx.stroke()}});
-        pts.forEach(pt=>{const p=proj(pt.lat,pt.lon);if(!p.vis)return;const a=.28+(p.z+.15)/.65*.45;if(pt.city){ctx.beginPath();ctx.arc(p.sx,p.sy,2.5,0,Math.PI*2);ctx.fillStyle=`rgba(14,165,233,${a})`;ctx.fill();ctx.beginPath();ctx.arc(p.sx,p.sy,4.5+1.8*Math.sin(t*2.2+p.sx),0,Math.PI*2);ctx.strokeStyle=`rgba(14,165,233,${a*.3})`;ctx.lineWidth=.6;ctx.stroke()}else{ctx.beginPath();ctx.arc(p.sx,p.sy,1,0,Math.PI*2);ctx.fillStyle=`rgba(56,189,248,${a*.5})`;ctx.fill()}});
-      })();
-    })();
-
-    /* ── GOOGLE AUTH ────────────────────────────────────────────────── */
-    let _googleTokenClient = null;
-
-    async function handleGoogleToken(tokenResponse) {
-      if (tokenResponse.error) { window.hideLoading(); alert('Google sign-in cancelled.'); return; }
-      window.showLoading('Setting up your profile…');
-      try {
-        // 1. Fetch Google profile
-        const profileRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-          headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
-        });
-        const profile = await profileRes.json();
-        if (!profile.email) { alert('Could not get email from Google. Please try again.'); return; }
-
-        // Deterministic derived password — same every time for this Google account
-        const derivedPass = 'BSN_G_' + profile.sub.slice(-12);
-
-        // 2. Try to REGISTER first (handles brand-new Google users)
-        const reg = await apiCall(API, {
-          fullName:   profile.name,
-          email:      profile.email,
-          phone:      'N/A',
-          role:       'Google User',
-          lookingFor: 'BSN Platform Access',
-          password:   derivedPass,
-        });
-
-        if (reg.ok) {
-          // New user — registered and saved
-          const user = buildUser(reg.data, {name: profile.name, email: profile.email});
-          user.picture = profile.picture;
-          user.googleId = profile.sub;
-          user.authProvider = 'google';
-          localStorage.setItem('bsnUser', JSON.stringify(user));
-          window.loginUser(user); window.closeModal();
-          return;
-        }
-
-        if (reg.message && reg.message.toLowerCase().includes('user already exists')) {
-          // 3. User already in DB — try logging in with derived password (returning Google user)
-          const login = await apiCall(`${API}/login`, {email: profile.email, password: derivedPass});
-
-          if (login.ok) {
-            const user = buildUser(login.data, {name: profile.name, email: profile.email});
-            user.picture = profile.picture;
-            user.googleId = profile.sub;
-            user.authProvider = 'google';
-            localStorage.setItem('bsnUser', JSON.stringify(user));
-            window.loginUser(user); window.closeModal();
-            return;
-          }
-
-          // 4. Email exists but was registered with a different (email/password) account
-          alert('This email is already registered with a password account.\nPlease sign in using your email and password.');
-          window.switchTab('login');
-          document.getElementById('lEmail').value = profile.email;
-          return;
-        }
-
-        // 5. Unexpected backend error — still allow local-only session
-        console.error('Google register unexpected error:', reg.message);
-        const fallbackUser = {
-          name: profile.name, email: profile.email,
-          picture: profile.picture, googleId: profile.sub, authProvider: 'google',
-        };
-        localStorage.setItem('bsnUser', JSON.stringify(fallbackUser));
-        window.loginUser(fallbackUser); window.closeModal();
-
-      } catch(e) {
-        console.error('Google sign-in error:', e);
-        alert('Could not complete Google sign-in. Please try again.');
-      } finally {
-        window.hideLoading();
-      }
-    }
-
-    function initGoogleAuth() {
-      if (!window.google?.accounts?.oauth2 || !GOOGLE_CLIENT_ID) return;
-      _googleTokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: GOOGLE_CLIENT_ID,
-        scope: 'openid profile email',
-        callback: handleGoogleToken,
-        error_callback: function(){ window.hideLoading(); }, // popup closed / blocked
-      });
-    }
-
-    window.signInWithGoogle = function() {
-      if (!_googleTokenClient) {
-        // Script might still be loading — try to init then retry
-        initGoogleAuth();
-        if (!_googleTokenClient) { alert('Google Sign-In is loading. Please try again in a moment.'); return; }
-      }
-      window.showLoading('Connecting to Google…');
-      _googleTokenClient.requestAccessToken({ prompt: 'select_account' });
-    };
-
-    // Init immediately if script already loaded, else wait for load event
-    initGoogleAuth();
-    if (!_googleTokenClient) {
-      const gsiScript = document.querySelector('script[src*="accounts.google.com/gsi"]');
-      if (gsiScript) gsiScript.addEventListener('load', initGoogleAuth);
-    }
-
-    /* ── STATIC CHATBOT ────────────────────────────────────────────── */
-    const CB_FAQ = [
-      { q:'What does BSN actually do?',
-        a:'We deploy autonomous AI agents and digital twins that run your business operations — procurement, scheduling, reporting, analysis — 24/7. Clients typically boost efficiency by 70%+ and make faster decisions.' },
-      { q:'How much does it cost?',
-        a:'Marketplace agents start at a one-time ₹4,999. Managed plans: Seed Agent ₹99K/mo (1 agent), Lotus Agent ₹2.99L/mo (3 advanced agents — most popular), and custom Multiverse plans for enterprises.',
-        cta:{ label:'See Pricing →', act:'pricing' } },
-      { q:'How do AI agents make me 70% more efficient?',
-        a:'Agents automate repetitive operations around the clock — no salaries, no breaks, no errors from fatigue. Most clients see 30%+ efficiency gains in the first month, scaling to 70%+ as more workflows are automated.' },
-      { q:'How fast can I deploy?',
-        a:'Marketplace agents deploy in one click right after purchase. Custom enterprise agents typically go live in 2–4 weeks, including onboarding and training on your workflows.' },
-      { q:'Is my business data secure?',
-        a:'Yes. Data is encrypted in transit, kept isolated per client, and agents only operate inside the scope you give them. We never sell or share your data.' },
-      { q:'Which industries do you serve?',
-        a:'BSN agents are industry-agnostic — manufacturing, healthcare, logistics, retail, finance, real estate and more. If your business has repetitive operations, an agent can run them.' },
-      { q:'Can I see a demo first?',
-        a:"Of course — book a free 30-minute strategy session directly with the founder. You'll get a live demo plus a custom AI roadmap for your business.",
-        cta:{ label:'Book a Free Demo →', act:'demo' } },
-      { q:'How do I get started?',
-        a:'Create a free BSN account — you get 3 free analyses, instant access to the AI Dashboard, and you can deploy your first agent in minutes.',
-        cta:{ label:'Create Free Account →', act:'register' } },
-    ];
-
-    const cbMsgs  = document.getElementById('cbMsgs');
-    const cbChips = document.getElementById('cbChips');
-    let cbOpen = false, cbGreeted = false;
-
-    function cbScroll(){ cbMsgs.scrollTop = cbMsgs.scrollHeight; }
-
-    function cbAddMsg(text, who, cta){
-      const m = document.createElement('div');
-      m.className = 'cb-m ' + who;
-      m.textContent = text;
-      cbMsgs.appendChild(m);
-      if(cta){
-        const b = document.createElement('button');
-        b.className = 'cb-cta';
-        b.textContent = cta.label;
-        b.onclick = () => {
-          if(cta.act === 'pricing'){ window.togChat(false); document.getElementById('pricing')?.scrollIntoView({behavior:'smooth'}); }
-          else if(cta.act === 'demo'){ window.bookDemo(); }
-          else if(cta.act === 'register'){ window.togChat(false); window.showModal('register'); }
-        };
-        cbMsgs.appendChild(b);
-      }
-      cbScroll();
-    }
-
-    function cbAnswer(item){
-      const t = document.createElement('div');
-      t.className = 'cb-m bot cb-typing';
-      t.innerHTML = '<span></span><span></span><span></span>';
-      cbMsgs.appendChild(t); cbScroll();
-      setTimeout(() => { t.remove(); cbAddMsg(item.a, 'bot', item.cta); }, 700);
-    }
-
-    CB_FAQ.forEach((item, i) => {
-      const c = document.createElement('button');
-      c.className = 'cb-chip';
-      c.textContent = item.q;
-      c.onclick = () => { cbAddMsg(item.q, 'user'); cbAnswer(item); };
-      cbChips.appendChild(c);
-    });
-
-    window.togChat = function(force){
-      cbOpen = typeof force === 'boolean' ? force : !cbOpen;
-      document.getElementById('cbPanel').classList.toggle('open', cbOpen);
-      document.getElementById('cbFab').classList.toggle('open', cbOpen);
-      if(cbOpen && !cbGreeted){
-        cbGreeted = true;
-        cbAddMsg("Hi! 👋 I'm the BSN assistant. Pick a question below — I'll answer instantly.", 'bot');
-      }
-    }
-
-    /* RESTORE SESSION */
-    const savedUser=JSON.parse(localStorage.getItem('bsnUser')||'null');
-    if(savedUser&&savedUser.email){window.loginUser(savedUser);}
-
+    /* Restore session (name + email only) */
+    const savedUser = JSON.parse(localStorage.getItem('bsnUser') || 'null');
+    if(savedUser && savedUser.email){ window.loginUser(savedUser); }
   }, []);
 
   return <div dangerouslySetInnerHTML={{ __html: pageHtml }} />;
