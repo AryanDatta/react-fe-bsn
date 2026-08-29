@@ -7,6 +7,36 @@ const pageHtml = `
 <div id="pb"></div>
 <canvas id="bg"></canvas>
 
+<!-- ═══ COLD-START NOTICE ═══ -->
+<div class="cold-notice" id="coldNotice" role="status">
+  <svg class="cold-doodle" viewBox="0 0 124 96" fill="none" aria-hidden="true">
+    <g class="cd-drop">
+      <path d="M38 18 C46 31 55 42 55 55 a17 17 0 0 1 -34 0 C21 42 30 31 38 18 Z" fill="#38bdf8" fill-opacity=".85" stroke="#7dd3fc" stroke-width="1.5"/>
+      <path d="M30 47 q-3 5 -2 9" stroke="rgba(255,255,255,.55)" stroke-width="2" stroke-linecap="round"/>
+      <g class="cd-eyes">
+        <circle cx="33" cy="55" r="2.3" fill="#04222e"/>
+        <circle cx="44" cy="55" r="2.3" fill="#04222e"/>
+      </g>
+      <path d="M34 61 q4.5 4 9 0" stroke="#04222e" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+      <circle cx="28" cy="60" r="2.2" fill="#f472b6" fill-opacity=".3"/>
+      <circle cx="49" cy="60" r="2.2" fill="#f472b6" fill-opacity=".3"/>
+    </g>
+    <line x1="99" y1="18" x2="88" y2="50" stroke="#34d399" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M72 36 h34 l-4.5 42 h-25 Z" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.45)" stroke-width="1.5"/>
+    <g class="cd-water-wrap">
+      <path d="M75 52 h28 l-3 24 h-22 Z" fill="#38bdf8" fill-opacity=".5"/>
+    </g>
+    <circle class="cd-bub" cx="84" cy="70" r="1.7" fill="#bae6fd"/>
+    <circle class="cd-bub cd-b2" cx="93" cy="72" r="1.3" fill="#bae6fd"/>
+    <path class="cd-spark" d="M62 14 l1.6 3.6 3.6 1.6 -3.6 1.6 -1.6 3.6 -1.6 -3.6 -3.6 -1.6 3.6 -1.6 Z" fill="#34d399"/>
+    <path class="cd-spark cd-s2" d="M112 62 l1.2 2.8 2.8 1.2 -2.8 1.2 -1.2 2.8 -1.2 -2.8 -2.8 -1.2 2.8 -1.2 Z" fill="#7dd3fc"/>
+  </svg>
+  <div class="cold-txt">
+    <div class="cold-title">FREE SERVER WARMING UP…</div>
+    <div class="cold-body">Our backend runs on a free server, so this can take up to a minute. Till then, stay hydrated — sip some water! 💧</div>
+  </div>
+</div>
+
 <!-- ═══ NAVBAR ═══ -->
 <nav id="nav">
   <a href="#" class="nav-logo">
@@ -630,11 +660,16 @@ export default function App() {
       window.openJourney();
     }
 
+    /* COLD-START NOTICE (free backend can take ~1 min to wake) */
+    let coldT=null,coldN=0;
+    window.coldStart=function(){coldN++;if(coldT!==null)return;coldT=setTimeout(()=>{document.getElementById('coldNotice').classList.add('on')},4000)};
+    window.coldStop=function(){coldN=Math.max(0,coldN-1);if(coldN===0){clearTimeout(coldT);coldT=null;document.getElementById('coldNotice').classList.remove('on')}};
+
     /* AUTH */
     window.doLogin=async function(){
       const email=document.getElementById('lEmail').value.trim(),pass=document.getElementById('lPass').value;
       if(!email||!pass){setErr('Please fill in email and password.');return}
-      const btn=document.getElementById('lBtn');btn.disabled=true;btn.textContent='Signing in…';
+      const btn=document.getElementById('lBtn');btn.disabled=true;btn.textContent='Signing in…';window.coldStart();
       try{
         const res=await fetch('https://bsnjavabackend.onrender.com/api/users/login',{
           method:'POST',
@@ -651,12 +686,12 @@ export default function App() {
       }catch(err){
         console.error(err);
         setErr('Login failed — check your email and password, then try again.');
-      }finally{btn.disabled=false;btn.textContent='Sign In to BSN'}
+      }finally{window.coldStop();btn.disabled=false;btn.textContent='Sign In to BSN'}
     }
     window.doRegister=async function(){
       const name=document.getElementById('rName').value.trim(),email=document.getElementById('rEmail').value.trim(),phone=document.getElementById('rPhone').value.trim(),role=document.getElementById('rRole').value.trim(),lookingFor=document.getElementById('rLookingFor').value.trim(),pass=document.getElementById('rPass').value;
       if(!name||!email||!phone||!role||!lookingFor||!pass){setErr('Please fill in all fields.');return}
-      const btn=document.getElementById('rBtn');btn.disabled=true;btn.textContent='Creating account…';
+      const btn=document.getElementById('rBtn');btn.disabled=true;btn.textContent='Creating account…';window.coldStart();
       try{
         const res=await fetch('https://bsnjavabackend.onrender.com/api/users',{
           method:'POST',
@@ -672,7 +707,7 @@ export default function App() {
       }catch(err){
         console.error(err);
         setErr('Signup failed — please try again in a moment.');
-      }finally{btn.disabled=false;btn.textContent='Create Account'}
+      }finally{window.coldStop();btn.disabled=false;btn.textContent='Create Account'}
     }
     window.loginUser=function(u){
       document.getElementById('ddOut').style.display='none';

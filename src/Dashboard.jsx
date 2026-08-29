@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 /* ── Backend (Spring Boot) agent marketplace API ── */
 const AGENT_API = "https://bsnjavabackend.onrender.com/api/agents";
@@ -271,6 +271,19 @@ export default function Dashboard() {
   const [chooser, setChooser] = useState(null); // agent shown in payment-method chooser
   const [paypal, setPaypal]   = useState(null); // agent awaiting PayPal.me confirmation
   const [toast, setToast] = useState(null);
+  const [coldWait, setColdWait] = useState(false);
+  const coldPending = useRef(0);
+
+  /* Free-tier backend cold-starts; if a request drags on, show the hydration nudge. */
+  const coldFetch = useCallback((url, opts) => {
+    coldPending.current += 1;
+    const t = setTimeout(() => setColdWait(true), 4000);
+    return fetch(url, opts).finally(() => {
+      clearTimeout(t);
+      coldPending.current -= 1;
+      if (coldPending.current <= 0) setColdWait(false);
+    });
+  }, []);
   const w      = useWidth();
   const mobile = w < 768;
   const tablet = w >= 768 && w < 1100;
@@ -283,7 +296,7 @@ export default function Dashboard() {
 
   const refreshAgents = useCallback(async (email) => {
     try {
-      const r = await fetch(`${AGENT_API}?email=${encodeURIComponent(email)}`);
+      const r = await coldFetch(`${AGENT_API}?email=${encodeURIComponent(email)}`);
       if (!r.ok) throw new Error("bad status");
       const data = await r.json();
       if (Array.isArray(data) && data.length) setAgents(data);
@@ -305,7 +318,7 @@ export default function Dashboard() {
     if (!user?.email) { window.location.href = HOME; return; }
     setBusy(agent.id);
     try {
-      const oRes = await fetch(`${AGENT_API}/order`, {
+      const oRes = await coldFetch(`${AGENT_API}/order`, {
         method:"POST", headers:{ "Content-Type":"application/json" },
         body: JSON.stringify({ email:user.email, agentId:agent.id }),
       });
@@ -327,7 +340,7 @@ export default function Dashboard() {
         modal: { ondismiss: () => setBusy(null) },
         handler: async (resp) => {
           try {
-            const vRes = await fetch(`${AGENT_API}/verify`, {
+            const vRes = await coldFetch(`${AGENT_API}/verify`, {
               method:"POST", headers:{ "Content-Type":"application/json" },
               body: JSON.stringify({
                 email: user.email,
@@ -353,7 +366,7 @@ export default function Dashboard() {
     if (!user?.email) return;
     setBusy(agent.id);
     try {
-      const r = await fetch(`${AGENT_API}/deploy`, {
+      const r = await coldFetch(`${AGENT_API}/deploy`, {
         method:"POST", headers:{ "Content-Type":"application/json" },
         body: JSON.stringify({ email:user.email, agentId:agent.id }),
       });
@@ -373,7 +386,7 @@ export default function Dashboard() {
     setChooser(null);
     setBusy(agent.id);
     try {
-      const r = await fetch(`${AGENT_API}/paypal/checkout`, {
+      const r = await coldFetch(`${AGENT_API}/paypal/checkout`, {
         method:"POST", headers:{ "Content-Type":"application/json" },
         body: JSON.stringify({ email:user.email, agentId:agent.id }),
       });
@@ -390,7 +403,7 @@ export default function Dashboard() {
     if (!user?.email) return;
     setBusy(agent.id);
     try {
-      const r = await fetch(`${AGENT_API}/paypal/confirm`, {
+      const r = await coldFetch(`${AGENT_API}/paypal/confirm`, {
         method:"POST", headers:{ "Content-Type":"application/json" },
         body: JSON.stringify({ email:user.email, agentId:agent.id }),
       });
@@ -701,6 +714,35 @@ export default function Dashboard() {
           </div>
         </div>
       )}
+
+      <div className={"cold-notice" + (coldWait ? " on" : "")} style={{bottom:mobile?72:24}} role="status">
+        <svg className="cold-doodle" viewBox="0 0 124 96" fill="none" aria-hidden="true">
+          <g className="cd-drop">
+            <path d="M38 18 C46 31 55 42 55 55 a17 17 0 0 1 -34 0 C21 42 30 31 38 18 Z" fill="#38bdf8" fillOpacity=".85" stroke="#7dd3fc" strokeWidth="1.5"/>
+            <path d="M30 47 q-3 5 -2 9" stroke="rgba(255,255,255,.55)" strokeWidth="2" strokeLinecap="round"/>
+            <g className="cd-eyes">
+              <circle cx="33" cy="55" r="2.3" fill="#04222e"/>
+              <circle cx="44" cy="55" r="2.3" fill="#04222e"/>
+            </g>
+            <path d="M34 61 q4.5 4 9 0" stroke="#04222e" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
+            <circle cx="28" cy="60" r="2.2" fill="#f472b6" fillOpacity=".3"/>
+            <circle cx="49" cy="60" r="2.2" fill="#f472b6" fillOpacity=".3"/>
+          </g>
+          <line x1="99" y1="18" x2="88" y2="50" stroke="#34d399" strokeWidth="3.4" strokeLinecap="round"/>
+          <path d="M72 36 h34 l-4.5 42 h-25 Z" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.45)" strokeWidth="1.5"/>
+          <g className="cd-water-wrap">
+            <path d="M75 52 h28 l-3 24 h-22 Z" fill="#38bdf8" fillOpacity=".5"/>
+          </g>
+          <circle className="cd-bub" cx="84" cy="70" r="1.7" fill="#bae6fd"/>
+          <circle className="cd-bub cd-b2" cx="93" cy="72" r="1.3" fill="#bae6fd"/>
+          <path className="cd-spark" d="M62 14 l1.6 3.6 3.6 1.6 -3.6 1.6 -1.6 3.6 -1.6 -3.6 -3.6 -1.6 3.6 -1.6 Z" fill="#34d399"/>
+          <path className="cd-spark cd-s2" d="M112 62 l1.2 2.8 2.8 1.2 -2.8 1.2 -1.2 2.8 -1.2 -2.8 -2.8 -1.2 2.8 -1.2 Z" fill="#7dd3fc"/>
+        </svg>
+        <div className="cold-txt">
+          <div className="cold-title">FREE SERVER WARMING UP…</div>
+          <div className="cold-body">Our backend runs on a free server, so this can take up to a minute. Till then, stay hydrated — sip some water! 💧</div>
+        </div>
+      </div>
 
       {toast && (
         <div style={{position:"fixed",bottom:mobile?72:24,left:"50%",transform:"translateX(-50%)",zIndex:400,padding:"12px 20px",borderRadius:12,background:"rgba(8,22,34,.96)",border:"1px solid rgba(56,189,248,.3)",color:"#f5ecda",fontSize:13,fontWeight:500,boxShadow:"0 12px 40px rgba(0,0,0,.5)",maxWidth:"90vw",textAlign:"center"}}>
