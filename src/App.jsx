@@ -358,6 +358,37 @@ const pageHtml = `
   </div>
 </section>
 
+<!-- ═══ 3D MODELING & LAYERING ═══ -->
+<section id="modeling" class="s-dk">
+  <div class="si">
+    <div class="rv" style="text-align:center">
+      <span class="slbl">DESIGN &amp; FABRICATION PIPELINE</span>
+      <h2 class="stit">3D Modeling and <em>Layering</em></h2>
+      <p class="sect-sub">From concept mesh to layered, production-ready output — every model is built, sliced and refined in-house before it ships.</p>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card rv d1">
+        <div class="prod-top"><span class="jtag live">IN-HOUSE</span><span class="prod-ico">🧊</span></div>
+        <h3>3D Modeling</h3>
+        <p class="prod-line">Parametric and sculpted models built from research sketches — clean topology, real-world scale, and ready for iteration.</p>
+        <span class="prod-link muted">Concept → mesh → refined model</span>
+      </div>
+      <div class="prod-card rv d2">
+        <div class="prod-top"><span class="jtag live">PIPELINE</span><span class="prod-ico">🪜</span></div>
+        <h3>Layering</h3>
+        <p class="prod-line">Models are decomposed into precise layers — sliced, ordered and optimized so every build comes out exactly as designed.</p>
+        <span class="prod-link muted">Slice → stack → verify</span>
+      </div>
+      <div class="prod-card rv d3">
+        <div class="prod-top"><span class="jtag done">ITERATIVE</span><span class="prod-ico">🔁</span></div>
+        <h3>Refine &amp; Ship</h3>
+        <p class="prod-line">Each layered build is tested against the original model, refined, and folded back into the research journey it came from.</p>
+        <span class="prod-link muted">Test → refine → ship</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══ EXPERIMENTS & DOCUMENTS (replaces pricing) ═══ -->
 <section id="experiments" class="s-dk s-xp">
   <div class="si">
@@ -436,67 +467,15 @@ const pageHtml = `
     <div class="vquote rv">
       <p>"We don't sell the future. We ship the present — and let the products pay for the future."</p>
 
-      <!-- Dual founders -->
+      <!-- Founder signature -->
       <div class="founders-row">
         <div class="founder-sig">
           <div class="founder-avatar" style="background:linear-gradient(135deg,#052e16,#064e23)">
             <div class="av-pulse"></div>
             A
           </div>
-          <div class="founder-name">Aryan</div>
+          <div class="founder-name">Aryan Datta</div>
           <div class="founder-role">FOUNDER</div>
-        </div>
-        <div class="founders-divider"></div>
-        <div class="founder-sig">
-          <div class="founder-avatar" style="background:linear-gradient(135deg,#064e23,#0a6636)">
-            <div class="av-pulse" style="animation-delay:.8s"></div>
-            VD
-          </div>
-          <div class="founder-name">Vansh Dhiman</div>
-          <div class="founder-role">CO-FOUNDER</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ TEAM SECTION ═══ -->
-<section id="team" class="team-section">
-  <div class="si">
-    <div class="rv" style="text-align:center">
-      <span class="slbl">THE MINDS BEHIND BSN</span>
-      <h2 class="stit">Our <em>Founders</em></h2>
-      <p style="font-size:14px;color:rgba(255,255,255,.4);margin-top:12px;max-width:440px;margin-left:auto;margin-right:auto;line-height:1.7">Two builders shipping AI products and logging every step of the research behind them.</p>
-    </div>
-    <div class="team-grid">
-      <div class="team-card rv d1">
-        <div class="team-av" style="background:linear-gradient(135deg,#052e16,#0a5c2c)">
-          <div class="ring"></div>
-          <div class="ring2"></div>
-          A
-        </div>
-        <div class="team-name">Aryan</div>
-        <div class="team-role">FOUNDER &amp; CEO</div>
-        <p class="team-bio">Product lead behind Mehnat, Dewleaf and the BSN research pipeline — turning AI research records into shipped products.</p>
-        <div class="team-tags">
-          <span class="team-tag">Product</span>
-          <span class="team-tag">AI Research</span>
-          <span class="team-tag">Vision</span>
-        </div>
-      </div>
-      <div class="team-card rv d2">
-        <div class="team-av" style="background:linear-gradient(135deg,#064e23,#0d6b31)">
-          <div class="ring" style="animation-delay:.5s"></div>
-          <div class="ring2" style="animation-delay:1.1s"></div>
-          VD
-        </div>
-        <div class="team-name">Vansh Dhiman</div>
-        <div class="team-role">CO-FOUNDER</div>
-        <p class="team-bio">Co-architect of BSN's product engine — building the systems that carry an idea from research record to live product.</p>
-        <div class="team-tags">
-          <span class="team-tag">Co-Founder</span>
-          <span class="team-tag">Engineering</span>
-          <span class="team-tag">Strategy</span>
         </div>
       </div>
     </div>
@@ -546,7 +525,7 @@ const pageHtml = `
       <p class="jbody">Whether you're an investor, researcher, developer or early user — register to unlock the full Research Journey and see every record from concept to shipped product. We personally review every submission.</p>
       <button type="button" class="bjoin" onclick="showModal('register')">Create Your BSN Profile →</button>
       <p class="jnote">TAKES UNDER 3 MINUTES · REVIEWED WITHIN 48 HOURS</p>
-      <p style="margin-top:22px"><a href="#" onclick="bookDemo(event)" style="font-size:12px;color:#0a6636;font-weight:600;text-decoration:none">Prefer to talk? Book a 30-minute call with the founders →</a></p>
+      <p style="margin-top:22px"><a href="#" onclick="bookDemo(event)" style="font-size:12px;color:#0a6636;font-weight:600;text-decoration:none">Prefer to talk? Book a 30-minute call with the founder →</a></p>
     </div>
   </div>
 </section>
@@ -556,7 +535,7 @@ const pageHtml = `
   <div class="fi">
     <div class="flogo"><img src="/logo.png" alt="BSN"><span class="fb">BSN</span></div>
     <div class="flinks"><a href="https://mehnat-eight.vercel.app/" target="_blank" rel="noopener">Mehnat</a><a href="https://skin-advisor.onrender.com" target="_blank" rel="noopener">Dewleaf</a><a href="#experiments">Experiments</a><a href="#">Privacy</a><a href="#">© 2026 Bandna Shri Nika</a></div>
-    <div class="fcopy">Built with love in Delhi, India<br>Research → Experiment → Product<br><span style="font-size:9px;color:rgba(255,255,255,.18);letter-spacing:1.5px">FOUNDED BY </span><span style="color:rgba(16,185,129,.6);font-weight:500">Aryan</span><span style="color:rgba(255,255,255,.18);margin:0 4px">&amp;</span><span style="color:rgba(52,211,153,.7);font-weight:600">Vansh Dhiman</span></div>
+    <div class="fcopy">Built with love in Delhi, India<br>Research → Experiment → Product<br><span style="font-size:9px;color:rgba(255,255,255,.18);letter-spacing:1.5px">FOUNDED BY </span><span style="color:rgba(16,185,129,.6);font-weight:500">Aryan Datta</span></div>
   </div>
 </footer>
 
