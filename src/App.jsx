@@ -143,12 +143,12 @@ const pageHtml = `
 
     <!-- Register -->
     <div id="fReg" style="display:none">
-      <div class="fg"><label class="fl">FULL NAME</label><input type="text" class="fi2" id="rName" placeholder="Your name"></div>
-      <div class="fg"><label class="fl">EMAIL</label><input type="email" class="fi2" id="rEmail" placeholder="you@example.com"></div>
-      <div class="fg"><label class="fl">PHONE</label><input type="tel" class="fi2" id="rPhone" placeholder="9999999999"></div>
-      <div class="fg"><label class="fl">ROLE</label><input type="text" class="fi2" id="rRole" placeholder="Founder / Student / Developer"></div>
-      <div class="fg"><label class="fl">LOOKING FOR</label><input type="text" class="fi2" id="rLookingFor" placeholder="What are you looking for?"></div>
-      <div class="fg"><label class="fl">PASSWORD</label><input type="password" class="fi2" id="rPass" placeholder="Create a password"></div>
+      <div class="fg"><label class="fl">FULL NAME</label><input type="text" class="fi2" id="rName" oninput="revalidateReg(this)" placeholder="Your name"><p class="fmsg" id="rNameMsg"></p></div>
+      <div class="fg"><label class="fl">EMAIL</label><input type="email" class="fi2" id="rEmail" oninput="revalidateReg(this)" placeholder="you@example.com"><p class="fmsg" id="rEmailMsg"></p></div>
+      <div class="fg"><label class="fl">PHONE</label><input type="tel" class="fi2" id="rPhone" oninput="revalidateReg(this)" placeholder="9999999999"><p class="fmsg" id="rPhoneMsg"></p></div>
+      <div class="fg"><label class="fl">ROLE</label><input type="text" class="fi2" id="rRole" oninput="revalidateReg(this)" placeholder="Founder / Student / Developer"><p class="fmsg" id="rRoleMsg"></p></div>
+      <div class="fg"><label class="fl">LOOKING FOR</label><input type="text" class="fi2" id="rLookingFor" oninput="revalidateReg(this)" placeholder="What are you looking for?"><p class="fmsg" id="rLookingForMsg"></p></div>
+      <div class="fg"><label class="fl">PASSWORD</label><input type="password" class="fi2" id="rPass" oninput="revalidateReg(this)" placeholder="Create a password"><p class="fmsg" id="rPassMsg"></p></div>
       <button class="fsub" onclick="doRegister()" id="rBtn">Create Account</button>
       <p class="ffoot">Have an account? <a href="#" onclick="switchTab('login')">Sign in</a></p>
     </div>
@@ -610,6 +610,29 @@ export default function App() {
 
     /* AUTH MODAL */
     const setErr=msg=>{const el=document.getElementById('authErr');el.textContent=msg||'';el.style.display=msg?'block':'none'};
+    /* SIGNUP VALIDATION */
+    const regRules={
+      rName:v=>{v=v.trim();return !v?'Full name is required.':v.length<2?'Name must be at least 2 characters.':!/^[A-Za-z][A-Za-z .'-]*$/.test(v)?'Name can only contain letters, spaces, dots and hyphens.':''},
+      rEmail:v=>{v=v.trim();return !v?'Email is required.':!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)?'Enter a valid email like you@example.com.':''},
+      rPhone:v=>{if(!v.trim())return 'Phone number is required.';const d=v.replace(/[\s()-]/g,'').replace(/^\+/,'');return /^\d{10,15}$/.test(d)?'':'Enter a valid phone number (10\u201315 digits).'},
+      rRole:v=>{v=v.trim();return !v?'Role is required.':v.length<2?'Role must be at least 2 characters.':''},
+      rLookingFor:v=>{v=v.trim();return !v?'Tell us what you\u2019re looking for.':v.length<3?'Please add a few more characters.':''},
+      rPass:v=>!v?'Password is required.':v.length<8?'Password must be at least 8 characters.':(!/[A-Za-z]/.test(v)||!/\d/.test(v))?'Password needs at least one letter and one number.':''
+    };
+    const setFieldErr=(id,msg)=>{
+      const inp=document.getElementById(id),m=document.getElementById(id+'Msg');
+      inp.classList.toggle('invalid',!!msg);
+      m.textContent=msg||'';m.style.display=msg?'block':'none';
+    };
+    const validateRegField=id=>{const msg=regRules[id](document.getElementById(id).value);setFieldErr(id,msg);return !msg};
+    window.revalidateReg=function(inp){if(inp.classList.contains('invalid'))validateRegField(inp.id)};
+    const clearRegErrs=()=>Object.keys(regRules).forEach(id=>setFieldErr(id,''));
+    window.validateReg=function(){
+      let firstBad=null;
+      Object.keys(regRules).forEach(id=>{if(!validateRegField(id)&&!firstBad)firstBad=id});
+      if(firstBad){setErr('Please fix the highlighted fields.');document.getElementById(firstBad).focus();return false}
+      setErr('');return true;
+    };
     window.showModal=function(tab){
       document.getElementById('authModal').classList.add('open');
       document.body.style.overflow='hidden';
@@ -620,7 +643,7 @@ export default function App() {
     window.closeModal=function(){document.getElementById('authModal').classList.remove('open');document.body.style.overflow='';setErr('')}
     window.outClose=function(e){if(e.target===document.getElementById('authModal'))closeModal()}
     window.switchTab=function(t){
-      setErr('');
+      setErr('');clearRegErrs();
       document.getElementById('tLogin').classList.toggle('active',t==='login');
       document.getElementById('tReg').classList.toggle('active',t==='register');
       document.getElementById('fLogin').style.display=t==='login'?'block':'none';
@@ -690,7 +713,7 @@ export default function App() {
     }
     window.doRegister=async function(){
       const name=document.getElementById('rName').value.trim(),email=document.getElementById('rEmail').value.trim(),phone=document.getElementById('rPhone').value.trim(),role=document.getElementById('rRole').value.trim(),lookingFor=document.getElementById('rLookingFor').value.trim(),pass=document.getElementById('rPass').value;
-      if(!name||!email||!phone||!role||!lookingFor||!pass){setErr('Please fill in all fields.');return}
+      if(!window.validateReg())return;
       const btn=document.getElementById('rBtn');btn.disabled=true;btn.textContent='Creating account…';window.coldStart();
       try{
         const res=await fetch('https://bsnjavabackend.onrender.com/api/users',{

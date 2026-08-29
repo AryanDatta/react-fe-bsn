@@ -537,3 +537,8 @@ button.bjoin { border: none; cursor: pointer; font-family: inherit; }
 @keyframes cdBub{0%{transform:translateY(0);opacity:0}25%{opacity:.9}100%{transform:translateY(-16px);opacity:0}}
 @keyframes cdSpark{0%,100%{opacity:.15;transform:scale(.8)}50%{opacity:.8;transform:scale(1.1)}}
 @media(max-width:600px){.cold-notice{bottom:16px}}
+
+/* Signup field validation */
+.fi2.invalid{border-color:rgba(255,80,80,.5);background:rgba(255,80,80,.05)}
+.fi2.invalid:focus{border-color:rgba(255,80,80,.7)}
+.fmsg{display:none;margin:6px 2px 0;font-size:11px;color:#ff8f8f;line-height:1.4}
