@@ -7,6 +7,36 @@ const pageHtml = `
 <div id="pb"></div>
 <canvas id="bg"></canvas>
 
+<!-- ═══ COLD-START NOTICE ═══ -->
+<div class="cold-notice" id="coldNotice" role="status">
+  <svg class="cold-doodle" viewBox="0 0 124 96" fill="none" aria-hidden="true">
+    <g class="cd-drop">
+      <path d="M38 18 C46 31 55 42 55 55 a17 17 0 0 1 -34 0 C21 42 30 31 38 18 Z" fill="#38bdf8" fill-opacity=".85" stroke="#7dd3fc" stroke-width="1.5"/>
+      <path d="M30 47 q-3 5 -2 9" stroke="rgba(255,255,255,.55)" stroke-width="2" stroke-linecap="round"/>
+      <g class="cd-eyes">
+        <circle cx="33" cy="55" r="2.3" fill="#04222e"/>
+        <circle cx="44" cy="55" r="2.3" fill="#04222e"/>
+      </g>
+      <path d="M34 61 q4.5 4 9 0" stroke="#04222e" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+      <circle cx="28" cy="60" r="2.2" fill="#f472b6" fill-opacity=".3"/>
+      <circle cx="49" cy="60" r="2.2" fill="#f472b6" fill-opacity=".3"/>
+    </g>
+    <line x1="99" y1="18" x2="88" y2="50" stroke="#34d399" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M72 36 h34 l-4.5 42 h-25 Z" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.45)" stroke-width="1.5"/>
+    <g class="cd-water-wrap">
+      <path d="M75 52 h28 l-3 24 h-22 Z" fill="#38bdf8" fill-opacity=".5"/>
+    </g>
+    <circle class="cd-bub" cx="84" cy="70" r="1.7" fill="#bae6fd"/>
+    <circle class="cd-bub cd-b2" cx="93" cy="72" r="1.3" fill="#bae6fd"/>
+    <path class="cd-spark" d="M62 14 l1.6 3.6 3.6 1.6 -3.6 1.6 -1.6 3.6 -1.6 -3.6 -3.6 -1.6 3.6 -1.6 Z" fill="#34d399"/>
+    <path class="cd-spark cd-s2" d="M112 62 l1.2 2.8 2.8 1.2 -2.8 1.2 -1.2 2.8 -1.2 -2.8 -2.8 -1.2 2.8 -1.2 Z" fill="#7dd3fc"/>
+  </svg>
+  <div class="cold-txt">
+    <div class="cold-title">FREE SERVER WARMING UP…</div>
+    <div class="cold-body">Our backend runs on a free server, so this can take up to a minute. Till then, stay hydrated — sip some water! 💧</div>
+  </div>
+</div>
+
 <!-- ═══ NAVBAR ═══ -->
 <nav id="nav">
   <a href="#" class="nav-logo">
@@ -113,12 +143,12 @@ const pageHtml = `
 
     <!-- Register -->
     <div id="fReg" style="display:none">
-      <div class="fg"><label class="fl">FULL NAME</label><input type="text" class="fi2" id="rName" placeholder="Your name"></div>
-      <div class="fg"><label class="fl">EMAIL</label><input type="email" class="fi2" id="rEmail" placeholder="you@example.com"></div>
-      <div class="fg"><label class="fl">PHONE</label><input type="tel" class="fi2" id="rPhone" placeholder="9999999999"></div>
-      <div class="fg"><label class="fl">ROLE</label><input type="text" class="fi2" id="rRole" placeholder="Founder / Student / Developer"></div>
-      <div class="fg"><label class="fl">LOOKING FOR</label><input type="text" class="fi2" id="rLookingFor" placeholder="What are you looking for?"></div>
-      <div class="fg"><label class="fl">PASSWORD</label><input type="password" class="fi2" id="rPass" placeholder="Create a password"></div>
+      <div class="fg"><label class="fl">FULL NAME</label><input type="text" class="fi2" id="rName" oninput="revalidateReg(this)" placeholder="Your name"><p class="fmsg" id="rNameMsg"></p></div>
+      <div class="fg"><label class="fl">EMAIL</label><input type="email" class="fi2" id="rEmail" oninput="revalidateReg(this)" placeholder="you@example.com"><p class="fmsg" id="rEmailMsg"></p></div>
+      <div class="fg"><label class="fl">PHONE</label><input type="tel" class="fi2" id="rPhone" oninput="revalidateReg(this)" placeholder="9999999999"><p class="fmsg" id="rPhoneMsg"></p></div>
+      <div class="fg"><label class="fl">ROLE</label><input type="text" class="fi2" id="rRole" oninput="revalidateReg(this)" placeholder="Founder / Student / Developer"><p class="fmsg" id="rRoleMsg"></p></div>
+      <div class="fg"><label class="fl">LOOKING FOR</label><input type="text" class="fi2" id="rLookingFor" oninput="revalidateReg(this)" placeholder="What are you looking for?"><p class="fmsg" id="rLookingForMsg"></p></div>
+      <div class="fg"><label class="fl">PASSWORD</label><input type="password" class="fi2" id="rPass" oninput="revalidateReg(this)" placeholder="Create a password"><p class="fmsg" id="rPassMsg"></p></div>
       <button class="fsub" onclick="doRegister()" id="rBtn">Create Account</button>
       <p class="ffoot">Have an account? <a href="#" onclick="switchTab('login')">Sign in</a></p>
     </div>
@@ -580,6 +610,29 @@ export default function App() {
 
     /* AUTH MODAL */
     const setErr=msg=>{const el=document.getElementById('authErr');el.textContent=msg||'';el.style.display=msg?'block':'none'};
+    /* SIGNUP VALIDATION */
+    const regRules={
+      rName:v=>{v=v.trim();return !v?'Full name is required.':v.length<2?'Name must be at least 2 characters.':!/^[A-Za-z][A-Za-z .'-]*$/.test(v)?'Name can only contain letters, spaces, dots and hyphens.':''},
+      rEmail:v=>{v=v.trim();return !v?'Email is required.':!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)?'Enter a valid email like you@example.com.':''},
+      rPhone:v=>{if(!v.trim())return 'Phone number is required.';const d=v.replace(/[\s()-]/g,'').replace(/^\+/,'');return /^\d{10,15}$/.test(d)?'':'Enter a valid phone number (10\u201315 digits).'},
+      rRole:v=>{v=v.trim();return !v?'Role is required.':v.length<2?'Role must be at least 2 characters.':''},
+      rLookingFor:v=>{v=v.trim();return !v?'Tell us what you\u2019re looking for.':v.length<3?'Please add a few more characters.':''},
+      rPass:v=>!v?'Password is required.':v.length<8?'Password must be at least 8 characters.':(!/[A-Za-z]/.test(v)||!/\d/.test(v))?'Password needs at least one letter and one number.':''
+    };
+    const setFieldErr=(id,msg)=>{
+      const inp=document.getElementById(id),m=document.getElementById(id+'Msg');
+      inp.classList.toggle('invalid',!!msg);
+      m.textContent=msg||'';m.style.display=msg?'block':'none';
+    };
+    const validateRegField=id=>{const msg=regRules[id](document.getElementById(id).value);setFieldErr(id,msg);return !msg};
+    window.revalidateReg=function(inp){if(inp.classList.contains('invalid'))validateRegField(inp.id)};
+    const clearRegErrs=()=>Object.keys(regRules).forEach(id=>setFieldErr(id,''));
+    window.validateReg=function(){
+      let firstBad=null;
+      Object.keys(regRules).forEach(id=>{if(!validateRegField(id)&&!firstBad)firstBad=id});
+      if(firstBad){setErr('Please fix the highlighted fields.');document.getElementById(firstBad).focus();return false}
+      setErr('');return true;
+    };
     window.showModal=function(tab){
       document.getElementById('authModal').classList.add('open');
       document.body.style.overflow='hidden';
@@ -590,7 +643,7 @@ export default function App() {
     window.closeModal=function(){document.getElementById('authModal').classList.remove('open');document.body.style.overflow='';setErr('')}
     window.outClose=function(e){if(e.target===document.getElementById('authModal'))closeModal()}
     window.switchTab=function(t){
-      setErr('');
+      setErr('');clearRegErrs();
       document.getElementById('tLogin').classList.toggle('active',t==='login');
       document.getElementById('tReg').classList.toggle('active',t==='register');
       document.getElementById('fLogin').style.display=t==='login'?'block':'none';
@@ -630,11 +683,16 @@ export default function App() {
       window.openJourney();
     }
 
+    /* COLD-START NOTICE (free backend can take ~1 min to wake) */
+    let coldT=null,coldN=0;
+    window.coldStart=function(){coldN++;if(coldT!==null)return;coldT=setTimeout(()=>{document.getElementById('coldNotice').classList.add('on')},4000)};
+    window.coldStop=function(){coldN=Math.max(0,coldN-1);if(coldN===0){clearTimeout(coldT);coldT=null;document.getElementById('coldNotice').classList.remove('on')}};
+
     /* AUTH */
     window.doLogin=async function(){
       const email=document.getElementById('lEmail').value.trim(),pass=document.getElementById('lPass').value;
       if(!email||!pass){setErr('Please fill in email and password.');return}
-      const btn=document.getElementById('lBtn');btn.disabled=true;btn.textContent='Signing in…';
+      const btn=document.getElementById('lBtn');btn.disabled=true;btn.textContent='Signing in…';window.coldStart();
       try{
         const res=await fetch('https://bsnjavabackend.onrender.com/api/users/login',{
           method:'POST',
@@ -651,12 +709,12 @@ export default function App() {
       }catch(err){
         console.error(err);
         setErr('Login failed — check your email and password, then try again.');
-      }finally{btn.disabled=false;btn.textContent='Sign In to BSN'}
+      }finally{window.coldStop();btn.disabled=false;btn.textContent='Sign In to BSN'}
     }
     window.doRegister=async function(){
       const name=document.getElementById('rName').value.trim(),email=document.getElementById('rEmail').value.trim(),phone=document.getElementById('rPhone').value.trim(),role=document.getElementById('rRole').value.trim(),lookingFor=document.getElementById('rLookingFor').value.trim(),pass=document.getElementById('rPass').value;
-      if(!name||!email||!phone||!role||!lookingFor||!pass){setErr('Please fill in all fields.');return}
-      const btn=document.getElementById('rBtn');btn.disabled=true;btn.textContent='Creating account…';
+      if(!window.validateReg())return;
+      const btn=document.getElementById('rBtn');btn.disabled=true;btn.textContent='Creating account…';window.coldStart();
       try{
         const res=await fetch('https://bsnjavabackend.onrender.com/api/users',{
           method:'POST',
@@ -672,7 +730,7 @@ export default function App() {
       }catch(err){
         console.error(err);
         setErr('Signup failed — please try again in a moment.');
-      }finally{btn.disabled=false;btn.textContent='Create Account'}
+      }finally{window.coldStop();btn.disabled=false;btn.textContent='Create Account'}
     }
     window.loginUser=function(u){
       document.getElementById('ddOut').style.display='none';
